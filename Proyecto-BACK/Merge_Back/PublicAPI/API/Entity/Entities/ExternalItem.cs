@@ -1,0 +1,10 @@
+﻿namespace Entity.Entities
+{
+    public class ExternalItem
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = default!;
+        public string Description { get; set; } = default!;
+    }
+
+}

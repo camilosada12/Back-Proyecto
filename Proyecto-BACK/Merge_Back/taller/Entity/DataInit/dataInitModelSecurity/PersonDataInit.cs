@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+using Entity.Domain.Models.Implements.ModelSecurity;
+using Microsoft.EntityFrameworkCore;
+
+namespace Entity.DataInit.dataInitModelSecurity
+{
+    /// <summary>
+    /// Clase estática para inicializar datos semilla (seed) para la entidad <see cref="Person"/>.
+    /// </summary>
+    public static class PersonDataInit
+    {
+        /// <summary>
+        /// Método de extensión para agregar datos iniciales (seed) a la entidad <see cref="Person"/>.
+        /// </summary>
+        /// <param name="modelBuilder">Instancia de <see cref="ModelBuilder"/> usada para configurar el modelo de datos.</param>
+        public static void seedPerson(this ModelBuilder modelBuilder)
+        {
+            // Seed para Person
+            modelBuilder.Entity<Person>().HasData(
+             new Person
+             {
+                 id = 1,
+                 firstName = "Juan",
+                 lastName = "Pérez",
+                 phoneNumber = "1234567890",
+                 address = "Carrera 10",
+                 documentTypeId = 1,
+                 municipalityId = 1,
+                 active = true,
+                 is_deleted = false,
+                 created_date = new DateTime(2023, 1, 1)
+             },
+             new Person
+             {
+                 id = 2,
+                 firstName = "Sara",
+                 lastName = "Sofía",
+                 phoneNumber = "312312314",
+                 address = "Carrera 11",
+                 documentTypeId = 2,
+                 municipalityId = 4,
+                 active = true,
+                 is_deleted = false,
+                 created_date = new DateTime(2023, 1, 1)
+             }
+         );
+        }
+    }
+}

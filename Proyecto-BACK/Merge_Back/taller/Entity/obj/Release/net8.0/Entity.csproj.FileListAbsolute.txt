@@ -1,0 +1,15 @@
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\bin\Release\net8.0\Entity.deps.json
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\bin\Release\net8.0\Entity.runtimeconfig.json
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\bin\Release\net8.0\Entity.dll
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\bin\Release\net8.0\Entity.pdb
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.csproj.AssemblyReference.cache
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.AssemblyInfoInputs.cache
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.AssemblyInfo.cs
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.csproj.CoreCompileInputs.cache
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.sourcelink.json
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.dll
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\refint\Entity.dll
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.pdb
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\Entity.genruntimeconfig.cache
+C:\Users\Camilo\Desktop\proyectoHaciend\Proyecto-BACK\Merge_Back\taller\Entity\obj\Release\net8.0\ref\Entity.dll

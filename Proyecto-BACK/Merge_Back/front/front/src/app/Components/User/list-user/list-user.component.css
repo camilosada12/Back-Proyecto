@@ -1,0 +1,191 @@
+.container {
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+.titulo-tabla {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0d47a1;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabla-cards {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.card-fila {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-fila:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e88e5;
+    margin-bottom: 10px;
+}
+
+.icono-usuario {
+    font-size: 28px;
+}
+
+.card-content .info-linea {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.card-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Contenedor principal */
+.formulario-usuario {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+/* Título */
+h2 {
+  color: #3f51b5;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Campos de entrada */
+input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border-color: #3f51b5;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+}
+
+/* Contenedor de botones */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+/* Botón principal (Crear/Actualizar) */
+button[type="submit"] {
+  flex: 2;
+  padding: 14px;
+  background-color: #3f51b5;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 5px rgba(63, 81, 181, 0.3);
+}
+
+button[type="submit"]:hover {
+  background-color: #303f9f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.4);
+}
+
+button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+/* Botón cancelar (solo en modo edición) */
+button[type="button"] {
+  flex: 1;
+  padding: 14px;
+  background-color: transparent;
+  color: #5c6bc0;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid #5c6bc0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button[type="button"]:hover {
+  background-color: #f5f7ff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(92, 107, 192, 0.2);
+}
+
+/* Validación */
+input.ng-invalid.ng-touched {
+  border-color: #f44336;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .formulario-usuario {
+    padding: 1.8rem;
+    margin: 1rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  button[type="submit"], 
+  button[type="button"] {
+    width: 100%;
+  }
+}

@@ -1,0 +1,58 @@
+<div class="container">
+    <form [formGroup]="formGroup" (ngSubmit)="save()" class="form-form">
+        <div *ngFor="let field of formFields">
+            <mat-form-field appearance="fill">
+                <mat-label>{{ field.label }}</mat-label>
+
+
+                <input matInput *ngIf="field.type !== 'textarea'" [formControlName]="field.key"
+                    [type]="field.type || 'text'">
+
+                <textarea matInput *ngIf="field.type === 'textarea'" [formControlName]="field.key"></textarea>
+
+                <!-- SELECT -->
+                <!-- <mat-select *ngIf="field.type === 'select'" [formControlName]="field.key">
+                    <mat-option *ngFor="let opt of field.options ?? []" [value]="opt.value">
+                        {{ opt.label }}
+                    </mat-option>
+                </mat-select> -->
+
+
+
+
+            </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit">{{ isEditMode ? 'Actualizar' : 'Crear' }}</button>
+        <button mat-button type="button" (click)="reset()" *ngIf="isEditMode">Cancelar</button>
+    </form>
+
+    <hr>
+
+    <div class="tabla-cards">
+        <div class="card-fila" *ngFor="let item of data">
+            <div class="card-header">
+                <mat-icon>folder</mat-icon>
+                <span class="card-title">
+                    {{ displayItem ? displayItem(item, columns[0].key) : (item[columns[0].key]) }}
+                </span>
+            </div>
+
+            <div class="card-content">
+                <div class="info-linea" *ngFor="let col of columns.slice(1)">
+                    <strong>{{ col.label }}:</strong>
+                    <span>{{ displayItem ? displayItem(item, col.key) : (item[col.key]) }}</span>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <button mat-icon-button color="primary" (click)="edit(item)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete(getId(item))">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<!-- <button *ngIf="isAdmin" mat-flat-button routerLink="listDetele">Restore</button> -->
+
+@if (forms) {
+    <div class="container" *ngIf="forms">
+    <h2>List My API PUBLIC</h2>
+    <h2 class="titulo-tabla">{{ isEditMode ? '✏️ Editar' : '➕ Crear' }}</h2>
+
+    <form [formGroup]="formForm" (ngSubmit)="saveRol()" class="form-form">
+        <mat-form-field appearance="fill">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="formForm.invalid">
+            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button mat-button type="button" (click)="resetForm()" *ngIf="isEditMode">Cancelar</button>
+    </form>
+
+    <hr>
+
+    <h2 class="titulo-tabla">📋 Lista de Data de API</h2>
+
+    <div class="tabla-cards">
+        <div class="card-fila" *ngFor="let form of forms">
+            <div class="card-header">
+                <mat-icon>supervisor_account</mat-icon>
+                <span class="card-title">{{ form.name }}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="info-linea">
+                    <strong>Descripción:</strong>
+                    <span>{{ form.description }}</span>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <button mat-icon-button color="primary" (click)="editApiPublic(form)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteApiPublic(form.id!)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+}

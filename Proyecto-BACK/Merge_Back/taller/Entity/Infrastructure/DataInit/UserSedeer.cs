@@ -1,0 +1,27 @@
+﻿using Entity.Domain.Models.Implements.ModelSecurity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Entity.Infrastructure.DataInit
+{
+    public class UserSedeer : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.HasData(
+                                 new User
+                                 {
+                                     id = 1,
+                                     name = "admin",
+                                     email = "admin@example.com",
+                                     password = "admin123",
+                                     active = true,
+                                     is_deleted = false,
+                                     PersonId = null, 
+                                     created_date = new DateTime(2025, 1, 1)
+                                 }
+                            );
+
+        }
+    }
+}

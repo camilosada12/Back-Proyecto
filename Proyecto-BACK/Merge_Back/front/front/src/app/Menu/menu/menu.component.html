@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" class="custom-toolbar">
+    <div class="toolbar-links">
+        <a routerLink="user" mat-button>Usuario</a>
+        <a routerLink="rol" mat-button>Rol</a>
+        <a routerLink="rolUser" mat-button>Rol Usuario</a>
+        <a routerLink="form" mat-button>Form</a>
+        <a routerLink="module" mat-button>Module</a>
+        <a routerLink="formModule" mat-button>Form Module</a>
+        <a routerLink="apiPublic" mat-button>API Public</a>
+        <a routerLink="listApiPublic" mat-button>My API Public</a>
+        <app-select-db></app-select-db>
+    </div>
+
+    <div class="toolbar-actions">
+        <a mat-button routerLink="/login" (click)="clearLocalStorage()">
+            <mat-icon>person</mat-icon>
+            <span class="logout-text">Cerrar sesión</span>
+        </a>
+    </div>
+</mat-toolbar>

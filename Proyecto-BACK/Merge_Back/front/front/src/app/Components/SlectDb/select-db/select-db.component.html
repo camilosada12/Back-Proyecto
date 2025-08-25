@@ -1,0 +1,6 @@
+<label for="dbSelect">Seleccione la base de datos:</label>
+<select id="dbSelect" [(ngModel)]="selectedDb" (change)="onDbChange()">
+    <option value="SqlServer">SQL Server</option>
+    <option value="PostgreSql">PostgreSQL</option>
+    <option value="MySql">MySQL</option>
+</select>

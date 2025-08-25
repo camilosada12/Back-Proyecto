@@ -1,0 +1,57 @@
+<!-- <button *ngIf="isAdmin" mat-flat-button routerLink="listDetele">Restore</button> -->
+
+@if (modules) {
+
+<div class="container" *ngIf="modules">
+    <button mat-flat-button routerLink="listDetele" style="margin-top: 4rem;">Restore</button>
+
+    <h2 class="titulo-tabla">{{ isEditMode ? '✏️ Editar Module' : '➕ Crear Module' }}</h2>
+
+    <form [formGroup]="formForm" (ngSubmit)="save()" class="form-form">
+        <mat-form-field appearance="fill">
+            <mat-label>Nombre del Module</mat-label>
+            <input matInput formControlName="name" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="formForm.invalid">
+            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+        </button>
+        <button mat-button type="button" (click)="resetForm()" *ngIf="isEditMode">Cancelar</button>
+    </form>
+
+    <hr>
+
+    <h2 class="titulo-tabla">📋 Lista de Modules</h2>
+
+    <div class="tabla-cards">
+        <div class="card-fila" *ngFor="let entity of modules">
+            <div class="card-header">
+                <mat-icon>supervisor_account</mat-icon>
+                <span class="card-title">{{ entity.name }}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="info-linea">
+                    <strong>Descripción:</strong>
+                    <span>{{ entity.description }}</span>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                <button mat-icon-button color="primary" (click)="edit(entity)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="delete(entity.id!)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+}
