@@ -1,9 +1,9 @@
 ﻿
 
-    using Entity.Domain.Interfaces;
-using Entity.DTOs.Interface;
+using Entity.Domain.Interfaces;
+using Entity.DTOs.Interface.Entities;
 
-    namespace Entity.Domain.Models.Implements.Entities
+namespace Entity.Domain.Models.Implements.Entities
     {
         public class DocumentInfractionDto : IHasId, IDocumentInfraction
     {

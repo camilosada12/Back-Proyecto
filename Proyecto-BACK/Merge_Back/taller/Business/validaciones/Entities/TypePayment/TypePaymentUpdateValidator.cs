@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity.Domain.Models.Implements.Entities;
 
-namespace Business.validaciones.InspectoraReport
+namespace Business.validaciones.Entities.TypePayment
 {
-    public class InspectoraReportUpdateValidator : InspectoraReportValidator<InspectoraReportDto>
+    public class TypePaymentUpdateValidator : TypePaymentDtoValidator<TypePaymentDto>
     {
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Entity.Domain.Interfaces;
+using Entity.DTOs.Interface.ModelSecurity;
 
 namespace Entity.DTOs.Default.ModelSecurityDto
 {
-    public class PersonDto : IHasId
+    public class PersonDto : IHasId, IPerson
     {
         public int id { get; set; }
         public string firstName { get; set; }

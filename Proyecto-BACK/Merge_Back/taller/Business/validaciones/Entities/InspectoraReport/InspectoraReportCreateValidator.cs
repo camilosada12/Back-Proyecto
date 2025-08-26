@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity.Domain.Models.Implements.Entities;
 
-namespace Business.validaciones.InspectoraReport
+namespace Business.validaciones.Entities.InspectoraReport
 {
     public class InspectoraReportCreateValidator : InspectoraReportValidator<InspectoraReportDto>
     {

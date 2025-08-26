@@ -2,11 +2,8 @@ using Web.Extensions;
 using Web.Middleware; // ApiExceptionMiddleware, DbContextMiddleware
 using Web.Service;
 
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Entity.Domain.Models.Implements.Entities;
-using Business.validaciones.InspectoraReport;
-using Business.validaciones.DocumentInfraction;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,9 +22,7 @@ builder.Services
     .AddFluentValidationAutoValidation()          // activa la auto-validación con [ApiController]
     .AddFluentValidationClientsideAdapters();     // opcional (si usas clientes MVC/Razor)
 
-builder.Services.AddValidatorsFromAssemblyContaining<InspectoraReportCreateValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
-
+builder.Services.AddCustomValidators();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerWithJwt();
@@ -38,7 +33,7 @@ builder.Services.AddCustomCors(builder.Configuration);
 var app = builder.Build();
 
 // 2) Contexto por request (si aplica a tu proyecto)
-app.UseMiddleware<DbContextMiddleware>();
+builder.Services.AddCustomValidators();
 app.UseStaticFiles();
 
 // 4) Swagger (en Dev/Prod según tu lógica)

@@ -74,7 +74,7 @@ namespace Business.Services.Security
             userEntity.InitializeLogicalState(); // Inicializa estado lógico (is_deleted = false)
             var createdEntity = await _dataUser.CreateAsync(userEntity);
 
-             _ =  _rolUserService.AsignateUserRTo(createdEntity);
+            _ = _rolUserService.AsignateUserRTo(createdEntity);
 
             return _mapper.Map<UserDto>(createdEntity);
         }

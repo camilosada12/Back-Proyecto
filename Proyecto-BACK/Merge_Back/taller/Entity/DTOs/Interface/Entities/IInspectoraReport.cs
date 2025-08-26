@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity.Domain.Interfaces;
 
-namespace Entity.DTOs.Interface
+namespace Entity.DTOs.Interface.Entities
 {
     public interface  IInspectoraReport : IHasId
     {

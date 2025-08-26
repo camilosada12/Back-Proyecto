@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PjVhDEHCVhE=",
+  "dgSpecHash": "b437ioFCJW4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Entity\\Entity.csproj",
+  "projectFilePath": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Entity\\Entity.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Camilo\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Camilo\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

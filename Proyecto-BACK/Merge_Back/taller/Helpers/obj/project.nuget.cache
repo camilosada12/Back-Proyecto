@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "F/3vYTwBGkA=",
+  "dgSpecHash": "8np4MyorZkM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Helpers\\Helpers.csproj",
+  "projectFilePath": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Helpers\\Helpers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Camilo\\.nuget\\packages\\automapper\\14.0.0\\automapper.14.0.0.nupkg.sha512",
     "C:\\Users\\Camilo\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",

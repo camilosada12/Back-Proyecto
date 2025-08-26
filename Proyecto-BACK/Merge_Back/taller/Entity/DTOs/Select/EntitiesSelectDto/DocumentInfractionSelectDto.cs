@@ -1,7 +1,7 @@
 ﻿
 
 using Entity.Domain.Interfaces;
-using Entity.DTOs.Interface;
+using Entity.DTOs.Interface.Entities;
 
 namespace Entity.Domain.Models.Implements.Entities
 {

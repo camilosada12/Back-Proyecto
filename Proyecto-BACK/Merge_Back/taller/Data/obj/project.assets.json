@@ -5171,11 +5171,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Data\\Data.csproj",
+      "projectUniqueName": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Data\\Data.csproj",
       "projectName": "Data",
-      "projectPath": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Data\\Data.csproj",
+      "projectPath": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Data\\Data.csproj",
       "packagesPath": "C:\\Users\\Camilo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Data\\obj\\",
+      "outputPath": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5197,11 +5197,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Entity\\Entity.csproj": {
-              "projectPath": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Entity\\Entity.csproj"
+            "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Entity\\Entity.csproj": {
+              "projectPath": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Entity\\Entity.csproj"
             },
-            "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Utilities\\Utilities.csproj": {
-              "projectPath": "C:\\Users\\Camilo\\Desktop\\proyectoHaciend\\Proyecto-BACK\\Merge_Back\\taller\\Utilities\\Utilities.csproj"
+            "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Utilities\\Utilities.csproj": {
+              "projectPath": "C:\\Users\\Camilo\\Desktop\\nuevoBack\\Proyecto-BACK\\Merge_Back\\taller\\Utilities\\Utilities.csproj"
             }
           }
         }

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Entity.Domain.Models.Implements.Entities;
 
-namespace Business.validaciones.DocumentInfraction
+namespace Business.validaciones.Entities.TypePayment
 {
-    public class DocumentInfractionCreateValidator : DocumentInfractionDtoValidator<DocumentInfractionDto>
+    public class TypePaymentCreateValidator : TypePaymentDtoValidator<TypePaymentDto>
     {
     }
 }

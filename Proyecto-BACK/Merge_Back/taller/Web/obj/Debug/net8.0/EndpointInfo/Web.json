@@ -5425,8 +5425,8 @@
             "format": "int32"
           },
           "departmentId": {
-            "type": "string",
-            "nullable": true
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
