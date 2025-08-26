@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.User
+namespace Business.validaciones.ModelSecurity.User
 {
     public class UserValidator : AbstractValidator<UserDto>
     {

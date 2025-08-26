@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.Rol
+namespace Business.validaciones.ModelSecurity.RolUser
 {
-    class RolCreateValidator
+    class RolUserUpdateValidator
     {
     }
 }

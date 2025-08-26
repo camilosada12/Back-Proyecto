@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.UserNotification
+namespace Business.validaciones.Entities.UserNotification
 {
     public class UserNotificationValidator : AbstractValidator<UserNotificationDto>
     {

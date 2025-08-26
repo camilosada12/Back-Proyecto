@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.RolFormPermission
+namespace Business.validaciones.ModelSecurity.RolFormPermission
 {
     public class RolFormPermissionValidator : AbstractValidator<RolFormPermissionDto>
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.ValueSmldv
+namespace Business.validaciones.Entities.ValueSmldv
 {
     public class ValueSmldvValidator : AbstractValidator<ValueSmldvDto>
     {

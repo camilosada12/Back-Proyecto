@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.TypeInfraction
+namespace Business.validaciones.Entities.TypeInfraction
 {
     public class TypeInfractionValidator : AbstractValidator<TypeInfractionDto>
     {

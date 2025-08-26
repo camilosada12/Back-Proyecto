@@ -4,11 +4,8 @@ using Web.Service;
 
 using FluentValidation.AspNetCore;
 using Entity.Domain.Models.Implements.Entities;
-using Business.validaciones.InspectoraReport;
-using Business.validaciones.DocumentInfraction;
-using Business.validaciones.FineCalculationDetail;
-using Business.validaciones.TypeInfraction;
-using Business.validaciones.ValueSmldv;
+using Business.validaciones.Entities.InspectoraReport;
+using Business.validaciones.Entities.DocumentInfraction;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,11 +25,7 @@ builder.Services
     .AddFluentValidationClientsideAdapters();     // opcional (si usas clientes MVC/Razor)
 
 builder.Services.AddCustomValidators();
-builder.Services.AddValidatorsFromAssemblyContaining<InspectoraReportCreateValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<FineCalculationDetailValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<TypeInfractionValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<ValueSmldvValidator>();
+
 
 
 

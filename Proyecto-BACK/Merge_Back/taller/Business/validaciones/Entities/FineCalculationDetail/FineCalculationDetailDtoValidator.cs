@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.FineCalculationDetail
+namespace Business.validaciones.Entities.FineCalculationDetail
 {
     public class FineCalculationDetailValidator : AbstractValidator<FineCalculationDetailDto>
     {

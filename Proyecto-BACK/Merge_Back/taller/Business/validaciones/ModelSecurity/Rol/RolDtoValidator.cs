@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.validaciones.Rol
+namespace Business.validaciones.ModelSecurity.Rol
 {
     public class RolValidator : AbstractValidator<RolDto>
     {

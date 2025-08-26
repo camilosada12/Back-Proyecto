@@ -1,7 +1,10 @@
 ﻿using Business.validaciones.Entities.DocumentInfraction;
+using Business.validaciones.Entities.FineCalculationDetail;
 using Business.validaciones.Entities.InspectoraReport;
 using Business.validaciones.Entities.PaymentAgreement;
+using Business.validaciones.Entities.TypeInfraction;
 using Business.validaciones.Entities.TypePayment;
+using Business.validaciones.Entities.ValueSmldv;
 using Business.validaciones.ModelSecurity.Form;
 using Business.validaciones.ModelSecurity.FormModule;
 using Business.validaciones.ModelSecurity.Module;
@@ -23,6 +26,11 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<PaymentAgreementCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<TypePaymentCreateValidator>();
+            services.AddValidatorsFromAssemblyContaining<InspectoraReportCreateValidator>();
+            services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
+            services.AddValidatorsFromAssemblyContaining<FineCalculationDetailValidator>();
+            services.AddValidatorsFromAssemblyContaining<TypeInfractionValidator>();
+            services.AddValidatorsFromAssemblyContaining<ValueSmldvValidator>();
 
             // Parameters
             services.AddValidatorsFromAssemblyContaining<departmentCreateValidator>();
@@ -34,6 +42,7 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<PermissionCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<PersonCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<FormModuleCreateValidator>();
+
 
             return services;
         }
