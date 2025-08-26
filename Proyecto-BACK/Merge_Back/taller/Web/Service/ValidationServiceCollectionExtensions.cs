@@ -4,6 +4,7 @@ using Business.validaciones.Entities.InspectoraReport;
 using Business.validaciones.Entities.PaymentAgreement;
 using Business.validaciones.Entities.TypeInfraction;
 using Business.validaciones.Entities.TypePayment;
+using Business.validaciones.Entities.UserInfraction;
 using Business.validaciones.Entities.ValueSmldv;
 using Business.validaciones.ModelSecurity.Form;
 using Business.validaciones.ModelSecurity.FormModule;
@@ -31,6 +32,7 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<FineCalculationDetailValidator>();
             services.AddValidatorsFromAssemblyContaining<TypeInfractionValidator>();
             services.AddValidatorsFromAssemblyContaining<ValueSmldvValidator>();
+            services.AddValidatorsFromAssemblyContaining<UserInfracionCreateValidator>();
 
             // Parameters
             services.AddValidatorsFromAssemblyContaining<departmentCreateValidator>();

@@ -7,6 +7,7 @@ using Entity.Domain.Interfaces;
 using Entity.Domain.Models;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
+using Entity.Domain.Models.Implements.parameters;
 using Entity.relacionesModel;
 using Entity.relacionesModel.RelacionesEntities;
 using Entity.relacionesModel.RelacionesModelSecurity;
@@ -53,15 +54,20 @@ namespace Entity.Infrastructure.Contexts
         ///<summary>
         ///Implementación DBSet Model entities
         ///</summary>
-        public DbSet<DocumentInfraction> documenInfraction { get; set; }
-        public DbSet<FineCalculationDetail> fineCalculationDetail { get; set; }
-        public DbSet<InspectoraReport> inspectoraReport { get; set; }
-        public DbSet<PaymentAgreement> paymentAgreement { get; set; }
+
         public DbSet<TypeInfraction> typeInfraction { get; set; }
+        public DbSet<InspectoraReport> inspectoraReport { get; set; }
+        public DbSet<ValueSmldv> valueSmldv { get; set; }
+        public DbSet<UserNotification> userNotification { get; set; }
+        public DbSet<DocumentInfraction> documenInfraction { get; set; }
         public DbSet<TypePayment> typePayment { get; set; }
         public DbSet<UserInfraction> userInfraction { get; set; }
-        public DbSet<UserNotification> userNotification { get; set; }
-        public DbSet<ValueSmldv> valueSmldv { get; set; }
+        public DbSet<FineCalculationDetail> fineCalculationDetail { get; set; }
+        public DbSet<PaymentAgreement> paymentAgreement { get; set; }
+
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

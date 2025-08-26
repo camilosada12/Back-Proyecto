@@ -70,6 +70,9 @@ namespace Web.Service
             services.AddScoped<IValueSmldvService, ValueSmldvService>();
             services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
 
+            services.AddScoped<IUserInfractionServices, UserInfractionServices>();
+            services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
+
 
 
 

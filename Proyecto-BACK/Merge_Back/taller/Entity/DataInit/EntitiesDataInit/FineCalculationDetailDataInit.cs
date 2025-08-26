@@ -16,8 +16,8 @@ namespace Entity.DataInit.EntitiesDataInit
                 new FineCalculationDetail
                 {
                     id = 1,
-                    forumula = "salario minimo * dias = smdlv",
-                    percentaje = 0.5M,
+                    formula = "salario minimo * dias = smdlv",
+                    porcentaje = 0.5M,
                     totalCalculation = 100000M,
                     valueSmldvId = 1,
                     typeInfractionId = 1,
@@ -28,8 +28,8 @@ namespace Entity.DataInit.EntitiesDataInit
                  new FineCalculationDetail
                  {
                      id = 2,
-                     forumula = "salario minimo * dias = smdlv",
-                     percentaje = 0.0M,
+                     formula = "salario minimo * dias = smdlv",
+                     porcentaje = 0.0M,
                      totalCalculation = 150.000M,
                      valueSmldvId = 2,
                      typeInfractionId = 2,

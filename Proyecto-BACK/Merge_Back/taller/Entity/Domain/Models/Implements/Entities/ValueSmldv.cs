@@ -14,6 +14,6 @@ namespace Entity.Domain.Models.Implements.Entities
         public decimal minimunWage { get; set; }
 
         //Relaciones
-        public List<FineCalculationDetail> FineCalculationDetail { get; set; } = new List<FineCalculationDetail>();
+        public ICollection<FineCalculationDetail> fineCalculationDetail { get; set; }
     }
 }

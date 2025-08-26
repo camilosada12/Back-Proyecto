@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250824032608_Initial")]
+    [Migration("20250826164115_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -76,76 +76,6 @@ namespace Entity.Migrations
                             created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             inspectoraReportId = 2,
                             is_deleted = false
-                        });
-                });
-
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.FineCalculationDetail", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<bool>("active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("forumula")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("is_deleted")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("percentaje")
-                        .HasColumnType("float");
-
-                    b.Property<double>("totalCalculation")
-                        .HasColumnType("float");
-
-                    b.Property<int>("typeInfractionId")
-                        .HasColumnType("int")
-                        .HasColumnName("typeInfractionId");
-
-                    b.Property<int>("valueSmldvId")
-                        .HasColumnType("int")
-                        .HasColumnName("valueSmldvId");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("typeInfractionId");
-
-                    b.HasIndex("valueSmldvId");
-
-                    b.ToTable("FineCalculationDetail", "Entities");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            forumula = "salario minimo * dias = smdlv",
-                            is_deleted = false,
-                            percentaje = 0.5,
-                            totalCalculation = 168.0,
-                            typeInfractionId = 1,
-                            valueSmldvId = 1
-                        },
-                        new
-                        {
-                            id = 2,
-                            active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            forumula = "salario minimo * dias = smdlv",
-                            is_deleted = false,
-                            percentaje = 0.0,
-                            totalCalculation = 100.0,
-                            typeInfractionId = 2,
-                            valueSmldvId = 2
                         });
                 });
 
@@ -1386,6 +1316,75 @@ namespace Entity.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FineCalculationDetail", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<bool>("active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("formula")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("is_deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("porcentaje")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("totalCalculation")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<int>("typeInfractionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("valueSmldvId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("typeInfractionId");
+
+                    b.HasIndex("valueSmldvId");
+
+                    b.ToTable("FineCalculationDetail", "Entities");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            active = true,
+                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            formula = "salario minimo * dias = smdlv",
+                            is_deleted = false,
+                            porcentaje = 0.5m,
+                            totalCalculation = 100000m,
+                            typeInfractionId = 1,
+                            valueSmldvId = 1
+                        },
+                        new
+                        {
+                            id = 2,
+                            active = true,
+                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            formula = "salario minimo * dias = smdlv",
+                            is_deleted = false,
+                            porcentaje = 0.0m,
+                            totalCalculation = 150.000m,
+                            typeInfractionId = 2,
+                            valueSmldvId = 2
+                        });
+                });
+
             modelBuilder.Entity("RolFormPermission", b =>
                 {
                     b.Property<int>("id")
@@ -1605,27 +1604,6 @@ namespace Entity.Migrations
                     b.Navigation("paymentAgreement");
                 });
 
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.FineCalculationDetail", b =>
-                {
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "typeInfraction")
-                        .WithMany("fineCalculationDetail")
-                        .HasForeignKey("typeInfractionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_TypeInfraction_FineCalculationDetail");
-
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.ValueSmldv", "valueSmldv")
-                        .WithMany("FineCalculationDetail")
-                        .HasForeignKey("valueSmldvId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_ValueSmldv_FineCalculationDetail");
-
-                    b.Navigation("typeInfraction");
-
-                    b.Navigation("valueSmldv");
-                });
-
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.PaymentAgreement", b =>
                 {
                     b.HasOne("Entity.Domain.Models.Implements.parameters.PaymentFrequency", "paymentFrequency")
@@ -1759,6 +1737,27 @@ namespace Entity.Migrations
                     b.Navigation("department");
                 });
 
+            modelBuilder.Entity("FineCalculationDetail", b =>
+                {
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "typeInfraction")
+                        .WithMany("fineCalculationDetail")
+                        .HasForeignKey("typeInfractionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_TypeInfraction_FineCalculationDetail");
+
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.ValueSmldv", "valueSmldv")
+                        .WithMany("fineCalculationDetail")
+                        .HasForeignKey("valueSmldvId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_ValueSmldv_FineCalculationDetail");
+
+                    b.Navigation("typeInfraction");
+
+                    b.Navigation("valueSmldv");
+                });
+
             modelBuilder.Entity("RolFormPermission", b =>
                 {
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.Form", "Form")
@@ -1841,7 +1840,7 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.ValueSmldv", b =>
                 {
-                    b.Navigation("FineCalculationDetail");
+                    b.Navigation("fineCalculationDetail");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.Form", b =>

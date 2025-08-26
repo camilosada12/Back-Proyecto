@@ -23,7 +23,7 @@ namespace Entity.relacionesModel.RelacionesEntities
             builder.Property(x => x.minimunWage).HasPrecision(18, 2);
 
             // Relación: ValueSmldv -> FineCalculationDetail (uno a muchos)
-            builder.HasMany(vs => vs.FineCalculationDetail)
+            builder.HasMany(vs => vs.fineCalculationDetail)
                    .WithOne(fcd => fcd.valueSmldv)
                    .HasForeignKey(fcd => fcd.valueSmldvId)
                    .OnDelete(DeleteBehavior.Restrict)

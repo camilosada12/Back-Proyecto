@@ -1,59 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entity.ConfigurationsBase;
-using Entity.Domain.Models.Implements.Entities;
-using Entity.Domain.Models.Implements.ModelSecurity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Entity.Domain.Models.Implements.Entities;
+using Entity.ConfigurationsBase;
 
-namespace Entity.relacionesModel.RelacionesEntities
+public class RelacionesFineCalculationDetail : IEntityTypeConfiguration<FineCalculationDetail>
 {
-    public class RelacionesFineCalculationDetail : IEntityTypeConfiguration<FineCalculationDetail>
+    public void Configure(EntityTypeBuilder<FineCalculationDetail> builder)
     {
-        public void Configure(EntityTypeBuilder<FineCalculationDetail> builder)
-        {
-            // Configura la tabla y esquema
-            builder.ToTable("FineCalculationDetail", schema: "Entities");
+        builder.ToTable("FineCalculationDetail", "Entities");
+        builder.ConfigureBaseModel();
 
-            // Propiedades del baseModel
-            builder.ConfigureBaseModel();
+        builder.Property(x => x.formula)
+               .HasMaxLength(200)
+               .IsRequired();
 
-            // Propiedades de clave foránea
-            builder.Property(va => va.valueSmldvId).HasColumnName("valueSmldvId");
-            builder.Property(ty => ty.typeInfractionId).HasColumnName("typeInfractionId");
+        builder.Property(x => x.porcentaje)
+               .HasColumnType("decimal(5,2)")
+               .IsRequired();
 
-            // Propiedad requerida
-            builder.Property(i => i.is_deleted)
-                   .IsRequired();
+        builder.Property(x => x.totalCalculation)
+               .HasColumnType("decimal(12,2)")
+               .IsRequired();
 
-            builder.HasKey(x => x.id);
+        // Relación a TypeInfraction (sin sombras)
+        builder.HasOne(x => x.typeInfraction)
+               .WithMany(t => t.fineCalculationDetail)
+               .HasForeignKey(x => x.typeInfractionId)
+               .OnDelete(DeleteBehavior.NoAction)
+               .HasConstraintName("FK_TypeInfraction_FineCalculationDetail");
 
-            builder.Property(x => x.forumula)
-          .IsRequired()
-          .HasMaxLength(200)
-          .HasColumnType("varchar(200)");
+        // Relación a ValueSmldv (sin sombras)
+        builder.HasOne(x => x.valueSmldv)
+               .WithMany(v => v.fineCalculationDetail)
+               .HasForeignKey(x => x.valueSmldvId)
+               .OnDelete(DeleteBehavior.NoAction)
+               .HasConstraintName("FK_ValueSmldv_FineCalculationDetail");
 
-            builder.Property(x => x.percentaje)
-                .IsRequired()
-                .HasColumnType("decimal(5,2)");
-
-            builder.Property(x => x.totalCalculation)
-                .IsRequired()
-                .HasColumnType("decimal(12,2)");
-
-            builder.HasOne(x => x.valueSmldv)
-                .WithMany()
-                .HasForeignKey(x => x.valueSmldvId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(x => x.typeInfraction)
-                .WithMany()
-                .HasForeignKey(x => x.typeInfractionId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-        }
+        // 🔒 Evita que EF intente crear FKs sombra por convenciones
+        builder.Ignore("TypeInfractionid");
+        builder.Ignore("ValueSmldvid");
     }
 }

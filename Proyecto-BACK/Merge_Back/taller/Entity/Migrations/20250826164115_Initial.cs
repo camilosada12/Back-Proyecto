@@ -328,9 +328,9 @@ namespace Entity.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    forumula = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    percentaje = table.Column<double>(type: "float", nullable: false),
-                    totalCalculation = table.Column<double>(type: "float", nullable: false),
+                    formula = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    porcentaje = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    totalCalculation = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     valueSmldvId = table.Column<int>(type: "int", nullable: false),
                     typeInfractionId = table.Column<int>(type: "int", nullable: false),
                     active = table.Column<bool>(type: "bit", nullable: false),
@@ -345,15 +345,13 @@ namespace Entity.Migrations
                         column: x => x.typeInfractionId,
                         principalSchema: "Entities",
                         principalTable: "typeInfraction",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_ValueSmldv_FineCalculationDetail",
                         column: x => x.valueSmldvId,
                         principalSchema: "Entities",
                         principalTable: "valueSmldv",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -736,11 +734,11 @@ namespace Entity.Migrations
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "FineCalculationDetail",
-                columns: new[] { "id", "active", "created_date", "forumula", "is_deleted", "percentaje", "totalCalculation", "typeInfractionId", "valueSmldvId" },
+                columns: new[] { "id", "active", "created_date", "formula", "is_deleted", "porcentaje", "totalCalculation", "typeInfractionId", "valueSmldvId" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "salario minimo * dias = smdlv", false, 0.5, 168.0, 1, 1 },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "salario minimo * dias = smdlv", false, 0.0, 100.0, 2, 2 }
+                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "salario minimo * dias = smdlv", false, 0.5m, 100000m, 1, 1 },
+                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "salario minimo * dias = smdlv", false, 0.0m, 150.000m, 2, 2 }
                 });
 
             migrationBuilder.InsertData(

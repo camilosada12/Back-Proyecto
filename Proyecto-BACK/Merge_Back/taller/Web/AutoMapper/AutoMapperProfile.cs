@@ -76,6 +76,9 @@ namespace Web.AutoMapper
             CreateMap<ValueSmldv, ValueSmldvSelectDto>();
             CreateMap<ValueSmldv, ValueSmldvDto>().ReverseMap();
 
+            CreateMap<UserInfraction, UserInfractionSelectDto>();
+            CreateMap<UserInfraction, UserInfractionDto>().ReverseMap();
+
 
             //parameters 
 

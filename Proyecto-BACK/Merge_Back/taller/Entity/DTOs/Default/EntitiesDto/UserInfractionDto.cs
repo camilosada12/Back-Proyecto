@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Entity.Domain.Interfaces;
 using Entity.Domain.Models.Base;
 using Entity.Domain.Models.Implements.ModelSecurity;
+using Entity.DTOs.Interface.Entities;
 
 namespace Entity.Domain.Models.Implements.Entities
 {
-    public class UserInfractionDto : IHasId
+    public class UserInfractionDto : IHasId, IUserInfraction
     {
         public int id { get; set; }
         public DateTime dateInfraction { get; set; } = DateTime.Now;

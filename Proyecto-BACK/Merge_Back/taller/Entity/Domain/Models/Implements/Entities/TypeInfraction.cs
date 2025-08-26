@@ -15,6 +15,6 @@ namespace Entity.Domain.Models.Implements.Entities
         
         //relaciones
         public List<UserInfraction> userInfractions { get; set; } = new List<UserInfraction>();
-        public List<FineCalculationDetail> fineCalculationDetail { get; set; } = new List<FineCalculationDetail>();
+        public ICollection<FineCalculationDetail> fineCalculationDetail { get; set; }
     }
 }
