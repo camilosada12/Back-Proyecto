@@ -1,5 +1,10 @@
-backup
-.VS/
-.vscode/
-*.vs
-*/.vscode/
+# Archivos de compilación y temporales
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+
+# Configuración de Visual Studio
+.vs/
