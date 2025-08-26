@@ -11,8 +11,8 @@ namespace Entity.Domain.Models.Implements.Entities
     public class ValueSmldvSelectDto
     {
         public int id { get; set; }
-        public int value_smldv { get; set; }
-        public DateTime Current_Year { get; set; } = DateTime.Now;
+        public double value_smldv { get; set; }
+        public int Current_Year { get; set; } 
         public decimal minimunWage { get; set; }
 
     }

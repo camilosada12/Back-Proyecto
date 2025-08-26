@@ -705,6 +705,241 @@
     ]
   },
   {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.FineCalculationDetailSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IFineCalculationDetailService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "api/FineCalculationDetail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getAllType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.FineCalculationDetailSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IFineCalculationDetailService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Post",
+    "RelativePath": "api/FineCalculationDetail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.FineCalculationDetailSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IFineCalculationDetailService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "api/FineCalculationDetail/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.FineCalculationDetailSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IFineCalculationDetailService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Put",
+    "RelativePath": "api/FineCalculationDetail/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.FineCalculationDetailSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IFineCalculationDetailService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "api/FineCalculationDetail/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "deleteType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.FineCalculationDetailDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.FineCalculationDetailSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IFineCalculationDetailService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "RestoreLogical",
+    "RelativePath": "api/FineCalculationDetail/logical-restore/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.DTOs.Default.ModelSecurityDto.FormDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.DTOs.Select.ModelSecuritySelectDto.FormSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Security.IFormService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "Get",
     "RelativePath": "api/Form",
@@ -3629,6 +3864,241 @@
     ]
   },
   {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypeInfractionDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypeInfractionSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypeInfractionService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "api/TypeInfraction",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getAllType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypeInfractionDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypeInfractionSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypeInfractionService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Post",
+    "RelativePath": "api/TypeInfraction",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.TypeInfractionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypeInfractionDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypeInfractionSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypeInfractionService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "api/TypeInfraction/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypeInfractionDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypeInfractionSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypeInfractionService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Put",
+    "RelativePath": "api/TypeInfraction/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.TypeInfractionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypeInfractionDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypeInfractionSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypeInfractionService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "api/TypeInfraction/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "deleteType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypeInfractionDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypeInfractionSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypeInfractionService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "RestoreLogical",
+    "RelativePath": "api/TypeInfraction/logical-restore/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.TypePaymentDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.TypePaymentSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.ITypePaymentServices, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "Get",
     "RelativePath": "api/TypePayment",
@@ -3864,6 +4334,241 @@
     ]
   },
   {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.UserNotificationDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.UserNotificationSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IUserNotificationService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "api/UserNotification",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getAllType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.UserNotificationDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.UserNotificationSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IUserNotificationService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Post",
+    "RelativePath": "api/UserNotification",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.UserNotificationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.UserNotificationDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.UserNotificationSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IUserNotificationService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "api/UserNotification/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.UserNotificationDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.UserNotificationSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IUserNotificationService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Put",
+    "RelativePath": "api/UserNotification/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.UserNotificationDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.UserNotificationDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.UserNotificationSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IUserNotificationService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "api/UserNotification/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "deleteType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.UserNotificationDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.UserNotificationSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IUserNotificationService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "RestoreLogical",
+    "RelativePath": "api/UserNotification/logical-restore/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.DTOs.Default.ModelSecurityDto.UserDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.DTOs.Select.ModelSecuritySelectDto.UserSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Security.IUserService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "Get",
     "RelativePath": "api/Users",
@@ -4061,6 +4766,241 @@
     "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.DTOs.Default.ModelSecurityDto.UserDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.DTOs.Select.ModelSecuritySelectDto.UserSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Security.IUserService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "RestoreLogical",
     "RelativePath": "api/Users/logical-restore/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.ValueSmldvDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.ValueSmldvSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IValueSmldvService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Get",
+    "RelativePath": "api/ValueSmldv",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "getAllType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.ValueSmldvDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.ValueSmldvSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IValueSmldvService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Post",
+    "RelativePath": "api/ValueSmldv",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.ValueSmldvDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.ValueSmldvDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.ValueSmldvSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IValueSmldvService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "GetById",
+    "RelativePath": "api/ValueSmldv/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.ValueSmldvDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.ValueSmldvSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IValueSmldvService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Put",
+    "RelativePath": "api/ValueSmldv/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Entity.Domain.Models.Implements.Entities.ValueSmldvDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.ValueSmldvDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.ValueSmldvSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IValueSmldvService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "Delete",
+    "RelativePath": "api/ValueSmldv/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "deleteType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "Web.Controllers.ControllersBase.Web.Controllers.BaseController.BaseController\u00603[[Entity.Domain.Models.Implements.Entities.ValueSmldvDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Entity.Domain.Models.Implements.Entities.ValueSmldvSelectDto, Entity, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Business.Interfaces.IBusinessImplements.Entities.IValueSmldvService, Business, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+    "Method": "RestoreLogical",
+    "RelativePath": "api/ValueSmldv/logical-restore/{id}",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,

@@ -10,8 +10,8 @@ namespace Entity.Domain.Models.Implements.Entities
     public class FineCalculationDetail : BaseModel
     {
         public string forumula {  get; set; }
-        public double percentaje { get; set; }
-        public double totalCalculation {  get; set; }
+        public decimal percentaje { get; set; }
+        public decimal totalCalculation {  get; set; }
         public int valueSmldvId { get; set; }
         public int typeInfractionId { get; set; }
 

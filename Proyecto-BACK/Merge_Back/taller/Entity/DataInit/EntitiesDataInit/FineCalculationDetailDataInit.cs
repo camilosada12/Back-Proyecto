@@ -17,8 +17,8 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 1,
                     forumula = "salario minimo * dias = smdlv",
-                    percentaje = 0.5,
-                    totalCalculation = 168.000,
+                    percentaje = 0.5M,
+                    totalCalculation = 100000M,
                     valueSmldvId = 1,
                     typeInfractionId = 1,
                     active = true,
@@ -29,8 +29,8 @@ namespace Entity.DataInit.EntitiesDataInit
                  {
                      id = 2,
                      forumula = "salario minimo * dias = smdlv",
-                     percentaje = 0.0,
-                     totalCalculation = 100.000,
+                     percentaje = 0.0M,
+                     totalCalculation = 150.000M,
                      valueSmldvId = 2,
                      typeInfractionId = 2,
                      active = true,

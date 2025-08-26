@@ -7,6 +7,9 @@ using FluentValidation.AspNetCore;
 using Entity.Domain.Models.Implements.Entities;
 using Business.validaciones.InspectoraReport;
 using Business.validaciones.DocumentInfraction;
+using Business.validaciones.FineCalculationDetail;
+using Business.validaciones.TypeInfraction;
+using Business.validaciones.ValueSmldv;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +30,11 @@ builder.Services
 
 builder.Services.AddValidatorsFromAssemblyContaining<InspectoraReportCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<FineCalculationDetailValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<TypeInfractionValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ValueSmldvValidator>();
+
+
 
 
 builder.Services.AddApplicationServices();
@@ -53,7 +61,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 }
 
 // 5) Redirección HTTPS (habilítalo si sirve en tu hosting)
-// app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors();
 app.UseAuthentication();

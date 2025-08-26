@@ -30,7 +30,7 @@ namespace Web.Service
 
             // Registrar AuditDbContext si es necesario, con proveedor fijo o dinámico
             services.AddDbContext<AuditDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("Audit")));
+               options.UseNpgsql(configuration.GetConnectionString("Audit")));
 
             return services;
         }

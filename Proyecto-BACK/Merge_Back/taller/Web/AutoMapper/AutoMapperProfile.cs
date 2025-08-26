@@ -60,6 +60,23 @@ namespace Web.AutoMapper
             CreateMap<InspectoraReport, InspectoraReportDto>().ReverseMap();
             CreateMap<InspectoraReport, InspectoraReportSelectDto>().ReverseMap();
 
+            CreateMap<FineCalculationDetail, FineCalculationDetailDto>().ReverseMap();
+            CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>().ReverseMap();
+
+
+            CreateMap<TypeInfraction, TypeInfractionSelectDto>();
+            CreateMap<TypeInfractionDto, TypeInfraction>();
+            CreateMap<TypeInfraction, TypeInfractionDto>();
+
+            CreateMap<FineCalculationDetailSelectDto, FineCalculationDetail>();
+
+            CreateMap<UserNotification, UserNotificationDto>().ReverseMap();
+            CreateMap<UserNotification, UserNotificationSelectDto>().ReverseMap();
+
+            CreateMap<ValueSmldv, ValueSmldvSelectDto>();
+            CreateMap<ValueSmldv, ValueSmldvDto>().ReverseMap();
+
+
             //parameters 
 
             CreateMap<department, departmentDto>().ReverseMap();

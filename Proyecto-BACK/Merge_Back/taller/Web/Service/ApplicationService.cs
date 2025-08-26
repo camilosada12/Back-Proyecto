@@ -39,7 +39,7 @@ namespace Web.Service
             services.AddScoped<IAuditService, AuditService>();
 
             // 2) Persistencia genérica
-            // services.AddDbContext<AppDbContext>(...); // (si aplica)
+            //services.AddDbContext<AppDbContext>(...); // (si aplica)
             services.AddScoped(typeof(IData<>), typeof(DataGeneric<>)); // ojo: namespace "Data.Repository" (sin typo)
 
             // 3) Repositorios — PARAMETERS
@@ -56,6 +56,23 @@ namespace Web.Service
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
             services.AddScoped<IPaymentAgreementRepository, PaymentAgreementRepository>();
             services.AddScoped<IInspectoraReportRepository, InspectoraReportRepository>();
+            services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
+
+            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
+            services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
+
+            services.AddScoped<ITypeInfractionRepository, TypeInfractionRepository>();
+            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
+
+            services.AddScoped<IUserNotificationService, UserNotificationService>();
+            services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
+
+            services.AddScoped<IValueSmldvService, ValueSmldvService>();
+            services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
+
+
+
+
 
             // 4) Servicios — PARAMETERS
             services.AddScoped<IdepartmentServices, departmentServices>();
@@ -79,6 +96,7 @@ namespace Web.Service
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
             services.AddScoped<IPaymentAgreementServices, PaymentAgreementServices>();
+
             //services.AddScoped<IFineCalculationDetailServices, FineCalculationDetailServices>();
 
             // 5) Integraciones externas
