@@ -1,6 +1,8 @@
-﻿namespace Entity.DTOs.Select.ModelSecuritySelectDto
+﻿using Entity.DTOs.Interface.ModelSecurity;
+
+namespace Entity.DTOs.Select.ModelSecuritySelectDto
 {
-    public class PersonSelectDto
+    public class PersonSelectDto : IPerson
     {
         public int id { get; set; }
         public string firstName { get; set; }

@@ -1,5 +1,5 @@
 ﻿using Entity.Domain.Models.Implements.Entities;
-using Entity.DTOs.Interface;
+using Entity.DTOs.Interface.Entities;
 using FluentValidation;
 
 public class InspectoraReportValidator<T> : AbstractValidator<T>

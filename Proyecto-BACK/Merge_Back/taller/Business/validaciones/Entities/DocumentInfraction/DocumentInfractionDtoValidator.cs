@@ -1,7 +1,7 @@
-﻿using Entity.DTOs.Interface;
+﻿using Entity.DTOs.Interface.Entities;
 using FluentValidation;
 
-namespace Business.validaciones.DocumentInfraction
+namespace Business.validaciones.Entities.DocumentInfraction
 {
     public class DocumentInfractionDtoValidator<T> : AbstractValidator<T>
         where T : IDocumentInfraction

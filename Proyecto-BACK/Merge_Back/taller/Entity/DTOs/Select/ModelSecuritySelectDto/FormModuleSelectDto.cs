@@ -1,6 +1,8 @@
-﻿namespace Entity.DTOs.Select.ModelSecuritySelectDto
+﻿using Entity.DTOs.Interface.ModelSecurity;
+
+namespace Entity.DTOs.Select.ModelSecuritySelectDto
 {
-    public class FormModuleSelectDto
+    public class FormModuleSelectDto : IFormModule
     {
         public int id { get; set; }
         public int formid { get; set; }

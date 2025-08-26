@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Interface;
 
-namespace Business.validaciones.DocumentInfraction
+namespace Business.validaciones.Entities.DocumentInfraction
 {
     public class DocumentInfractionUpdateValidator : DocumentInfractionDtoValidator<DocumentInfractionDto>
     {

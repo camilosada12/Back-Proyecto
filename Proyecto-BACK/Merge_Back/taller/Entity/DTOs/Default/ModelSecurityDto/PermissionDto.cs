@@ -1,8 +1,9 @@
 ﻿using Entity.Domain.Interfaces;
+using Entity.DTOs.Interface.ModelSecurity;
 
 namespace Entity.DTOs.Default.ModelSecurityDto
 {
-    public class PermissionDto : IHasId
+    public class PermissionDto : IHasId, IPermission
     {
         public int id { get; set; }
         public string name { get; set; }

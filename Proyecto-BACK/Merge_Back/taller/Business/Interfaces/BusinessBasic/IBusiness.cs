@@ -15,9 +15,7 @@ namespace Business.Interfaces.BusinessBasic
 
         //Metodos de validacion
 
-        Task ValidateForCreateAsync(TDto dto) => Task.CompletedTask;
-        Task ValidateForUpdateAsync(TDto dto) => Task.CompletedTask;
-        Task ValidateIdAsync(int id) => Task.CompletedTask;
+        Task<bool> ExistsAsync(int id);
 
     }
 }

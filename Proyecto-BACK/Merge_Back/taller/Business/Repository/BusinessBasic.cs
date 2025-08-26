@@ -10,7 +10,9 @@ using Utilities.Exceptions;
 using FluentValidation;
 using FVValidationException = FluentValidation.ValidationException;
 using UValidationException = Utilities.Exceptions.ValidationException;
-using System.Runtime.ExceptionServices; // para re-lanzar conservando stack
+using System.Runtime.ExceptionServices;
+using Entity.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore; // para re-lanzar conservando stack
 
 namespace Business.Repository
 {
@@ -19,12 +21,15 @@ namespace Business.Repository
     {
         protected readonly IMapper _mapper;
         protected readonly IData<TEntity> Data;
+        protected readonly ApplicationDbContext? _context;
 
-        public BusinessBasic(IData<TEntity> data, IMapper mapper)
+        public BusinessBasic(IData<TEntity> data, IMapper mapper, ApplicationDbContext? context = null)
         {
             Data = data ?? throw new ArgumentNullException(nameof(data));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _context = context; // puede ser null si no lo necesitan
         }
+
 
         public override async Task<IEnumerable<TDtoGet>> GetAllAsync()
         {
@@ -150,6 +155,14 @@ namespace Business.Repository
                 throw new BusinessException($"Error al restaurar el registro con ID {id}.", ex);
             }
         }
+
+        public override async Task<bool> ExistsAsync(int id)
+        {
+            BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+            return await _context.Set<TEntity>().AnyAsync(e => e.id == id);
+        }
+
+
 
         /// <summary>
         /// Si es BusinessException, FluentValidation.ValidationException o Utilities.ValidationException, relanza sin envolver.

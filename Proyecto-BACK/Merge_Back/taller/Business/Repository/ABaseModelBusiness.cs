@@ -15,8 +15,11 @@ namespace Business.Repository
         public abstract Task<bool> RestoreLogical(int id);
         public abstract Task<bool> UpdateAsync(TDto dto);
 
-        //public virtual Task ValidateForCreateAsync(TDto dto) => Task.CompletedTask;
-        //public virtual Task ValidateForUpdateAsync(TDto dto) => Task.CompletedTask;
-        //public virtual Task ValidateIdAsync(int id) => Task.CompletedTask;
+        public virtual Task<bool> ExistsAsync(int id)
+        {
+            // Implementación por defecto: devuelve false o lanza una excepción
+            return Task.FromResult(false);
+        }
+
     }
 }

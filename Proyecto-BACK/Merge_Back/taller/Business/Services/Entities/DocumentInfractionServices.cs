@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Repository;
 using Business.Strategy.StrategyGet.Implement;
-using Data.Interfaces.DataBasic;
 using Data.Interfaces.IDataImplement.Entities;
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
@@ -18,15 +12,20 @@ using Utilities.Exceptions;
 
 namespace Business.Services.Entities
 {
-    public class DocumentInfractionServices : BusinessBasic<DocumentInfractionDto,DocumentInfractionSelectDto,DocumentInfraction>, IDocumentInfractionServices
+    public class DocumentInfractionServices
+        : BusinessBasic<DocumentInfractionDto, DocumentInfractionSelectDto, DocumentInfraction>, IDocumentInfractionServices
     {
         private readonly ILogger<DocumentInfractionServices> _logger;
+        private readonly IDocumentInfractionRepository _documentInfractionRepository;
 
-        protected readonly IDocumentInfractionRepository _DocumentInfractionRepository;
-
-        public DocumentInfractionServices(IDocumentInfractionRepository data, IMapper mapper,ILogger<DocumentInfractionServices> logger) : base(data, mapper)
+        public DocumentInfractionServices(
+            IDocumentInfractionRepository data,
+            IMapper mapper,
+            ILogger<DocumentInfractionServices> logger,
+            Entity.Infrastructure.Contexts.ApplicationDbContext context
+        ) : base(data, mapper, context)
         {
-            _DocumentInfractionRepository = data;
+            _documentInfractionRepository = data;
             _logger = logger;
         }
 
@@ -34,9 +33,8 @@ namespace Business.Services.Entities
         {
             try
             {
-
-                var strategy = GetStrategyFactory.GetStrategyGet(_DocumentInfractionRepository, getAllType);
-                var entities = await strategy.GetAll(_DocumentInfractionRepository);
+                var strategy = GetStrategyFactory.GetStrategyGet(_documentInfractionRepository, getAllType);
+                var entities = await strategy.GetAll(_documentInfractionRepository);
                 return _mapper.Map<IEnumerable<DocumentInfractionSelectDto>>(entities);
             }
             catch (Exception ex)
@@ -51,14 +49,91 @@ namespace Business.Services.Entities
             {
                 BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
 
-                var entity = await _DocumentInfractionRepository.GetByIdAsync(id);
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"El documento de infracción con ID {id} no existe.");
+
+                var entity = await _documentInfractionRepository.GetByIdAsync(id);
                 return _mapper.Map<DocumentInfractionSelectDto?>(entity);
             }
             catch (Exception ex)
             {
                 throw new BusinessException($"Error al obtener el registro con ID {id}.", ex);
             }
+        }
 
+        public override async Task<DocumentInfractionDto> CreateAsync(DocumentInfractionDto dto)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
+
+                // ✅ Validación de claves foráneas
+                if (!await ExistsAsync(dto.inspectoraReportId))
+                    throw new BusinessException($"El reporte de inspectora con ID {dto.inspectoraReportId} no existe.");
+
+                if (!await ExistsAsync(dto.PaymentAgreementId))
+                    throw new BusinessException($"El acuerdo de pago con ID {dto.PaymentAgreementId} no existe.");
+
+                return await base.CreateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al crear el documento de infracción.", ex);
+            }
+        }
+
+        public override async Task<bool> UpdateAsync(DocumentInfractionDto dto)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
+
+                if (!await ExistsAsync(dto.inspectoraReportId))
+                    throw new BusinessException($"El reporte de inspectora con ID {dto.inspectoraReportId} no existe.");
+
+                if (!await ExistsAsync(dto.PaymentAgreementId))
+                    throw new BusinessException($"El acuerdo de pago con ID {dto.PaymentAgreementId} no existe.");
+
+                return await base.UpdateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al actualizar el documento de infracción.", ex);
+            }
+        }
+
+        public override async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"No se puede eliminar. El documento de infracción con ID {id} no existe.");
+
+                return await base.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al eliminar el registro con ID {id}.", ex);
+            }
+        }
+
+        public override async Task<bool> RestoreLogical(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"No se puede restaurar. El documento de infracción con ID {id} no existe.");
+
+                return await base.RestoreLogical(id);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al restaurar el registro con ID {id}.", ex);
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Repository;
+using Business.Strategy.StrategyGet.Implement;
 using Data.Interfaces.IDataImplement.Security;
+using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
@@ -12,30 +14,133 @@ using Utilities.Exceptions;
 
 namespace Business.Services.Security
 {
-    public class RolUserService : BusinessBasic<RolUserDto, RolUserSelectDto, RolUser>, IRolUserService
+    public class RolUserService
+        : BusinessBasic<RolUserDto, RolUserSelectDto, RolUser>, IRolUserService
     {
-
-        private readonly IRolUserRepository _dataRolUser;
-        //private readonly IUnitOfWork _unitOfWork;
-
+        private readonly IRolUserRepository _rolUserRepository;
         private readonly ILogger<RolUserService> _logger;
-        //protected readonly IData<RolUser> Data;
 
-        public RolUserService(IRolUserRepository data, ILogger<RolUserService> logger, IMapper mapper) : base(data, mapper)
+        public RolUserService(
+            IRolUserRepository data,
+            IMapper mapper,
+            ILogger<RolUserService> logger,
+            Entity.Infrastructure.Contexts.ApplicationDbContext context
+        ) : base(data, mapper, context)
         {
-            _dataRolUser = data;
+            _rolUserRepository = data;
             _logger = logger;
-
         }
+
+        // =============================================
+        // Métodos obligatorios del BusinessBasic
+        // =============================================
+
+        public override async Task<IEnumerable<RolUserSelectDto>> GetAllAsync(GetAllType getAllType)
+        {
+            try
+            {
+                var strategy = GetStrategyFactory.GetStrategyGet(_rolUserRepository, getAllType);
+                var entities = await strategy.GetAll(_rolUserRepository);
+                return _mapper.Map<IEnumerable<RolUserSelectDto>>(entities);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al obtener los registros de RolUser.", ex);
+            }
+        }
+
+        public override async Task<RolUserSelectDto?> GetByIdAsync(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"El RolUser con ID {id} no existe.");
+
+                var entity = await _rolUserRepository.GetByIdAsync(id);
+                return _mapper.Map<RolUserSelectDto?>(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al obtener el RolUser con ID {id}.", ex);
+            }
+        }
+
+        public override async Task<RolUserDto> CreateAsync(RolUserDto dto)
+        {
+            try
+            {
+                await ValidateForeignKeysAsync(dto);
+                return await base.CreateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al crear el RolUser.", ex);
+            }
+        }
+
+        public override async Task<bool> UpdateAsync(RolUserDto dto)
+        {
+            try
+            {
+                await ValidateForeignKeysAsync(dto);
+                return await base.UpdateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al actualizar el RolUser.", ex);
+            }
+        }
+
+        public override async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"No se puede eliminar. El RolUser con ID {id} no existe.");
+
+                return await base.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al eliminar el RolUser con ID {id}.", ex);
+            }
+        }
+
+        public override async Task<bool> RestoreLogical(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"No se puede restaurar. El RolUser con ID {id} no existe.");
+
+                return await base.RestoreLogical(id);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al restaurar el RolUser con ID {id}.", ex);
+            }
+        }
+
+        // =============================================
+        // Métodos adicionales de IRolUserService
+        // =============================================
 
         public async Task<RolUserDto> AsignateUserRTo(User user)
         {
             try
             {
-                var entity = await _dataRolUser.AsignateUserRTo(user);
-                entity.InitializeLogicalState(); // Inicializa estado lógico (is_deleted = false)
+                BusinessValidationHelper.ThrowIfNull(user, "El usuario no puede ser nulo.");
 
-                return _mapper.Map<RolUserDto>(entity); // No IEnumerable
+                var entity = await _rolUserRepository.AsignateUserRTo(user);
+                entity.InitializeLogicalState();
+
+                return _mapper.Map<RolUserDto>(entity);
             }
             catch (Exception ex)
             {
@@ -43,26 +148,10 @@ namespace Business.Services.Security
             }
         }
 
-
-        public override async Task<IEnumerable<RolUserSelectDto>> GetAllAsync()
+        public async Task<IEnumerable<string>> GetAllRolUser(int idUser)
         {
-            try
-            {
-                var entity = await _dataRolUser.GetAllAsync();
-                return _mapper.Map<IEnumerable<RolUserSelectDto>>(entity);
-            }
-            catch (Exception ex)
-            {
-                throw new BusinessException("Error al obtener todos los registros.", ex);
-            }
-           
-        }
-
-        public  async Task<IEnumerable<string>> GetAllRolUser(int idUser)
-        {
-
-            var entity = await _dataRolUser.GetJoinRolesAsync(idUser);
-            return entity;
+            BusinessValidationHelper.ThrowIfZeroOrLess(idUser, "El ID de usuario debe ser mayor que cero.");
+            return await _rolUserRepository.GetJoinRolesAsync(idUser);
         }
 
         public async Task<RolUserSelectDto?> GetByIdJoin(int id)
@@ -71,52 +160,27 @@ namespace Business.Services.Security
             {
                 BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
 
-                var entity = await _dataRolUser.GetByIdAsync(id);
+                var entity = await _rolUserRepository.GetByIdAsync(id);
                 return entity == null ? default : _mapper.Map<RolUserSelectDto>(entity);
             }
             catch (Exception ex)
             {
                 throw new BusinessException($"Error al obtener el registro con ID {id}.", ex);
             }
-            
         }
 
-        
+        // =============================================
+        // Helper interno
+        // =============================================
+        private async Task ValidateForeignKeysAsync(RolUserDto dto)
+        {
+            BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
 
+            if (!await ExistsAsync(dto.userId))
+                throw new BusinessException($"El usuario con ID {dto.userId} no existe.");
 
-
-        //public async Task<RolUserDto> CreateAsync(RolUserDto dto)
-        //{
-        //    ValidateDto(dto);
-        //    var entity = _mapper.Map<RolUser>(dto);
-        //    var created = await Data.CreateAsync(entity);
-        //    return _mapper.Map<RolUserDto>(created);
-        //}
-
-        //protected override void ValidateDto(RolUserDto dto)
-        //{
-        //    if (dto == null)
-        //    {
-        //        throw new ValidationException("El objeto RolUser no puede ser nulo");
-        //    }
-        //}
-
-        //protected override async Task ValidateIdAsync(int id)
-        //{
-        //    var entity = await _dataRolUser.GetByIdAsync(id);
-        //    if (entity == null) 
-        //    {
-        //        _logger.LogWarning($"Se intentó operar con un ID inválido: {id}");
-        //        throw new EntityNotFoundException($"No se encontró una RolUser con el ID {id}");
-        //    }
-        //}
-
-        //protected override void ValidateDto(RolUserDto dto)
-        //{
-        //    if (dto == null)
-        //    {
-        //        throw new ValidationException("El objeto RolUser no puede ser nulo");
-        //    }
-        //}
+            if (!await ExistsAsync(dto.rolId))
+                throw new BusinessException($"El rol con ID {dto.rolId} no existe.");
+        }
     }
 }

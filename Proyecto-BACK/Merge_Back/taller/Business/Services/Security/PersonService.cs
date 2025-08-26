@@ -2,8 +2,6 @@
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Repository;
 using Business.Strategy.StrategyGet.Implement;
-using Data.Interfaces.DataBasic;
-using Data.Interfaces.IDataImplement;
 using Data.Interfaces.IDataImplement.Security;
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.ModelSecurity;
@@ -15,12 +13,18 @@ using Utilities.Exceptions;
 
 namespace Business.Services.Security
 {
-    public class PersonService : BusinessBasic<PersonDto, PersonSelectDto, Person>, IPersonService
+    public class PersonService
+        : BusinessBasic<PersonDto, PersonSelectDto, Person>, IPersonService
     {
         private readonly ILogger<PersonService> _logger;
-        //protected override IData<Person> Data => _unitOfWork.Persons;
-        protected readonly IPersonRepository _personRepository;
-        public PersonService(IPersonRepository data, IMapper mapper, ILogger<PersonService> logger) : base(data, mapper)
+        private readonly IPersonRepository _personRepository;
+
+        public PersonService(
+            IPersonRepository data,
+            IMapper mapper,
+            ILogger<PersonService> logger,
+            Entity.Infrastructure.Contexts.ApplicationDbContext context
+        ) : base(data, mapper, context)
         {
             _personRepository = data;
             _logger = logger;
@@ -30,8 +34,6 @@ namespace Business.Services.Security
         {
             try
             {
-
-
                 var strategy = GetStrategyFactory.GetStrategyGet(_personRepository, getAllType);
                 var entities = await strategy.GetAll(_personRepository);
                 return _mapper.Map<IEnumerable<PersonSelectDto>>(entities);
@@ -48,6 +50,9 @@ namespace Business.Services.Security
             {
                 BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
 
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"La persona con ID {id} no existe.");
+
                 var entity = await _personRepository.GetByIdAsync(id);
                 return _mapper.Map<PersonSelectDto?>(entity);
             }
@@ -55,32 +60,78 @@ namespace Business.Services.Security
             {
                 throw new BusinessException($"Error al obtener el registro con ID {id}.", ex);
             }
-
         }
 
+        public override async Task<PersonDto> CreateAsync(PersonDto dto)
+        {
+            try
+            {
+                if (!await ExistsAsync(dto.documentTypeId))
+                    throw new BusinessException($"El tipo de documento con ID {dto.documentTypeId} no existe.");
 
-        //protected override void ValidateDto(PersonDto dto)
-        //{
-        //    if (dto == null)
-        //    {
-        //        throw new ValidationException("El objeto Person no puede ser nulo");
-        //    }
+                if (!await ExistsAsync(dto.municipalityId))
+                    throw new BusinessException($"El municipio con ID {dto.municipalityId} no existe.");
 
-        //    if (string.IsNullOrWhiteSpace(dto.first_name))
-        //    {
-        //        _logger.LogWarning("Se intentó crear/actualizar una Person con Name vacío");
-        //        throw new ValidationException("name", "El Name de la Person es obligatorio");
-        //    }
-        //}
+                return await base.CreateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al crear la persona.", ex);
+            }
+        }
 
-        //protected override async Task ValidateIdAsync(int id)
-        //{
-        //    var entity = await Data.GetByIdAsync(id);
-        //    if (entity == null)
-        //    {
-        //        _logger.LogWarning($"Se intentó operar un ID inválido: {id}");
-        //        throw new EntityNotFoundException($"No se encontró un Person con el ID {id}");
-        //    }
-        //}
+        public override async Task<bool> UpdateAsync(PersonDto dto)
+        {
+            try
+            {
+
+                if (!await ExistsAsync(dto.documentTypeId))
+                    throw new BusinessException($"El tipo de documento con ID {dto.documentTypeId} no existe.");
+
+                if (!await ExistsAsync(dto.municipalityId))
+                    throw new BusinessException($"El municipio con ID {dto.municipalityId} no existe.");
+
+                return await base.UpdateAsync(dto);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Error al actualizar la persona.", ex);
+            }
+        }
+
+        public override async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"No se puede eliminar. La persona con ID {id} no existe.");
+
+                return await base.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al eliminar la persona con ID {id}.", ex);
+            }
+        }
+
+        public override async Task<bool> RestoreLogical(int id)
+        {
+            try
+            {
+                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
+
+                if (!await ExistsAsync(id))
+                    throw new BusinessException($"No se puede restaurar. La persona con ID {id} no existe.");
+
+                return await base.RestoreLogical(id);
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException($"Error al restaurar la persona con ID {id}.", ex);
+            }
+        }
+
     }
 }
