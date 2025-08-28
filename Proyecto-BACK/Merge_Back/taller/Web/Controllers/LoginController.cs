@@ -66,38 +66,47 @@ namespace Web.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost("Email")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> Login([FromBody] LoginDto login)
+        public async Task<IActionResult> LoginEmail([FromBody] EmailLoginDto login)
         {
             try
             {
-                var token = await _token.GenerateToken(login);
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token });
+                var token = await _token.GenerateTokenEmail(login);
+                return Ok(new { isSuccess = true, token });
             }
-            catch (ValidationException ex)
+            catch (UnauthorizedAccessException)
             {
-                _logger.LogWarning(ex, "Validación fallida para el inicio de sesión");
-                return BadRequest(new { isSuccess = false, token = (string?)null, message = ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                // <- Cuando el repo diga "credenciales inválidas"
-                _logger.LogInformation(ex, "Credenciales inválidas");
-                return Unauthorized(new { isSuccess = false, token = (string?)null, message = "Credenciales inválidas." });
-            }
-            catch (ExternalServiceException ex)
-            {
-                _logger.LogError(ex, "Error al crear el token");
-                return StatusCode(500, new { isSuccess = false, token = (string?)null, message = ex.Message });
+                return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error inesperado en Login");
-                return StatusCode(500, new { isSuccess = false, token = (string?)null, message = "Error interno del servidor." });
+                _logger.LogError(ex, "Error en LoginEmail");
+                return StatusCode(500, new { isSuccess = false, message = "Error interno." });
+            }
+        }
+
+        [HttpPost("Documento")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> LoginDocumento([FromBody] DocumentLoginDto login)
+        {
+            try
+            {
+                var token = await _token.GenerateTokenDocumento(login);
+                return Ok(new { isSuccess = true, token });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error en LoginDocumento");
+                return StatusCode(500, new { isSuccess = false, message = "Error interno." });
             }
         }
 

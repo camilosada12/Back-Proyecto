@@ -4,8 +4,9 @@
     {
         public interface IToken
         {
-            Task<string> GenerateToken(LoginDto dto);
+            Task<string> GenerateTokenEmail(EmailLoginDto dto);
+            Task<string> GenerateTokenDocumento(DocumentLoginDto dto);
             bool validarToken(string token);
-            Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId);
+            //Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId);
         }
     }
