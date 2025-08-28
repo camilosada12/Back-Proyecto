@@ -15,6 +15,6 @@ namespace Entity.Domain.Models.Implements.parameters
 
         //relacion
 
-        public ICollection<Person> person { get; set; } = new List<Person>();
+        public ICollection<User> person { get; set; } = new List<User>();
     }
 }

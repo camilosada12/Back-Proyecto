@@ -18,6 +18,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                      active = true,
                      is_deleted = false,
                      PersonId = 1,
+                     documentTypeId = 1,
+                     documentNumber = "123456789",
                      created_date = new DateTime(2023, 01, 01),
                  },
                  new User
@@ -29,6 +31,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                      active = true,
                      is_deleted = false,
                      PersonId = 2,
+                     documentTypeId = 2,
+                     documentNumber = "0123432121",
                      created_date = new DateTime(2023, 02, 01),
                  }
             );

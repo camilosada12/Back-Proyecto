@@ -22,7 +22,6 @@ namespace Data.Services.Security
         {
             return await _dbSet
                         .Include(p => p.municipality)
-                        .Include(p => p.documentType)
                         .Where(p => p.is_deleted == false)
                         .ToListAsync();
         }
@@ -30,7 +29,6 @@ namespace Data.Services.Security
         {
             return await _dbSet
                         .Include(p => p.municipality)
-                        .Include(p => p.documentType)
                         .Where(p => p.is_deleted == true)
                         .ToListAsync();
         }
@@ -38,7 +36,6 @@ namespace Data.Services.Security
         {
             return await _dbSet
                       .Include(p => p.municipality)
-                      .Include(p => p.documentType)
                       .Where(p => p.id == id)
                       .FirstOrDefaultAsync();
 

@@ -4,6 +4,7 @@ using Business.Interfaces.IJWT;
 using Business.Mensajeria;
 using Business.Mensajeria.Interfaces;
 using Business.Services.Auth;
+using Entity.DTOs.Default.Auth.LoginResultDto;
 using Entity.DTOs.Default.Auth.RegisterReponseDto;
 using Entity.DTOs.Default.GoogleTokenDto;
 using Entity.DTOs.Default.LoginDto;
@@ -68,31 +69,39 @@ namespace Web.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
             try
             {
                 var token = await _token.GenerateToken(login);
-
-                //await _serviceEmail.EnviarEmailBienvenida(login.email);
-                //await _notifyManager.NotifyAsync();
-
                 return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token });
-
-                //return Ok(token);
             }
             catch (ValidationException ex)
             {
                 _logger.LogWarning(ex, "Validación fallida para el inicio de sesión");
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { isSuccess = false, token = (string?)null, message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                // <- Cuando el repo diga "credenciales inválidas"
+                _logger.LogInformation(ex, "Credenciales inválidas");
+                return Unauthorized(new { isSuccess = false, token = (string?)null, message = "Credenciales inválidas." });
             }
             catch (ExternalServiceException ex)
             {
                 _logger.LogError(ex, "Error al crear el token");
-                return StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new { isSuccess = false, token = (string?)null, message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error inesperado en Login");
+                return StatusCode(500, new { isSuccess = false, token = (string?)null, message = "Error interno del servidor." });
             }
         }
+
+
 
         [HttpGet]
         [Route("ValidarToken")]

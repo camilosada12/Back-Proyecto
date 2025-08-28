@@ -3,7 +3,9 @@
     public class UserSelectDto
     {
         public int id { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
+        public string? name { get; set; }
+        public string? email { get; set; }
+        public int? documentTypeId { get; set; }
+        public string? documentNumber { get; set; }
     }
 }

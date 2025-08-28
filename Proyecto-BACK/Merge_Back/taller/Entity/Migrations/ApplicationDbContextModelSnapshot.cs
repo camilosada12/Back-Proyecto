@@ -784,12 +784,6 @@ namespace Entity.Migrations
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("documentNumber")
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<int?>("documentTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("firstName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -815,8 +809,6 @@ namespace Entity.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("documentTypeId");
-
                     b.HasIndex("municipalityId");
 
                     b.HasIndex("phoneNumber")
@@ -832,7 +824,6 @@ namespace Entity.Migrations
                             active = true,
                             address = "Carrera 10",
                             created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            documentTypeId = 1,
                             firstName = "Juan",
                             is_deleted = false,
                             lastName = "Pérez",
@@ -846,7 +837,6 @@ namespace Entity.Migrations
                             active = true,
                             address = "Carrera 11",
                             created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            documentTypeId = 2,
                             firstName = "Sara",
                             is_deleted = false,
                             lastName = "Sofía",
@@ -933,6 +923,12 @@ namespace Entity.Migrations
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("documentNumber")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<int?>("documentTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -947,6 +943,8 @@ namespace Entity.Migrations
                         .IsUnique()
                         .HasFilter("[PersonId] IS NOT NULL");
 
+                    b.HasIndex("documentTypeId");
+
                     b.HasIndex("email")
                         .IsUnique();
 
@@ -960,6 +958,8 @@ namespace Entity.Migrations
                             PersonId = 1,
                             active = true,
                             created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            documentNumber = "123456789",
+                            documentTypeId = 1,
                             email = "camiloandreslosada901@gmail.com",
                             is_deleted = false
                         },
@@ -970,6 +970,8 @@ namespace Entity.Migrations
                             PersonId = 2,
                             active = true,
                             created_date = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            documentNumber = "0123432121",
+                            documentTypeId = 2,
                             email = "sarita@gmail.com",
                             is_deleted = false
                         });
@@ -1649,17 +1651,10 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.Person", b =>
                 {
-                    b.HasOne("Entity.Domain.Models.Implements.parameters.documentType", "documentType")
-                        .WithMany("person")
-                        .HasForeignKey("documentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Entity.Domain.Models.Implements.parameters.municipality", "municipality")
                         .WithMany("person")
                         .HasForeignKey("municipalityId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("documentType");
 
                     b.Navigation("municipality");
                 });
@@ -1672,7 +1667,14 @@ namespace Entity.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_User_Person");
 
+                    b.HasOne("Entity.Domain.Models.Implements.parameters.documentType", "documentType")
+                        .WithMany("person")
+                        .HasForeignKey("documentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Person");
+
+                    b.Navigation("documentType");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.parameters.municipality", b =>

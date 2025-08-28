@@ -365,8 +365,6 @@ namespace Entity.Migrations
                     lastName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     phoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
                     address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
-                    documentTypeId = table.Column<int>(type: "int", nullable: true),
-                    documentNumber = table.Column<string>(type: "varchar(30)", nullable: true),
                     tipoUsuario = table.Column<int>(type: "int", nullable: false),
                     municipalityId = table.Column<int>(type: "int", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
@@ -376,13 +374,6 @@ namespace Entity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_person", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_person_documentType_documentTypeId",
-                        column: x => x.documentTypeId,
-                        principalSchema: "Parameters",
-                        principalTable: "documentType",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_person_municipality_municipalityId",
                         column: x => x.municipalityId,
@@ -402,6 +393,8 @@ namespace Entity.Migrations
                     PasswordHash = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     email = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false),
                     PersonId = table.Column<int>(type: "int", nullable: true),
+                    documentTypeId = table.Column<int>(type: "int", nullable: true),
+                    documentNumber = table.Column<string>(type: "varchar(30)", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -414,6 +407,13 @@ namespace Entity.Migrations
                         column: x => x.PersonId,
                         principalSchema: "ModelSecurity",
                         principalTable: "person",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_user_documentType_documentTypeId",
+                        column: x => x.documentTypeId,
+                        principalSchema: "Parameters",
+                        principalTable: "documentType",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -760,21 +760,21 @@ namespace Entity.Migrations
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "person",
-                columns: new[] { "id", "active", "address", "created_date", "documentNumber", "documentTypeId", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber", "tipoUsuario" },
+                columns: new[] { "id", "active", "address", "created_date", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber", "tipoUsuario" },
                 values: new object[,]
                 {
-                    { 1, true, "Carrera 10", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Juan", false, "Pérez", 1, "1234567890", 3 },
-                    { 2, true, "Carrera 11", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2, "Sara", false, "Sofía", 4, "312312314", 3 }
+                    { 1, true, "Carrera 10", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Juan", false, "Pérez", 1, "1234567890", 3 },
+                    { 2, true, "Carrera 11", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Sara", false, "Sofía", 4, "312312314", 3 }
                 });
 
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "user",
-                columns: new[] { "id", "PasswordHash", "PersonId", "active", "created_date", "email", "is_deleted" },
+                columns: new[] { "id", "PasswordHash", "PersonId", "active", "created_date", "documentNumber", "documentTypeId", "email", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, "admin123", 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "camiloandreslosada901@gmail.com", false },
-                    { 2, "sara12312", 2, true, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sarita@gmail.com", false }
+                    { 1, "admin123", 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "123456789", 1, "camiloandreslosada901@gmail.com", false },
+                    { 2, "sara12312", 2, true, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0123432121", 2, "sarita@gmail.com", false }
                 });
 
             migrationBuilder.InsertData(
@@ -949,12 +949,6 @@ namespace Entity.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_person_documentTypeId",
-                schema: "ModelSecurity",
-                table: "person",
-                column: "documentTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_person_municipalityId",
                 schema: "ModelSecurity",
                 table: "person",
@@ -1025,6 +1019,12 @@ namespace Entity.Migrations
                 schema: "Entities",
                 table: "typePayment",
                 column: "paymentAgreementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_documentTypeId",
+                schema: "ModelSecurity",
+                table: "user",
+                column: "documentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_email",

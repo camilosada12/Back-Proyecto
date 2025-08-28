@@ -43,12 +43,6 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
                    .IsRequired(false)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            // FK opcional: documentType
-            builder.HasOne(p => p.documentType)
-                   .WithMany(dt => dt.person)
-                   .HasForeignKey(p => p.documentTypeId)
-                   .IsRequired(false)
-                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
