@@ -21,11 +21,11 @@ namespace Entity.relacionesModel.RelacionesEntities
             builder.ConfigureBaseModel();
 
             // Relación: UserNotification -> UserInfraction (uno a muchos)
-            builder.HasMany(un => un.userInfraction)
-                   .WithOne(ui => ui.userNotification)
-                   .HasForeignKey(ui => ui.UserNotificationId)
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_UserNotification_UserInfraction");
+            //builder.HasMany(un => un.userInfraction)
+            //       .WithOne(ui => ui.userNotification)
+            //       .HasForeignKey(ui => ui.UserNotificationId)
+            //       .OnDelete(DeleteBehavior.Restrict)
+            //       .HasConstraintName("FK_UserNotification_UserInfraction");
         }
     }
 }

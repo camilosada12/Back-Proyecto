@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Entity.relacionesModel.RelacionesModelSecurity.RelacionPerson
 using Entity.ConfigurationsBase;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Microsoft.EntityFrameworkCore;
@@ -19,23 +15,40 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
 
             builder.HasKey(p => p.id);
 
-            builder.Property(p => p.firstName).IsRequired().HasMaxLength(100);
-            builder.Property(p => p.lastName).IsRequired().HasMaxLength(100);
-            builder.Property(p => p.phoneNumber).IsRequired().HasMaxLength(20);
-            builder.Property(p => p.address).IsRequired().HasMaxLength(100);
+            // Obligatorios
+            builder.Property(p => p.firstName)
+                   .IsRequired()
+                   .HasMaxLength(100);
 
+            builder.Property(p => p.lastName)
+                   .IsRequired()
+                   .HasMaxLength(100);
+
+            // Opcionales
+            builder.Property(p => p.phoneNumber)
+                   .HasMaxLength(20);
+
+            builder.Property(p => p.address)
+                   .HasMaxLength(100);
+
+            // Único filtrado para permitir múltiples NULL en SQL Server
+            builder.HasIndex(p => p.phoneNumber)
+                   .IsUnique()
+                   .HasFilter("[phoneNumber] IS NOT NULL");
+
+            // FK opcional: municipality
             builder.HasOne(p => p.municipality)
-                   .WithMany(m => m.person)          
+                   .WithMany(m => m.person)
                    .HasForeignKey(p => p.municipalityId)
+                   .IsRequired(false)
                    .OnDelete(DeleteBehavior.Restrict);
 
+            // FK opcional: documentType
             builder.HasOne(p => p.documentType)
                    .WithMany(dt => dt.person)
                    .HasForeignKey(p => p.documentTypeId)
+                   .IsRequired(false)
                    .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasIndex(u => u.phoneNumber).IsUnique();
         }
     }
-
 }

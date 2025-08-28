@@ -7,10 +7,6 @@ namespace Business.Validaciones.ModelSecurity.Person
     {
         public PersonDtoValidator()
         {
-            // id mayor a 0
-            RuleFor(x => x.id)
-                .GreaterThan(0)
-                .WithMessage("El ID debe ser mayor que cero.");
 
             // firstName requerido y capitalizado
             RuleFor(x => x.firstName)

@@ -396,40 +396,6 @@ namespace Entity.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfractionDto", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("UserNotificationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("dateInfraction")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("observations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("stateInfraction")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("typeInfractionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("UserInfractionDto");
-                });
-
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserNotification", b =>
                 {
                     b.Property<int>("id")
@@ -812,14 +778,16 @@ namespace Entity.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("address")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("documentTypeId")
+                    b.Property<string>("documentNumber")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<int?>("documentTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("firstName")
@@ -835,13 +803,15 @@ namespace Entity.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("municipalityId")
+                    b.Property<int?>("municipalityId")
                         .HasColumnType("int");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
+
+                    b.Property<int>("tipoUsuario")
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -850,7 +820,8 @@ namespace Entity.Migrations
                     b.HasIndex("municipalityId");
 
                     b.HasIndex("phoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[phoneNumber] IS NOT NULL");
 
                     b.ToTable("person", "ModelSecurity");
 
@@ -866,7 +837,8 @@ namespace Entity.Migrations
                             is_deleted = false,
                             lastName = "Pérez",
                             municipalityId = 1,
-                            phoneNumber = "1234567890"
+                            phoneNumber = "1234567890",
+                            tipoUsuario = 3
                         },
                         new
                         {
@@ -879,7 +851,8 @@ namespace Entity.Migrations
                             is_deleted = false,
                             lastName = "Sofía",
                             municipalityId = 4,
-                            phoneNumber = "312312314"
+                            phoneNumber = "312312314",
+                            tipoUsuario = 3
                         });
                 });
 
@@ -946,6 +919,11 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<int?>("PersonId")
                         .HasColumnType("int");
 
@@ -957,21 +935,11 @@ namespace Entity.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasMaxLength(200)
+                        .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.HasKey("id");
 
@@ -982,33 +950,28 @@ namespace Entity.Migrations
                     b.HasIndex("email")
                         .IsUnique();
 
-                    b.HasIndex("name")
-                        .IsUnique();
-
                     b.ToTable("user", "ModelSecurity");
 
                     b.HasData(
                         new
                         {
                             id = 1,
+                            PasswordHash = "admin123",
                             PersonId = 1,
                             active = true,
                             created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             email = "camiloandreslosada901@gmail.com",
-                            is_deleted = false,
-                            name = "camilosada12",
-                            password = "admin123"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 2,
+                            PasswordHash = "sara12312",
                             PersonId = 2,
                             active = true,
                             created_date = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             email = "sarita@gmail.com",
-                            is_deleted = false,
-                            name = "sara12312",
-                            password = "sara12312"
+                            is_deleted = false
                         });
                 });
 
@@ -1650,7 +1613,7 @@ namespace Entity.Migrations
                         .HasConstraintName("FK_TypeInfraction_UserInfraction");
 
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", "user")
-                        .WithMany()
+                        .WithMany("UserInfraction")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
@@ -1661,15 +1624,6 @@ namespace Entity.Migrations
                     b.Navigation("user");
 
                     b.Navigation("userNotification");
-                });
-
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfractionDto", b =>
-                {
-                    b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", null)
-                        .WithMany("UserInfraction")
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.FormModule", b =>
@@ -1698,14 +1652,12 @@ namespace Entity.Migrations
                     b.HasOne("Entity.Domain.Models.Implements.parameters.documentType", "documentType")
                         .WithMany("person")
                         .HasForeignKey("documentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Entity.Domain.Models.Implements.parameters.municipality", "municipality")
                         .WithMany("person")
                         .HasForeignKey("municipalityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("documentType");
 

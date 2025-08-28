@@ -1,8 +1,10 @@
-﻿using Business.Interfaces.IBusinessImplements;
+﻿using Business.Interfaces.BusinessRegister;
+using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Mensajeria;
+using Business.Services.Auth;
 using Business.Services.Entities;
 using Business.Services.parameters;
 
@@ -51,6 +53,7 @@ namespace Web.Service
             services.AddScoped<IRolUserRepository, RolUserRepository>();
             services.AddScoped<IFormModuleRepository, FormModuleRepository>();
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
+            services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
             // 3) Repositorios — ENTITIES
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();

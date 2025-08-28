@@ -1,4 +1,5 @@
-﻿using Business.validaciones.Entities.DocumentInfraction;
+﻿using Business.validaciones.Auth;
+using Business.validaciones.Entities.DocumentInfraction;
 using Business.validaciones.Entities.FineCalculationDetail;
 using Business.validaciones.Entities.InspectoraReport;
 using Business.validaciones.Entities.PaymentAgreement;
@@ -44,6 +45,9 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<PermissionCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<PersonCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<FormModuleCreateValidator>();
+
+            //Auth
+            services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
 
 
             return services;

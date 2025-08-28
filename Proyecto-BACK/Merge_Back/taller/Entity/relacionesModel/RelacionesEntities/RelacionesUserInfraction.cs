@@ -15,18 +15,33 @@ namespace Entity.relacionesModel.RelacionesEntities
     {
         public void Configure(EntityTypeBuilder<UserInfraction> builder)
         {
-            // Nombre de tabla
             builder.ToTable("userInfraction", schema: "Entities");
-
-            // Propiedades del baseModel
             builder.ConfigureBaseModel();
 
-            // Relación: UserInfraction -> User (muchos a uno)
+            builder.Property(x => x.observations)
+                   .IsRequired();
+
+            // Muchos UserInfraction -> Un User (INVERTIDA: User.UserInfraction)
             builder.HasOne(ui => ui.user)
-                   .WithMany()
-                   .HasForeignKey(ui => ui.userId)
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_UserInfraction_User");
+            .WithMany(u => u.UserInfraction)
+            .HasForeignKey(ui => ui.userId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_UserInfraction_User");
+
+            // TypeInfraction (si tu entidad tiene colección, úsala; si no, WithMany() a secas)
+            builder.HasOne(ui => ui.typeInfraction)
+           .WithMany(ti => ti.userInfractions)       // <-- usa la colección real
+           .HasForeignKey(ui => ui.typeInfractionId) // <-- una sola vez
+           .OnDelete(DeleteBehavior.Restrict)
+           .HasConstraintName("FK_TypeInfraction_UserInfraction");
+
+            builder.HasOne(ui => ui.userNotification)
+            .WithMany(un => un.userInfraction) // ✅ enlaza a la colección real
+            .HasForeignKey(ui => ui.UserNotificationId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_UserNotification_UserInfraction");
+
         }
     }
 }
+

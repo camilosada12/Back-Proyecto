@@ -33,3 +33,10 @@ C:\Users\Ingrid Medina\Documents\Backend-Final-Control-De-Comparendo\Back-Proyec
 C:\Users\Ingrid Medina\Documents\Backend-Final-Control-De-Comparendo\Back-Proyecto\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.csproj.CoreCompileInputs.cache
 C:\Users\Ingrid Medina\Documents\Backend-Final-Control-De-Comparendo\Back-Proyecto\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.dll
 C:\Users\Ingrid Medina\Documents\Backend-Final-Control-De-Comparendo\Back-Proyecto\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.pdb
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\bin\Debug\Diagram1.dll.config
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\bin\Debug\Diagram1.dll
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\bin\Debug\Diagram1.pdb
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.csproj.AssemblyReference.cache
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.csproj.CoreCompileInputs.cache
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.dll
+C:\Users\Camilo\Desktop\nuevoBack\Proyecto-BACK\Merge_Back\taller\DiagramProyecto\Diagram1\obj\Debug\Diagram1.pdb

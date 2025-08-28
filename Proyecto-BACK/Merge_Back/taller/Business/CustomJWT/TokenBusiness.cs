@@ -31,7 +31,7 @@ namespace Business.Custom
             var userClaims = new List<Claim>
             {
                 new Claim("id", user.id.ToString()),
-                new Claim(ClaimTypes.Email, dto.email!)
+                new Claim(ClaimTypes.Email, dto.Email!)
             };
 
 

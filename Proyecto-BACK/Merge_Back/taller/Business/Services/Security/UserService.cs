@@ -88,9 +88,8 @@ namespace Business.Services.Security
 
             var newUser = new User
             {
-                name = name,
                 //password = _utilities.EncripteSHA256("hola"),
-                password = null,
+                PasswordHash = null,
                 email = email
             };
 
@@ -105,7 +104,7 @@ namespace Business.Services.Security
             BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
             var entity = _mapper.Map<User>(dto);
             //entity.password = _utilities.EncripteSHA256(entity.password);
-            entity.password = entity.password;
+            entity.PasswordHash = entity.PasswordHash;
 
             return await _dataUser.UpdateAsync(entity);
         }

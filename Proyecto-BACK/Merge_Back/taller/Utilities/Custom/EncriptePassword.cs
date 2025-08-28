@@ -5,25 +5,48 @@ namespace Utilities.Custom
 {
     public class EncriptePassword
     {
+        // Formato almacenado: algo$iter$saltBase64$hashBase64
+        private const int SaltSize = 16;     // 128 bits
+        private const int KeySize = 32;     // 256 bits
+        private const int Iterations = 100_000; // coste (ajústalo según tu servidor)
 
-        public string EncripteSHA256(string text)
+        public string Hash(string password)
         {
-            // Computar el hash 
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
+            using var rng = RandomNumberGenerator.Create();
+            var salt = new byte[SaltSize];
+            rng.GetBytes(salt);
 
-                //Convertir el array de byte a string 
-                StringBuilder builder = new StringBuilder();
+            using var pbkdf2 = new Rfc2898DeriveBytes(
+                password,
+                salt,
+                Iterations,
+                HashAlgorithmName.SHA256
+            );
+            var key = pbkdf2.GetBytes(KeySize);
 
-                for(int iterador = 0; iterador< bytes.Length; iterador++)
-                {
-                    builder.Append(bytes[iterador].ToString("x2"));
-                }
+            return $"pbkdf2-sha256${Iterations}${Convert.ToBase64String(salt)}${Convert.ToBase64String(key)}";
+        }
 
-                return builder.ToString();
-            }
+        public bool Verify(string password, string stored)
+        {
+            // esperado: pbkdf2-sha256$iter$salt$hash
+            var parts = stored.Split('$', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 4 || parts[0] != "pbkdf2-sha256") return false;
 
+            var iter = int.Parse(parts[1]);
+            var salt = Convert.FromBase64String(parts[2]);
+            var expected = Convert.FromBase64String(parts[3]);
+
+            using var pbkdf2 = new Rfc2898DeriveBytes(
+                password,
+                salt,
+                iter,
+                HashAlgorithmName.SHA256
+            );
+            var key = pbkdf2.GetBytes(expected.Length);
+
+            // comparación en tiempo constante
+            return CryptographicOperations.FixedTimeEquals(key, expected);
         }
     }
 }

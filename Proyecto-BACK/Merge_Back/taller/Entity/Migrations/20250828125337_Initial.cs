@@ -363,10 +363,12 @@ namespace Entity.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     firstName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     lastName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    phoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false),
-                    address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    documentTypeId = table.Column<int>(type: "int", nullable: false),
-                    municipalityId = table.Column<int>(type: "int", nullable: false),
+                    phoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
+                    address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
+                    documentTypeId = table.Column<int>(type: "int", nullable: true),
+                    documentNumber = table.Column<string>(type: "varchar(30)", nullable: true),
+                    tipoUsuario = table.Column<int>(type: "int", nullable: false),
+                    municipalityId = table.Column<int>(type: "int", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -397,9 +399,8 @@ namespace Entity.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    password = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    email = table.Column<string>(type: "varchar(150)", maxLength: 200, nullable: false),
+                    PasswordHash = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    email = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false),
                     PersonId = table.Column<int>(type: "int", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -490,31 +491,6 @@ namespace Entity.Migrations
                         principalTable: "userNotification",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserInfractionDto",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    dateInfraction = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    stateInfraction = table.Column<bool>(type: "bit", nullable: false),
-                    observations = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    userId = table.Column<int>(type: "int", nullable: false),
-                    typeInfractionId = table.Column<int>(type: "int", nullable: false),
-                    UserNotificationId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInfractionDto", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_UserInfractionDto_user_userId",
-                        column: x => x.userId,
-                        principalSchema: "ModelSecurity",
-                        principalTable: "user",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -784,21 +760,21 @@ namespace Entity.Migrations
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "person",
-                columns: new[] { "id", "active", "address", "created_date", "documentTypeId", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber" },
+                columns: new[] { "id", "active", "address", "created_date", "documentNumber", "documentTypeId", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber", "tipoUsuario" },
                 values: new object[,]
                 {
-                    { 1, true, "Carrera 10", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Juan", false, "Pérez", 1, "1234567890" },
-                    { 2, true, "Carrera 11", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Sara", false, "Sofía", 4, "312312314" }
+                    { 1, true, "Carrera 10", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 1, "Juan", false, "Pérez", 1, "1234567890", 3 },
+                    { 2, true, "Carrera 11", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, 2, "Sara", false, "Sofía", 4, "312312314", 3 }
                 });
 
             migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "user",
-                columns: new[] { "id", "PersonId", "active", "created_date", "email", "is_deleted", "name", "password" },
+                columns: new[] { "id", "PasswordHash", "PersonId", "active", "created_date", "email", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "camiloandreslosada901@gmail.com", false, "camilosada12", "admin123" },
-                    { 2, 2, true, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sarita@gmail.com", false, "sara12312", "sara12312" }
+                    { 1, "admin123", 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "camiloandreslosada901@gmail.com", false },
+                    { 2, "sara12312", 2, true, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sarita@gmail.com", false }
                 });
 
             migrationBuilder.InsertData(
@@ -989,7 +965,8 @@ namespace Entity.Migrations
                 schema: "ModelSecurity",
                 table: "person",
                 column: "phoneNumber",
-                unique: true);
+                unique: true,
+                filter: "[phoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_rol_name",
@@ -1057,13 +1034,6 @@ namespace Entity.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_user_name",
-                schema: "ModelSecurity",
-                table: "user",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_user_PersonId",
                 schema: "ModelSecurity",
                 table: "user",
@@ -1088,11 +1058,6 @@ namespace Entity.Migrations
                 schema: "Entities",
                 table: "userInfraction",
                 column: "UserNotificationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInfractionDto_userId",
-                table: "UserInfractionDto",
-                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_valueSmldv_Current_Year",
@@ -1128,9 +1093,6 @@ namespace Entity.Migrations
             migrationBuilder.DropTable(
                 name: "typePayment",
                 schema: "Entities");
-
-            migrationBuilder.DropTable(
-                name: "UserInfractionDto");
 
             migrationBuilder.DropTable(
                 name: "InspectoraReport",

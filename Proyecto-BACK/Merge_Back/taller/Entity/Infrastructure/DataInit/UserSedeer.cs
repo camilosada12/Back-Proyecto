@@ -12,9 +12,9 @@ namespace Entity.Infrastructure.DataInit
                                  new User
                                  {
                                      id = 1,
-                                     name = "admin",
+                                     //name = "admin",
                                      email = "admin@example.com",
-                                     password = "admin123",
+                                     PasswordHash = "admin123",
                                      active = true,
                                      is_deleted = false,
                                      PersonId = null, 

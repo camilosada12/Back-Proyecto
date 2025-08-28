@@ -34,8 +34,8 @@ namespace Data.Services.Security
                 //            u.email == loginDto.email && 
                 //            u.password == (loginDto.password))
                 .FirstOrDefaultAsync(u =>
-                            u.email == loginDto.email &&
-                            u.password == loginDto.password);
+                            u.email == loginDto.Email &&
+                            u.PasswordHash == loginDto.Password);
 
             suceeded = user != null ? true : throw new UnauthorizedAccessException("Credenciales inválidas");
 

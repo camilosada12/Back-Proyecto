@@ -12,8 +12,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new User
                  {
                      id = 1,
-                     name = "camilosada12",
-                     password = "admin123",
+                     //name = "camilosada12",
+                     PasswordHash = "admin123",
                      email = "camiloandreslosada901@gmail.com",
                      active = true,
                      is_deleted = false,
@@ -23,8 +23,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new User
                  {
                      id = 2,
-                     name = "sara12312",
-                     password = "sara12312",
+                     //name = "sara12312",
+                     PasswordHash = "sara12312",
                      email = "sarita@gmail.com",
                      active = true,
                      is_deleted = false,
