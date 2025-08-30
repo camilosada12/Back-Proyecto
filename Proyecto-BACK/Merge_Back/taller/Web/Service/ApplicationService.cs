@@ -1,4 +1,5 @@
-﻿using Business.Interfaces.BusinessRegister;
+﻿using Business.ExternalServices.Recaptcha;
+using Business.Interfaces.BusinessRegister;
 using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
@@ -21,8 +22,10 @@ using Data.Repositoy;
 using Data.Services.Entities;
 using Data.Services.Security;
 using Entity.Domain.Interfaces;
+using Entity.Domain.Models.Implements.Recaptcha;
 using Entity.Infrastructure.LogService;
 using Microsoft.AspNetCore.DataProtection.Repositories;
+using Microsoft.Extensions.Configuration;
 using Utilities.Custom;
 using Web.AutoMapper;
 
@@ -30,7 +33,7 @@ namespace Web.Service
 {
     public static class ApplicationService
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             // 0) Infra básica
             services.AddHttpContextAccessor();
@@ -102,6 +105,12 @@ namespace Web.Service
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
             services.AddScoped<IPaymentAgreementServices, PaymentAgreementServices>();
+
+            //Recaptchat
+
+            services.Configure<RecaptchaOptions>(configuration.GetSection("Recaptcha"));
+            services.AddHttpClient<IRecaptchaVerifier, RecaptchaVerifier>();
+
 
             //services.AddScoped<IFineCalculationDetailServices, FineCalculationDetailServices>();
 

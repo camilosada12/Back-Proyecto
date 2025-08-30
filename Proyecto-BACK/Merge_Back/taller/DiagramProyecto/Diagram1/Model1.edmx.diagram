@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f1a2ca59ddd7444da7f560a1e4042887" Name="Diagram1" ZoomLevel="82" >
+      <Diagram DiagramId="f1a2ca59ddd7444da7f560a1e4042887" Name="Diagram1" ZoomLevel="65" >
         <EntityTypeShape EntityType="Model1.User" Width="1.5" PointX="8.75" PointY="1.875" IsExpanded="true" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.Rol" Width="1.625" PointX="5.125" PointY="4.375" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.person" Width="1.5" PointX="5.25" PointY="0.625" FillColor="255, 128, 0" />
@@ -17,7 +17,7 @@
         <EntityTypeShape EntityType="Model1.Form" Width="1.5" PointX="4.75" PointY="9.625" IsExpanded="true" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.TypePayment" Width="1.5" PointX="14.375" PointY="4.25" />
         <EntityTypeShape EntityType="Model1.ModuloForm" Width="1.5" PointX="8.875" PointY="10.875" FillColor="255, 128, 0" />
-        <EntityTypeShape EntityType="Model1.RolUser" Width="1.5" PointX="7.125" PointY="2.5" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="Model1.RolUser" Width="1.5" PointX="6.875" PointY="2.625" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.RolFormPermission" Width="1.5" PointX="5.375" PointY="6.875" FillColor="255, 128, 0" />
         <AssociationConnector Association="Model1.FormRolFormPermission" />
         <AssociationConnector Association="Model1.FormModuloForm" />

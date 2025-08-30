@@ -26,11 +26,7 @@ builder.Services
 
 builder.Services.AddCustomValidators();
 
-
-
-
-
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddSwaggerWithJwt();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);

@@ -39,17 +39,16 @@ namespace Business.Custom
             var email = dto.Email.Trim().ToLowerInvariant();
             var pass = dto.Password.Trim();
 
-            // Busca por email
             var user = await _dataUser.FindByEmailAsync(email);
             if (user is null) throw new UnauthorizedAccessException("Credenciales inválidas.");
 
-            // Mientras estés con seeds en claro, podrías comparar directo.
-            // Recomendado: usar verificador real (BCrypt/PBKDF2/etc.)
             var ok = await _dataUser.VerifyPasswordAsync(user, pass);
             if (!ok) throw new UnauthorizedAccessException("Credenciales inválidas.");
 
             var roles = await _userRepository.GetJoinRolesAsync(user.id);
-            return await BuildJwtAsync(user, roles);
+
+            // Aquí SÍ queremos enviar el correo
+            return await BuildJwtAsync(user, roles, includeEmail: true);
         }
 
         // ====== LOGIN POR DOCUMENTO ======
@@ -61,16 +60,17 @@ namespace Business.Custom
 
             var docNum = dto.DocumentNumber.Trim();
 
-            // Busca por documento (NO valida password)
             var user = await _dataUser.FindByDocumentAsync(dto.DocumentTypeId, docNum);
             if (user is null) throw new UnauthorizedAccessException("Credenciales inválidas.");
 
             var roles = await _userRepository.GetJoinRolesAsync(user.id);
-            return await BuildJwtAsync(user, roles);
+
+            // Aquí NO queremos enviar el correo
+            return await BuildJwtAsync(user, roles, includeEmail: false);
         }
 
         // ====== Construcción del JWT (reutilizable) ======
-        private Task<string> BuildJwtAsync(User user, IEnumerable<string> roles)
+        private Task<string> BuildJwtAsync(User user, IEnumerable<string> roles, bool includeEmail)
         {
             var key = _configuration["Jwt:key"];
             if (string.IsNullOrWhiteSpace(key))
@@ -80,15 +80,16 @@ namespace Business.Custom
                 throw new ExternalServiceException("Configuración JWT inválida: Jwt:exp debe ser minutos > 0.");
 
             var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
-                new Claim("uid", user.id.ToString())
-            };
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+        new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+        new Claim("uid", user.id.ToString())
+    };
 
-            if (!string.IsNullOrWhiteSpace(user.email))
-                claims.Add(new Claim(ClaimTypes.Email, user.email));
+            // Solo agrega el email si así se indica
+            if (includeEmail && !string.IsNullOrWhiteSpace(user.email))
+                claims.Add(new Claim(ClaimTypes.Email, user.email)); // http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress
 
             if (user.documentTypeId.HasValue)
                 claims.Add(new Claim("doc_type_id", user.documentTypeId.Value.ToString()));
@@ -110,6 +111,7 @@ namespace Business.Custom
 
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(jwt));
         }
+
 
         public async Task<IEnumerable<string>> GetUserRoles(int idUser)
         {

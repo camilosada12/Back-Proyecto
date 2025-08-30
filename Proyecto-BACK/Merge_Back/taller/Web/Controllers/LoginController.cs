@@ -1,4 +1,5 @@
-﻿using Business.Interfaces.BusinessRegister;
+﻿using Business.ExternalServices.Recaptcha;
+using Business.Interfaces.BusinessRegister;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Interfaces.IJWT;
 using Business.Mensajeria;
@@ -28,11 +29,12 @@ namespace Web.Controllers
         private readonly IUserService _userService;
         private readonly ILogger<LoginController> _logger;
         private readonly EncriptePassword _utilities;
+        private readonly IRecaptchaVerifier _recaptcha;
         private readonly IUserRegistrationService _userRegistrationService;
         //private readonly IServiceEmail _serviceEmail;
         //private readonly INotifyManager _notifyManager;
 
-        public LoginController(EncriptePassword utilities,IToken token, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades,
+        public LoginController(EncriptePassword utilities,IToken token, IRecaptchaVerifier recaptcha, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades,
             IUserRegistrationService userRegistrationService) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
         {
             _token = token;
@@ -40,6 +42,7 @@ namespace Web.Controllers
             _logger = logger;
             _utilities = utilities;
             _userRegistrationService = userRegistrationService;
+            _recaptcha = recaptcha;
             //_serviceEmail = serviceEmail;
             //_notifyManager = notifyManager;
         }
@@ -88,7 +91,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPost("Documento")]
+        [HttpPost("documento")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -96,8 +99,23 @@ namespace Web.Controllers
         {
             try
             {
+                // 1. Verificar reCAPTCHA
+                var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+                var (ok, reason, score) = await _recaptcha.VerifyAsync(
+                    login.RecaptchaToken,
+                    login.RecaptchaAction ?? "documento",
+                    ip
+                );
+
+                if (!ok)
+                {
+                    return BadRequest(new { isSuccess = false, message = $"reCAPTCHA inválido: {reason}", score });
+                }
+
+
+                // 2. Generar token si credenciales válidas
                 var token = await _token.GenerateTokenDocumento(login);
-                return Ok(new { isSuccess = true, token });
+                return Ok(new { isSuccess = true, token, recaptchaScore = score });
             }
             catch (UnauthorizedAccessException)
             {
