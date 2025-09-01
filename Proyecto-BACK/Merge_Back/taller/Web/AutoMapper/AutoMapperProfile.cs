@@ -19,8 +19,10 @@ namespace Web.AutoMapper
             CreateMap<Rol, RolSelectDto>().ReverseMap();
             CreateMap<Rol, RolDto>().ReverseMap();
 
-            CreateMap<User, UserSelectDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserSelectDto>()
+                .ForMember(p => p.TypeDocument,
+                o => o.MapFrom(S => S.documentType != null ? S.documentType.name : null));
 
 
             CreateMap<RolUser, RolUserDto>().ReverseMap();
@@ -69,16 +71,31 @@ namespace Web.AutoMapper
             CreateMap<TypePayment, TypePaymentSelectDto>().ReverseMap();
 
             CreateMap<PaymentAgreement, PaymentAgreementDto>().ReverseMap();
-            CreateMap<PaymentAgreement, PaymentAgreementSelectDto>().ReverseMap();
+            CreateMap<PaymentAgreement, PaymentAgreementSelectDto>()
+                .ForMember(p => p.userInfractionName,
+                o => o.MapFrom(S => S.userInfraction != null ? S.userInfraction.observations : null))
+                .ForMember(p => p.paymentFrequencyName,
+                o => o.MapFrom(S => S.paymentFrequency != null ? S.paymentFrequency.intervalPage : null))
+                  .ForMember(d => d.TypeInfractionName,
+                 o => o.MapFrom(s => s.userInfraction != null ? s.userInfraction.typeInfraction.type_Infraction : null));
 
             CreateMap<DocumentInfraction, DocumentInfractionDto>().ReverseMap();
-            CreateMap<DocumentInfraction, DocumentInfractionSelectDto>().ReverseMap();
+            CreateMap<DocumentInfraction, DocumentInfractionSelectDto>()
+             .ForMember(d => d.inspectoraReportName,
+                 o => o.MapFrom(s => s.inspectoraReport != null ? s.inspectoraReport.message : null))
+             .ForMember(d => d.PaymentAgreementName,
+                 o => o.MapFrom(s => s.paymentAgreement != null ? s.paymentAgreement.AgreementDescription : null));
+
 
             CreateMap<InspectoraReport, InspectoraReportDto>().ReverseMap();
             CreateMap<InspectoraReport, InspectoraReportSelectDto>().ReverseMap();
 
             CreateMap<FineCalculationDetail, FineCalculationDetailDto>().ReverseMap();
-            CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>().ReverseMap();
+            CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
+                .ForMember(d => d.valueSmldvCalculation,
+                    o => o.MapFrom(s => (double?)s.valueSmldv.value_smldv))
+                  .ForMember(d => d.typeInfractionName,
+                 o => o.MapFrom(s => s.typeInfraction != null ? s.typeInfraction.type_Infraction : null));
 
 
             CreateMap<TypeInfraction, TypeInfractionSelectDto>();
@@ -93,8 +110,15 @@ namespace Web.AutoMapper
             CreateMap<ValueSmldv, ValueSmldvSelectDto>();
             CreateMap<ValueSmldv, ValueSmldvDto>().ReverseMap();
 
-            CreateMap<UserInfraction, UserInfractionSelectDto>();
+            CreateMap<UserInfraction, UserInfractionSelectDto>()
+                .ForMember(p => p.typeInfractionName,
+                o => o.MapFrom(S => S.typeInfraction != null ? S.typeInfraction.type_Infraction : null))
+                  .ForMember(d => d.firstName,
+                 o => o.MapFrom(s => s.user != null ? s.user.Person.firstName : null))
+                 .ForMember(d => d.lastName,
+                     o => o.MapFrom(s => s.user != null ? s.user.Person.lastName : null));
             CreateMap<UserInfraction, UserInfractionDto>().ReverseMap();
+                
 
 
             //parameters 

@@ -12,7 +12,6 @@ namespace Entity.DTOs.Interface.Entities
         public int id { get; set; }
         public string address { get; set; }
         public string neighborhood { get; set; }
-        public string financeAmount { get; set; }
         public string AgreementDescription { get; set; }
         public int userInfractionId { get; set; }
         public int paymentFrequencyId { get; set; }

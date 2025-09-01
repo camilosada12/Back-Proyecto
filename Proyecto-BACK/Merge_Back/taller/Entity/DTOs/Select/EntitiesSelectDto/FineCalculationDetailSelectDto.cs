@@ -11,12 +11,12 @@ namespace Entity.Domain.Models.Implements.Entities
     public class FineCalculationDetailSelectDto 
     {
         public int id { get; set; }
-        public string forumula {  get; set; }
+        public string formula {  get; set; }
         public decimal percentaje { get; set; }
         public decimal totalCalculation {  get; set; }
         public int valueSmldvId { get; set; }
         public int typeInfractionId { get; set; }
-        public string valueSmldvName { get; set; }
+        public string valueSmldvCalculation { get; set; }
         public string typeInfractionName { get; set; }
 
     }

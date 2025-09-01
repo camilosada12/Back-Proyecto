@@ -18,7 +18,6 @@ namespace Entity.DataInit.EntitiesDataInit
                  {
                      id = 1,
                      name = "efectivo",
-                     description = "se consigno una cantidad de 50.000",
                      paymentAgreementId = 1,
                      active = true,
                      is_deleted = false,
@@ -28,7 +27,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 2,
                     name = "nequi",
-                    description = "se consigno una cantidad de 80.000",
                     paymentAgreementId = 2,
                     active = true,
                     is_deleted = false,

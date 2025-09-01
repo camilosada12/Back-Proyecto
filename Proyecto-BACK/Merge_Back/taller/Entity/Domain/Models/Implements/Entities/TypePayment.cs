@@ -10,7 +10,6 @@ namespace Entity.Domain.Models.Implements.Entities
     public class TypePayment : BaseModel
     {
         public string name { get; set; }
-        public string description { get; set; }
         public int paymentAgreementId { get; set; }
 
         //relaciones

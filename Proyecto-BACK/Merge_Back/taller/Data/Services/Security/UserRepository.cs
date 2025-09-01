@@ -1,4 +1,5 @@
-﻿using Data.Interfaces.IDataImplement.Security;
+﻿
+using Data.Interfaces.IDataImplement.Security;
 using Data.Repositoy;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.LoginDto;
@@ -18,6 +19,28 @@ namespace Data.Services.Security
             _encriptePass = encriptePass;
         }
 
+        public override async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _dbSet
+                .Include(u => u.documentType)          
+                .Where(u => u.is_deleted == false)
+                .ToListAsync();
+        }
+
+        public override async Task<IEnumerable<User>> GetDeletes()
+        {
+            return await _dbSet
+                .Include(u => u.documentType)          
+                .Where(u => u.is_deleted == true)
+                .ToListAsync();
+        }
+
+        public override async Task<User?> GetByIdAsync(int id)
+        {
+            return await _dbSet
+                .Include(u => u.documentType)        
+                .FirstOrDefaultAsync(u => u.id == id);
+        }
 
 
         public async Task<User?> FindByEmailAsync(string emailNorm)

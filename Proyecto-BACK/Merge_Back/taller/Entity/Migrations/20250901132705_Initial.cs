@@ -592,7 +592,6 @@ namespace Entity.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     paymentAgreementId = table.Column<int>(type: "int", nullable: false),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
@@ -844,11 +843,11 @@ namespace Entity.Migrations
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "typePayment",
-                columns: new[] { "id", "active", "created_date", "description", "is_deleted", "name", "paymentAgreementId" },
+                columns: new[] { "id", "active", "created_date", "is_deleted", "name", "paymentAgreementId" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "se consigno una cantidad de 50.000", false, "efectivo", 1 },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "se consigno una cantidad de 80.000", false, "nequi", 2 }
+                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "efectivo", 1 },
+                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "nequi", 2 }
                 });
 
             migrationBuilder.CreateIndex(

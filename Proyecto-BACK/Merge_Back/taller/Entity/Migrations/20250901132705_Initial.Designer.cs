@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250831203818_Initial")]
+    [Migration("20250901132705_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -278,10 +278,6 @@ namespace Entity.Migrations
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
@@ -307,7 +303,6 @@ namespace Entity.Migrations
                             id = 1,
                             active = true,
                             created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            description = "se consigno una cantidad de 50.000",
                             is_deleted = false,
                             name = "efectivo",
                             paymentAgreementId = 1
@@ -317,7 +312,6 @@ namespace Entity.Migrations
                             id = 2,
                             active = true,
                             created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            description = "se consigno una cantidad de 80.000",
                             is_deleted = false,
                             name = "nequi",
                             paymentAgreementId = 2

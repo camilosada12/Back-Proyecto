@@ -11,7 +11,5 @@ namespace Entity.DTOs.Interface.Entities
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string description { get; set; }
-        public int paymentAgreementId { get; set; }
     }
 }
