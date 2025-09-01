@@ -51,23 +51,6 @@ namespace Business.Custom
             return await BuildJwtAsync(user, roles, includeEmail: true);
         }
 
-        // ====== LOGIN POR DOCUMENTO ======
-        public async Task<string> GenerateTokenDocumento(DocumentLoginDto dto)
-        {
-            if (dto is null) throw new ValidationException("Solicitud inválida.");
-            if (dto.DocumentTypeId <= 0 || string.IsNullOrWhiteSpace(dto.DocumentNumber))
-                throw new ValidationException("Tipo y número de documento son obligatorios.");
-
-            var docNum = dto.DocumentNumber.Trim();
-
-            var user = await _dataUser.FindByDocumentAsync(dto.DocumentTypeId, docNum);
-            if (user is null) throw new UnauthorizedAccessException("Credenciales inválidas.");
-
-            var roles = await _userRepository.GetJoinRolesAsync(user.id);
-
-            // Aquí NO queremos enviar el correo
-            return await BuildJwtAsync(user, roles, includeEmail: false);
-        }
 
         // ====== Construcción del JWT (reutilizable) ======
         private Task<string> BuildJwtAsync(User user, IEnumerable<string> roles, bool includeEmail)

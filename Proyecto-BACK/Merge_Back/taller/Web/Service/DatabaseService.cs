@@ -1,5 +1,4 @@
 ﻿using Entity.Infrastructure.Contexts;
-using Entity.Infrastructure.LogService;
 using Microsoft.EntityFrameworkCore;
 using Web.Infrastructure.Web.Infrastructure;
 
@@ -13,7 +12,7 @@ namespace Web.Service
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Registrar AuditManager si lo usas en ApplicationDbContext
-            services.AddScoped<AuditService>();
+            //services.AddScoped<AuditService>();
 
             // Registrar configuración para inyección
             services.AddSingleton(configuration);
@@ -29,8 +28,9 @@ namespace Web.Service
             });
 
             // Registrar AuditDbContext si es necesario, con proveedor fijo o dinámico
-            services.AddDbContext<AuditDbContext>(options =>
-               options.UseNpgsql(configuration.GetConnectionString("Audit")));
+            //services.AddDbContext<AuditDbContext>(options =>
+            // options.UseSqlServer(configuration.GetConnectionString("Audit")));
+
 
             return services;
         }

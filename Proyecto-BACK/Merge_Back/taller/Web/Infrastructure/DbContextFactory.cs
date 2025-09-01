@@ -2,7 +2,6 @@
 {
     using Entity.Domain.Enums;
     using Entity.Infrastructure.Contexts;
-    using Entity.Infrastructure.LogService;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -13,16 +12,16 @@
         {
             private readonly IHttpContextAccessor _httpContextAccessor;
             private readonly IConfiguration _configuration;
-            private readonly AuditService _auditManager;
+            //private readonly AuditService _auditManager;
 
             public DbContextFactory(
                 IHttpContextAccessor httpContextAccessor,
-                IConfiguration configuration,
-                AuditService auditManager)
+                IConfiguration configuration ) 
+                //AuditService auditManager)
             {
                 _httpContextAccessor = httpContextAccessor;
                 _configuration = configuration;
-                _auditManager = auditManager;
+                //_auditmanager = auditmanager;
             }
 
             public ApplicationDbContext CreateDbContext()
@@ -49,7 +48,7 @@
                         break;
                 }
 
-                return new ApplicationDbContext(optionsBuilder.Options, _configuration, _auditManager, _httpContextAccessor);
+                return new ApplicationDbContext(optionsBuilder.Options, _configuration, _httpContextAccessor);
             }
         }
     }

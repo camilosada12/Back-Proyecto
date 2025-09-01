@@ -1,54 +1,61 @@
 ﻿using Business.ExternalServices.Recaptcha;
-using Business.Interfaces.BusinessRegister;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Interfaces.IJWT;
-using Business.Mensajeria;
-using Business.Mensajeria.Interfaces;
-using Business.Services.Auth;
-using Entity.DTOs.Default.Auth.LoginResultDto;
-using Entity.DTOs.Default.Auth.RegisterReponseDto;
-using Entity.DTOs.Default.GoogleTokenDto;
 using Entity.DTOs.Default.LoginDto;
-using Entity.DTOs.Default.ModelSecurityDto;
+using Entity.DTOs.Default.LoginDto.response.LoginResultDto;
+using Entity.DTOs.Default.LoginDto.response.RegisterReponseDto;
 using Entity.DTOs.Default.RegisterRequestDto;
-using Entity.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Utilities.Custom;
-using Utilities.Exceptions;
+using Microsoft.AspNetCore.Authorization;     // ADD
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;             // ADD
+
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-
     public class LoginController : ControllerBase
     {
-
-
         private readonly IToken _token;
         private readonly IUserService _userService;
         private readonly ILogger<LoginController> _logger;
         private readonly EncriptePassword _utilities;
         private readonly IRecaptchaVerifier _recaptcha;
-        private readonly IUserRegistrationService _userRegistrationService;
+        private readonly IAuthSessionService _svc;   // ADD: servicio de sesiones
+        private readonly ISystemClock _clock;              // ADD: reloj (tu wrapper)
+
         //private readonly IServiceEmail _serviceEmail;
         //private readonly INotifyManager _notifyManager;
 
-        public LoginController(EncriptePassword utilities,IToken token, IRecaptchaVerifier recaptcha, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades,
-            IUserRegistrationService userRegistrationService) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
+        public LoginController(
+            EncriptePassword utilities,
+            IToken token,
+            IRecaptchaVerifier recaptcha,
+            ILogger<LoginController> logger,
+            IUserService userService,
+            IAuthSessionService svc,    // ADD
+            ISystemClock clock                // ADD
+        //, IServiceEmail serviceEmail,
+        //, INotifyManager notifyManager
+        )
         {
             _token = token;
             _userService = userService;
             _logger = logger;
             _utilities = utilities;
-            _userRegistrationService = userRegistrationService;
             _recaptcha = recaptcha;
+            _svc = svc;                // ADD
+            _clock = clock;            // ADD
             //_serviceEmail = serviceEmail;
             //_notifyManager = notifyManager;
         }
 
-        [HttpPost]
-        [Route("Registrarse")]
+        // ===========================
+        // Registro de usuario normal
+        // ===========================
+        [HttpPost("Registrarse")]
         [ProducesResponseType(typeof(RegisterResponseDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -56,7 +63,7 @@ namespace Web.Controllers
         {
             try
             {
-                var result = await _userRegistrationService.RegisterAsync(request);
+                var result = await _userService.RegisterAsync(request);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -67,8 +74,9 @@ namespace Web.Controllers
             }
         }
 
-
-
+        // ===========================
+        // Login por Email + Password (JWT existente)
+        // ===========================
         [HttpPost("Email")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
@@ -91,15 +99,18 @@ namespace Web.Controllers
             }
         }
 
+        // ===========================
+        // Login por Documento (SESIÓN con cookie, SIN JWT)
+        // ===========================
         [HttpPost("documento")]
-        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(LoginResultDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         public async Task<IActionResult> LoginDocumento([FromBody] DocumentLoginDto login)
         {
             try
             {
-                // 1. Verificar reCAPTCHA
+                // 1) Verificar reCAPTCHA v3
                 var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
                 var (ok, reason, score) = await _recaptcha.VerifyAsync(
                     login.RecaptchaToken,
@@ -109,17 +120,48 @@ namespace Web.Controllers
 
                 if (!ok)
                 {
-                    return BadRequest(new { isSuccess = false, message = $"reCAPTCHA inválido: {reason}", score });
+                    // BadRequest con el mismo tipo de respuesta
+                    return BadRequest(new LoginResultDto
+                    {
+                        IsSuccess = false,
+                        Message = $"reCAPTCHA inválido: {reason} (score: {score:F2})"
+                    });
                 }
 
+                // (Opcional) Aplica umbral local de score si quieres ser más estricto
+                // if (score < 0.5) return BadRequest(new LoginResultDto { IsSuccess = false, Message = "Acceso bloqueado por sospecha de bot." });
 
-                // 2. Generar token si credenciales válidas
-                var token = await _token.GenerateTokenDocumento(login);
-                return Ok(new { isSuccess = true, token, recaptchaScore = score });
+                // 2) (Opcional) Validar existencia/obtención de persona
+                long? personId = null;
+                // personId = await _userService.GetPersonIdByDocAsync(login.DocumentTypeId, login.DocumentNumber);
+
+                // 3) Crear sesión (Business) y setear cookie HttpOnly
+                var ua = Request.Headers.UserAgent.ToString();
+                var sess = await _svc.CreateSessionAsync(personId, ip ?? "-", ua); // _svc: tu servicio de sesiones
+
+                Response.Cookies.Append("ph_session", sess.SessionId.ToString(), new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,                 // PRODUCCIÓN: true (requiere HTTPS). En dev puedes poner false.
+                    SameSite = SameSiteMode.None,  // Si el front está en otro origen/puerto; si es mismo origen, Lax está bien.
+                    IsEssential = true,
+                    Expires = sess.AbsoluteExpiresAt.UtcDateTime
+                });
+
+                // 4) Responder éxito (sin JWT)
+                return Ok(new LoginResultDto
+                {
+                    IsSuccess = true,                 // no usamos JWT en este flujo
+                    Message = "Sesión iniciada"
+                });
             }
             catch (UnauthorizedAccessException)
             {
-                return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
+                return Unauthorized(new LoginResultDto
+                {
+                    IsSuccess = false,
+                    Message = "Credenciales inválidas."
+                });
             }
             catch (Exception ex)
             {
@@ -129,48 +171,85 @@ namespace Web.Controllers
         }
 
 
-
-        [HttpGet]
-        [Route("ValidarToken")]
-        public IActionResult ValidarToken([FromQuery] string token)
-
+        // ===========================
+        // Cerrar sesión (revoca y borra cookie)
+        // ===========================
+        [Authorize(AuthenticationSchemes = "DocSession")]
+        [HttpPost("logout")]
+        [ProducesResponseType(typeof(object), 200)]
+        public async Task<IActionResult> Logout()
         {
+            if (Request.Cookies.TryGetValue("ph_session", out var raw) && Guid.TryParse(raw, out var sid))
+                await _svc.RevokeAsync(sid);
 
-            bool respuesta = _token.validarToken(token);
-            return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
+            Response.Cookies.Delete("ph_session", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax
+            });
 
+            return Ok(new { isSuccess = true });
         }
 
+        // ===========================
+        // Endpoint protegido de ejemplo (consulta)
+        // ===========================
+        [Authorize(AuthenticationSchemes = "DocSession")]
+        [HttpGet("mis-multas")]
+        [ProducesResponseType(typeof(object), 200)]
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> MisMultas([FromQuery] int documentTypeId, [FromQuery] string documentNumber)
+        {
+            // Si guardaste PersonId en la sesión, puedes usarlo:
+            var personIdClaim = User.FindFirst("person_id")?.Value;
+            if (long.TryParse(personIdClaim, out var pid))
+            {
+                // return Ok(await _algúnServicio.ObtenerPorPersonaIdAsync(pid));
+            }
 
+            // O consulta por los parámetros (si no guardas PersonId):
+            // return Ok(await _algúnServicio.ObtenerPorDocumentoAsync(documentTypeId, documentNumber));
+            return Ok(new { pendientes = Array.Empty<object>() });
+        }
 
-        //[HttpPost("google")]
-        //public async Task<IActionResult> GoogleLogin([FromBody] GoogleTokenDto tokenDto)
-        //{
-        //    // 1. Validar el token recibido de Google
-        //    var payload = await _token.VerifyGoogleToken(tokenDto.TokenId);
+        // ===========================
+        // Validar token existente (tu endpoint actual JWT)
+        // ===========================
+        [HttpGet("ValidarToken")]
+        [ProducesResponseType(typeof(object), 200)]
+        public IActionResult ValidarToken([FromQuery] string token)
+        {
+            bool respuesta = _token.validarToken(token);
+            return Ok(new { isSuccess = respuesta });
+        }
 
-        //    // 2. Si el token no es válido, rechazar el acceso
-        //    if (payload == null)
-        //        return Unauthorized("Token inválido de Google");
+        /*
+        [HttpPost("google")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleTokenDto tokenDto)
+        {
+            // 1. Validar el token recibido de Google
+            var payload = await _token.VerifyGoogleToken(tokenDto.TokenId);
 
-        //    // 3. Buscar o crear un usuario en la base de datos con el email recibido en el token de Google
-        //    var user = await _userService.createUserGoogle(payload.Email, payload.Name);
+            // 2. Si el token no es válido, rechazar el acceso
+            if (payload == null)
+                return Unauthorized("Token inválido de Google");
 
-        //    // 4. Obtener los roles asociados a ese usuario
-        //    //var roles = await _token.GetRolesByUserId(user.Id);
-        //    //var permissions = await _rolUserResvice.GetPermissionsByUserId(user.Id);
+            // 3. Buscar o crear un usuario en la base de datos con el email recibido en el token de Google
+            var user = await _userService.createUserGoogle(payload.Email, payload.Name);
 
-        //    var login = new LoginDto
-        //    {
-        //        email = user.email,
-        //        password = user.password,
-        //    };
-        //    // 5. Generar un JWT del sistema con los datos del usuario y sus roles
-        //    var token = await _token.GenerateToken(login);
+            var login = new LoginDto
+            {
+                email = user.email,
+                password = user.password,
+            };
 
-        //    // 6. Retornar el token generado para que el frontend lo use en sesiones autenticadas
-        //    return Ok(new { token });
-        //}
+            // 4. Generar un JWT del sistema
+            var token = await _token.GenerateToken(login);
 
+            // 5. Retornar el token
+            return Ok(new { token });
+        }
+        */
     }
 }

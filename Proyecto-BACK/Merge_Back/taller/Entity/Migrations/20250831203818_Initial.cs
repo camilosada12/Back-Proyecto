@@ -14,13 +14,37 @@ namespace Entity.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
+                name: "ModelSecurity");
+
+            migrationBuilder.EnsureSchema(
                 name: "Parameters");
 
             migrationBuilder.EnsureSchema(
                 name: "Entities");
 
-            migrationBuilder.EnsureSchema(
-                name: "ModelSecurity");
+            migrationBuilder.CreateTable(
+                name: "AuthSession",
+                schema: "ModelSecurity",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PersonId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastActivityAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AbsoluteExpiresAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    Ip = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserAgent = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthSession", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "department",
@@ -828,6 +852,13 @@ namespace Entity.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AuthSession_SessionId",
+                schema: "ModelSecurity",
+                table: "AuthSession",
+                column: "SessionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_department_daneCode",
                 schema: "Parameters",
                 table: "department",
@@ -1070,6 +1101,10 @@ namespace Entity.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AuthSession",
+                schema: "ModelSecurity");
+
             migrationBuilder.DropTable(
                 name: "DocumentInfraction",
                 schema: "Entities");

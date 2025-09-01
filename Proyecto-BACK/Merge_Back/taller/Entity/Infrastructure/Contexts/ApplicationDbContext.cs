@@ -22,18 +22,18 @@ namespace Entity.Infrastructure.Contexts
     public class ApplicationDbContext : DbContext
     {
         protected readonly IConfiguration _configuration;
-        private readonly IAuditService _auditService;
+        //private readonly IAuditService _auditService;
         private readonly IHttpContextAccessor _http;
 
         public ApplicationDbContext(
              DbContextOptions<ApplicationDbContext> options,
              IConfiguration configuration,
-             IAuditService auditService,
+             //IAuditService auditService,
              IHttpContextAccessor httpContextAccessor
          ) : base(options)
         {
             _configuration = configuration;
-            _auditService = auditService;
+            //_auditService = auditService;
             _http = httpContextAccessor;
         }
 
@@ -66,6 +66,8 @@ namespace Entity.Infrastructure.Contexts
         public DbSet<PaymentAgreement> paymentAgreement { get; set; }
 
 
+        public DbSet<AuthSession> AuthSessions { get; set; } = null!;
+
 
 
 
@@ -73,6 +75,8 @@ namespace Entity.Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+          
 
             // ============ CONFIGURACIONES (IEntityTypeConfiguration<>) ============
             // Parameters
@@ -102,6 +106,8 @@ namespace Entity.Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new RelacionesUserInfraction());
             modelBuilder.ApplyConfiguration(new RelacionesFineCalculationDetail());
             modelBuilder.ApplyConfiguration(new RelacionesPaymentAgreement());
+
+            modelBuilder.ApplyConfiguration(new AuthSessionConfig());
 
             // ============ SEEDS (ORDEN IMPORTA) ============
 
@@ -154,7 +160,7 @@ namespace Entity.Infrastructure.Contexts
             try
             {
                 ChangeTracker.DetectChanges();
-                _auditService.CaptureAsync(ChangeTracker).GetAwaiter().GetResult();
+                //_auditService.CaptureAsync(ChangeTracker).GetAwaiter().GetResult();
                 return base.SaveChanges();
             }
             catch (Exception ex)
@@ -170,7 +176,7 @@ namespace Entity.Infrastructure.Contexts
             try
             {
                 ChangeTracker.DetectChanges();
-                await _auditService.CaptureAsync(ChangeTracker, cancellationToken);
+                //await _auditService.CaptureAsync(ChangeTracker, cancellationToken);
                 return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
             }
             catch (Exception ex)

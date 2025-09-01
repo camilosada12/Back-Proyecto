@@ -1,11 +1,9 @@
 ﻿using Business.ExternalServices.Recaptcha;
-using Business.Interfaces.BusinessRegister;
 using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Mensajeria;
-using Business.Services.Auth;
 using Business.Services.Entities;
 using Business.Services.parameters;
 
@@ -23,7 +21,6 @@ using Data.Services.Entities;
 using Data.Services.Security;
 using Entity.Domain.Interfaces;
 using Entity.Domain.Models.Implements.Recaptcha;
-using Entity.Infrastructure.LogService;
 using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.Extensions.Configuration;
 using Utilities.Custom;
@@ -41,7 +38,7 @@ namespace Web.Service
             services.AddSingleton<EncriptePassword>(); // si es stateless; si no, Scoped
 
             // 1) Auditoría / logging
-            services.AddScoped<IAuditService, AuditService>();
+            //services.AddScoped<IAuditService, AuditService>();
 
             // 2) Persistencia genérica
             //services.AddDbContext<AppDbContext>(...); // (si aplica)
@@ -56,7 +53,6 @@ namespace Web.Service
             services.AddScoped<IRolUserRepository, RolUserRepository>();
             services.AddScoped<IFormModuleRepository, FormModuleRepository>();
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
-            services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
             // 3) Repositorios — ENTITIES
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
@@ -78,10 +74,6 @@ namespace Web.Service
 
             services.AddScoped<IUserInfractionServices, UserInfractionServices>();
             services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
-
-
-
-
 
             // 4) Servicios — PARAMETERS
             services.AddScoped<IdepartmentServices, departmentServices>();
@@ -110,6 +102,12 @@ namespace Web.Service
 
             services.Configure<RecaptchaOptions>(configuration.GetSection("Recaptcha"));
             services.AddHttpClient<IRecaptchaVerifier, RecaptchaVerifier>();
+
+            //cookies
+            services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();   // ADD
+            services.AddScoped<IAuthSessionService, AuthSessionService>();
+
+            services.AddDistributedMemoryCache();
 
 
             //services.AddScoped<IFineCalculationDetailServices, FineCalculationDetailServices>();

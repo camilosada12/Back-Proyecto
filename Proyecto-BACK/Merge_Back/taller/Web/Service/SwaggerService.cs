@@ -1,4 +1,5 @@
-﻿using Entity.Domain.Enums;
+﻿// Web.Extensions/SwaggerService.cs
+using Entity.Domain.Enums;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 
@@ -8,82 +9,52 @@ namespace Web.Extensions
     {
         public static IServiceCollection AddSwaggerWithJwt(this IServiceCollection services)
         {
+            // Puedes dejarlo aquí (no duplica aunque también esté en Program, pero mejor en un solo sitio)
             services.AddEndpointsApiExplorer();
+
             services.AddSwaggerGen(c =>
             {
-                //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v2" });
+                // ✅ Un único documento
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Proyecto Hacienda API",
+                    Version = "v1",
+                    Description = "API para Carnetización/Multas"
+                });
 
-                // Config swagger Enum Deletes
-
+                // ✅ Tus enums como string
                 c.MapType<DeleteType>(() => new OpenApiSchema
                 {
                     Type = "string",
                     Enum = Enum.GetNames(typeof(DeleteType))
-               .Select(name => new OpenApiString(name) as IOpenApiAny)
-               .ToList()
+                               .Select(n => (IOpenApiAny)new OpenApiString(n)).ToList()
                 });
 
                 c.MapType<GetAllType>(() => new OpenApiSchema
                 {
                     Type = "string",
                     Enum = Enum.GetNames(typeof(GetAllType))
-              .Select(name => new OpenApiString(name) as IOpenApiAny)
-              .ToList()
+                               .Select(n => (IOpenApiAny)new OpenApiString(n)).ToList()
                 });
 
+                // (Opcional) Seguridad JWT – si lo usarás en Swagger UI
+                // var securityScheme = new OpenApiSecurityScheme
+                // {
+                //     Name = "Authorization",
+                //     Type = SecuritySchemeType.Http,
+                //     Scheme = "bearer",
+                //     BearerFormat = "JWT",
+                //     In = ParameterLocation.Header,
+                //     Description = "Ingresa: Bearer {token}"
+                // };
+                // c.AddSecurityDefinition("Bearer", securityScheme);
+                // c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                // {
+                //     { securityScheme, Array.Empty<string>() }
+                // });
 
-    //            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    //            {
-    //                Name = "Authorization",
-    //                Type = SecuritySchemeType.ApiKey,
-    //                Scheme = "Bearer",
-    //                BearerFormat = "JWT",
-    //                In = ParameterLocation.Header,
-    //                Description = "Ingresa tu token JWT como: Bearer {token}"
-    //            });
-
-    //            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    //            {
-    //                {
-    //                    new OpenApiSecurityScheme
-    //                    {
-    //                        Reference = new OpenApiReference
-    //                        {
-    //                            Type = ReferenceType.SecurityScheme,
-    //                            Id = "Bearer"
-    //                        }
-    //                    },
-    //                    new string[] {}
-    //                }
-    //            });
-
-    //            c.AddSecurityDefinition("DbProvider", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    //            {
-    //                Name = "X-DB-Provider",
-    //                Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-    //                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-    //                Description = "Select DB Provider: sqlserver, postgresql, mysql"
-    //            });
-
-    //            c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    //{
-    //    {
-    //        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    //        {
-    //            Name = "X-DB-Provider",
-    //            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-    //            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-    //            Reference = new Microsoft.OpenApi.Models.OpenApiReference
-    //            {
-    //                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-    //                Id = "DbProvider"
-    //            }
-    //        },
-    //        new List<string>()
-    //    }
-    //});
-
-
+                // (Opcional) Evitar conflictos si tienes acciones con misma ruta/verb
+                // c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
 
             return services;
