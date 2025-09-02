@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250901132705_Initial")]
+    [Migration("20250901144925_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -261,6 +261,26 @@ namespace Entity.Migrations
                             is_deleted = false,
                             numer_smldv = 4,
                             type_Infraction = "infraccion de tipo dos"
+                        },
+                        new
+                        {
+                            id = 3,
+                            active = true,
+                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
+                            is_deleted = false,
+                            numer_smldv = 8,
+                            type_Infraction = "infraccion de tipo Tres"
+                        },
+                        new
+                        {
+                            id = 4,
+                            active = true,
+                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ",
+                            is_deleted = false,
+                            numer_smldv = 16,
+                            type_Infraction = "infraccion de tipo Cuatro"
                         });
                 });
 

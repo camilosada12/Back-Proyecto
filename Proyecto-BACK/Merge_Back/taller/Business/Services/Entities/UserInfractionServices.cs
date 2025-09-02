@@ -7,6 +7,7 @@ using Data.Interfaces.IDataImplement.Security;   // <- IUserRepository
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
 using Helpers.Business.Business.Helpers.Validation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
 
@@ -109,5 +110,14 @@ public class UserInfractionServices
         var entities = await strategy.GetAll(_repo);
         return _mapper.Map<IEnumerable<UserInfractionSelectDto>>(entities);
     }
+
+    public async Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber)
+    {
+
+
+        var entities = await _repo.GetByDocumentAsync(documentTypeId, documentNumber);
+        return _mapper.Map<IReadOnlyList<UserInfractionSelectDto>>(entities);
+    }
 }
+ 
 

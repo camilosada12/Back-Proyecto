@@ -43,5 +43,20 @@ namespace Data.Services.Entities
                  .ThenInclude(ui => ui.Person)
                 .FirstOrDefaultAsync(u => u.id == id);
         }
+
+        public async Task<IReadOnlyList<UserInfraction>> GetByDocumentAsync(int documentTypeId, string documentNumber)
+        {
+            documentNumber = documentNumber.Trim();
+
+            return await _dbSet
+                .AsNoTracking()
+                .Include(u => u.typeInfraction)
+                .Include(u => u.user)
+                    .ThenInclude(ui => ui.Person)
+                .Where(u => !u.is_deleted &&
+                            u.user.documentTypeId == documentTypeId &&
+                            u.user.documentNumber == documentNumber)
+                .ToListAsync();
+        }
     }
 }

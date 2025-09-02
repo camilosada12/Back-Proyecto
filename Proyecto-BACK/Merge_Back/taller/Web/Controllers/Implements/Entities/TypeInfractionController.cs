@@ -20,5 +20,7 @@ namespace Web.Controllers.Implements.Entities
         protected override Task<bool> UpdateAsync(int id, TypeInfractionDto dto) => _service.UpdateAsync(dto);
         protected override Task<bool> DeleteAsync(int id, DeleteType deleteType) => _service.DeleteAsync(id, deleteType);
         protected override Task<bool> RestaureAsync(int id) => _service.RestoreLogical(id);
+
+
     }
 }

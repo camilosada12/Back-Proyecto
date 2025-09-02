@@ -33,7 +33,27 @@ namespace Entity.DataInit.EntitiesDataInit
                     active = true,
                     is_deleted = false,
                     created_date = new DateTime(2023, 02, 02),
-                }
+                },
+                 new TypeInfraction
+                 {
+                     id = 3,
+                     type_Infraction = "infraccion de tipo Tres",
+                     numer_smldv = 8,
+                     description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
+                     active = true,
+                     is_deleted = false,
+                     created_date = new DateTime(2023, 02, 02),
+                 },
+                  new TypeInfraction
+                  {
+                      id = 4,
+                      type_Infraction = "infraccion de tipo Cuatro",
+                      numer_smldv = 16,
+                      description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ",
+                      active = true,
+                      is_deleted = false,
+                      created_date = new DateTime(2023, 02, 02),
+                  }
                 );
         }
     }

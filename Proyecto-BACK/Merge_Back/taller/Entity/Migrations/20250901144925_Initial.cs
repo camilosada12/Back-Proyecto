@@ -707,7 +707,9 @@ namespace Entity.Migrations
                 values: new object[,]
                 {
                     { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "lanzar basura en un lugar publico", false, 2, "infraccion de tipo uno" },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "hacer mucho ruido en un sitio publico", false, 4, "infraccion de tipo dos" }
+                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "hacer mucho ruido en un sitio publico", false, 4, "infraccion de tipo dos" },
+                    { 3, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.", false, 8, "infraccion de tipo Tres" },
+                    { 4, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ", false, 16, "infraccion de tipo Cuatro" }
                 });
 
             migrationBuilder.InsertData(
