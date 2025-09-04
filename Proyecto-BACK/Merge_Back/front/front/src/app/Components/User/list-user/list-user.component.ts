@@ -2,15 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { User, UserCreate } from '../../../Models/User/user.models';
 import { UserService } from '../../../Services/User/user.service';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 
-
 @Component({
   selector: 'app-list-user',
-  imports: [MatButtonModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [MatButtonModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './list-user.component.html',
   styleUrl: './list-user.component.css'
 })
@@ -23,9 +21,10 @@ export class ListUserComponent implements OnInit {
   userForm!: FormGroup;
   isEditMode = false;
   selectedUserId: number | null = null;
-  columns = ['name', 'email']
+  showForm = false;
 
   constructor() { }
+  
   ngOnInit(): void {
     this.initForm();
     this.getAll();
@@ -46,21 +45,24 @@ export class ListUserComponent implements OnInit {
   }
 
   saveUser() {
-    const user = this.userForm.value;
+    if (this.userForm.valid) {
+      const user = this.userForm.value;
 
-    if (this.isEditMode && this.selectedUserId) {
-      this.userServices.update(this.selectedUserId, user).subscribe(() => {
-        this.resetForm();
-        this.getAll();
-      });
-    } else {
-      this.userServices.create(user).subscribe(() => {
-        this.resetForm();
-        this.getAll();
-      });
+      if (this.isEditMode && this.selectedUserId) {
+        this.userServices.update(this.selectedUserId, user).subscribe(() => {
+          this.showForm = false;
+          this.resetForm();
+          this.getAll();
+        });
+      } else {
+        this.userServices.create(user).subscribe(() => {
+          this.showForm = false;
+          this.resetForm();
+          this.getAll();
+        });
+      }
     }
   }
-
 
   editUser(user: User) {
     this.userForm.patchValue({
@@ -70,17 +72,16 @@ export class ListUserComponent implements OnInit {
     });
     this.isEditMode = true;
     this.selectedUserId = user.id;
+    this.showForm = true;
   }
-
 
   deleteUser(id: number) {
     this.userServices.delete(id).subscribe(() => this.getAll());
   }
 
-
   deleteLogic(id: number) {
     this.userServices.logicalDelete(id).subscribe(() => {
-      console.log("Se elimino Logicamnete")
+      console.log("Se elimino Logicamente")
       this.getAll();
     })
   }
@@ -90,6 +91,4 @@ export class ListUserComponent implements OnInit {
     this.isEditMode = false;
     this.selectedUserId = null;
   }
-
-
 }

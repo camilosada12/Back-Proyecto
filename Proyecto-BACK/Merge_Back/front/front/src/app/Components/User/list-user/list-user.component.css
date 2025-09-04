@@ -1,191 +1,279 @@
-.container {
-    margin-left: 5rem;
-    margin-right: 5rem;
+/* Main Container */
+.personas-container {
+    padding: 24px;
+    margin-left: 250px;
+    margin-top: 64px;
+    min-height: calc(100vh - 64px);
+    background-color: #f5f5f5;
 }
 
-.titulo-tabla {
-    font-size: 28px;
-    font-weight: bold;
-    color: #0d47a1;
-    margin: 20px;
+/* Header Section */
+.header-section {
     display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.tabla-cards {
-    display: grid;
-    gap: 20px;
-    padding: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-}
-
-.card-fila {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 20px 0;
 }
 
-.card-fila:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.card-header {
+.title-section {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 18px;
+    gap: 12px;
+}
+
+.section-icon {
+    font-size: 28px;
+    color: #2e7d32;
+}
+
+.title-section h1 {
+    margin: 0;
+    font-size: 24px;
     font-weight: 600;
-    color: #1e88e5;
-    margin-bottom: 10px;
-}
-
-.icono-usuario {
-    font-size: 28px;
-}
-
-.card-content .info-linea {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    padding: 6px 0;
-    border-bottom: 1px solid #eee;
     color: #333;
 }
 
-.card-actions {
-    margin-top: 12px;
+.add-button {
+    background-color: #4caf50 !important;
+    color: white !important;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-transform: none;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: #388e3c !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+/* Form Modal */
+.form-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    min-width: 400px;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.persona-form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
     gap: 8px;
 }
 
-/* Contenedor principal */
-.formulario-usuario {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2.5rem;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+.form-field label {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
 }
 
-/* Título */
-h2 {
-  color: #3f51b5;
-  text-align: center;
-  margin-bottom: 2.5rem;
-  font-size: 1.8rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+.form-field input {
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
 }
 
-/* Campos de entrada */
-input {
-  width: 100%;
-  padding: 14px 16px;
-  margin-bottom: 1.5rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
+.form-field input:focus {
+    outline: none;
+    border-color: #4caf50;
 }
 
-input:focus {
-  border-color: #3f51b5;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
 }
 
-/* Contenedor de botones */
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-  gap: 1rem;
+/* Users List */
+.users-list {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-/* Botón principal (Crear/Actualizar) */
-button[type="submit"] {
-  flex: 2;
-  padding: 14px;
-  background-color: #3f51b5;
-  color: white;
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 2px 5px rgba(63, 81, 181, 0.3);
+.user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
 }
 
-button[type="submit"]:hover {
-  background-color: #303f9f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.4);
+.user-card:last-child {
+    border-bottom: none;
 }
 
-button[type="submit"]:active {
-  transform: translateY(1px);
+.user-card:hover {
+    background-color: #f5f5f5;
 }
 
-/* Botón cancelar (solo en modo edición) */
-button[type="button"] {
-  flex: 1;
-  padding: 14px;
-  background-color: transparent;
-  color: #5c6bc0;
-  font-size: 1rem;
-  font-weight: 500;
-  border: 2px solid #5c6bc0;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-button[type="button"]:hover {
-  background-color: #f5f7ff;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(92, 107, 192, 0.2);
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1976d2;
 }
 
-/* Validación */
-input.ng-invalid.ng-touched {
-  border-color: #f44336;
-  animation: shake 0.4s ease-in-out;
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-5px); }
-  40%, 80% { transform: translateX(5px); }
+.user-name {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.user-email {
+    color: #666;
+    font-size: 12px;
+}
+
+.user-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn {
+    color: #1976d2;
+    background-color: rgba(25, 118, 210, 0.1);
+}
+
+.edit-btn:hover {
+    background-color: rgba(25, 118, 210, 0.2);
+}
+
+.delete-btn {
+    color: #d32f2f;
+    background-color: rgba(211, 47, 47, 0.1);
+}
+
+.delete-btn:hover {
+    background-color: rgba(211, 47, 47, 0.2);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-icon {
+    font-size: 64px;
+    color: #bdbdbd;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    color: #333;
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.empty-state p {
+    color: #666;
+    margin: 0 0 24px 0;
+    font-size: 14px;
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-  .formulario-usuario {
-    padding: 1.8rem;
-    margin: 1rem;
-  }
-  
-  .button-group {
-    flex-direction: column;
-  }
-  
-  button[type="submit"], 
-  button[type="button"] {
-    width: 100%;
-  }
+@media (max-width: 768px) {
+    .personas-container {
+        margin-left: 200px;
+        padding: 16px;
+    }
+
+    .header-section {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .modal-content {
+        margin: 16px;
+        min-width: auto;
+    }
+
+    .user-card {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .user-actions {
+        align-self: stretch;
+        justify-content: flex-end;
+    }
 }

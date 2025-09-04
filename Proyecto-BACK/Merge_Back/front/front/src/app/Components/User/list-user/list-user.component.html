@@ -1,44 +1,81 @@
-@if (users) {
-<div class="container">
-    <h2>{{ isEditMode ? '✏️ Editar Usuario' : '➕ Crear Usuario' }}</h2>
-    <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="formulario-usuario">
-        <input formControlName="name" placeholder="Nombre" required>
-        <input formControlName="email" type="email" placeholder="Correo" required>
-        <input formControlName="password" type="password" placeholder="Contraseña" [required]="!isEditMode">
-
-        <button mat-raised-button color="primary" type="submit">
-            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+<div class="personas-container">
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="title-section">
+            <mat-icon class="section-icon">group</mat-icon>
+            <h1>Personas del Sistema</h1>
+        </div>
+        <button mat-raised-button class="add-button" (click)="showForm = true">
+            + Agregar Persona
         </button>
-        <button mat-button type="button" (click)="resetForm()" *ngIf="isEditMode">Cancelar</button>
-    </form>
+    </div>
 
-    <h2 class="titulo-tabla">👥 Lista de Usuarios</h2>
-    <div class="tabla-cards">
-        <div class="card-fila" *ngFor="let user of users">
-            <div class="card-header">
-                <mat-icon class="icono-usuario">person</mat-icon>
-                <span class="card-title">{{ user.name }}</span>
+    <!-- Create/Edit Form Modal -->
+    <div class="form-modal" *ngIf="showForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>{{ isEditMode ? 'Editar Persona' : 'Nueva Persona' }}</h3>
+                <button mat-icon-button (click)="showForm = false; resetForm()">
+                    <mat-icon>close</mat-icon>
+                </button>
             </div>
-            <div class="card-content">
-                <div class="info-linea">
-                    <strong>Correo:</strong>
-                    <span>{{ user.email }}</span>
+            <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="persona-form">
+                <div class="form-field">
+                    <label>Nombre completo</label>
+                    <input formControlName="name" placeholder="Ingrese el nombre completo" required>
+                </div>
+
+                <div class="form-field">
+                    <label>Correo electrónico</label>
+                    <input formControlName="email" type="email" placeholder="correo@ejemplo.com" required>
+                </div>
+
+                <div class="form-field" *ngIf="!isEditMode">
+                    <label>Contraseña</label>
+                    <input formControlName="password" type="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-actions">
+                    <button mat-button type="button" (click)="showForm = false; resetForm()">Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">
+                        {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-backdrop" (click)="showForm = false; resetForm()"></div>
+    </div>
+
+    <!-- Users List -->
+    <div class="users-list" *ngIf="users && users.length > 0">
+        <div class="user-card" *ngFor="let user of users">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <mat-icon>person</mat-icon>
+                </div>
+                <div class="user-details">
+                    <span class="user-name">{{ user.name }}</span>
+                    <span class="user-email">{{ user.email }}</span>
                 </div>
             </div>
-            <div class="card-actions">
-                <button mat-icon-button color="primary" (click)="editUser(user)">
+            <div class="user-actions">
+                <button mat-icon-button class="edit-btn" (click)="editUser(user)">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" (click)="deleteUser(user.id!)">
+                <button mat-icon-button class="delete-btn" (click)="deleteUser(user.id!)">
                     <mat-icon>delete</mat-icon>
-                </button>
-
-                <button mat-icon-button color="warn" (click)="deleteLogic(user.id!)">
-                    <mat-icon>delete_outline</mat-icon>
                 </button>
             </div>
         </div>
     </div>
-</div>
 
-}
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!users || users.length === 0">
+        <mat-icon class="empty-icon">group_off</mat-icon>
+        <h3>No hay personas registradas</h3>
+        <p>Comienza agregando la primera persona al sistema</p>
+        <button mat-raised-button color="primary" (click)="showForm = true">
+            + Agregar Primera Persona
+        </button>
+    </div>
+</div>
