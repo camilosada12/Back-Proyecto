@@ -12,6 +12,7 @@
 
     <!-- Create/Edit Form Modal -->
     <div class="form-modal" *ngIf="showForm">
+        <div class="modal-backdrop" (click)="showForm = false; resetForm()"></div>
         <div class="modal-content">
             <div class="modal-header">
                 <h3>{{ isEditMode ? 'Editar Persona' : 'Nueva Persona' }}</h3>
@@ -43,7 +44,6 @@
                 </div>
             </form>
         </div>
-        <div class="modal-backdrop" (click)="showForm = false; resetForm()"></div>
     </div>
 
     <!-- Users List -->
