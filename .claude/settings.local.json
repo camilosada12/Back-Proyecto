@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Read(/C:\\Users\\sedmo\\OneDrive\\Escritorio\\Back-Proyecto\\Proyecto-BACK\\Merge_Back\\taller\\Web/**)"
+      "Read(/C:\\Users\\sedmo\\OneDrive\\Escritorio\\Back-Proyecto\\Proyecto-BACK\\Merge_Back\\taller\\Web/**)",
+      "Read(/C:\\Users\\sedmo\\OneDrive\\Escritorio\\Back-Proyecto\\Proyecto-BACK\\Merge_Back\\front\\front\\src\\app\\Components\\Login\\login/**)",
+      "Read(/C:\\Users\\sedmo\\OneDrive\\Escritorio\\Back-Proyecto\\Proyecto-BACK\\Merge_Back\\front\\front\\src\\app\\Components\\Login\\login/**)",
+      "Read(/C:\\Users\\sedmo\\OneDrive\\Escritorio\\Back-Proyecto\\Proyecto-BACK\\Merge_Back\\front\\front\\src\\assets/**)"
     ],
     "deny": [],
     "ask": []

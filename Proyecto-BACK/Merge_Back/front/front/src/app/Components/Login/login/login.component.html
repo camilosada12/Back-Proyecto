@@ -1,43 +1,53 @@
-<div class="login-wrapper">
-    <mat-card class="login-card animate-fade-in">
+<div class="login-container">
+  <div class="login-card">
+    <!-- Lado izquierdo - Imagen -->
+    <div class="login-image-section">
+      <div class="image-overlay">
+        <img src="images/iglesia.png" alt="Iglesia" class="background-image" />
+      </div>
+    </div>
+
+    <!-- Lado derecho - Formulario -->
+    <div class="login-form-section">
+      <div class="login-form-container">
+        <h2 class="login-title">Iniciar Sesión</h2>
         
-        <mat-card-header>
-            <mat-card-title class="login-title">Iniciar Sesión</mat-card-title>
-        </mat-card-header>
+        <form (ngSubmit)="Login()" [formGroup]="formLogin" class="login-form">
+          
+          <div class="form-group">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Usuario</mat-label>
+              <input matInput formControlName="email" placeholder="camino2017@" required>
+              <mat-icon matSuffix class="input-icon">person</mat-icon>
+              <mat-error *ngIf="formLogin.controls['email'].invalid">El email es requerido</mat-error>
+            </mat-form-field>
+          </div>
 
-        <mat-card-content>
-            <form (ngSubmit)="Login()" [formGroup]="formLogin" class="login-form">
+          <div class="form-group">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Contraseña</mat-label>
+              <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
+                placeholder="••••••••••" required>
+              <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" class="password-toggle">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="formLogin.controls['password'].invalid">La contraseña es requerida</mat-error>
+            </mat-form-field>
+          </div>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Email de usuario</mat-label>
-                    <input matInput formControlName="email" placeholder="Ingresa tu email" required>
-                    <mat-icon matSuffix>person</mat-icon>
-                    <mat-error *ngIf="formLogin.controls['email'].invalid">El email es requerido</mat-error>
-                </mat-form-field>
+          <button type="submit" mat-raised-button [disabled]="!formLogin.valid" class="login-button">
+            Iniciar Sesión
+          </button>
 
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
-                        placeholder="Ingresa tu contraseña" required>
-                    <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
-                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                    </button>
-                    <mat-error *ngIf="formLogin.controls['password'].invalid">La contraseña es requerida</mat-error>
-                </mat-form-field>
+          <div class="login-links">
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            <a routerLink="/register" class="register-link">¿Deseas Registrarte?</a>
+          </div>
 
-                <div class="button-container">
-                    <button type="submit" mat-raised-button color="primary"  [disabled]="!formLogin.valid"
-                        class="submit-button">Ingresar</button>
+        </form>
 
-                    <button mat-flat-button color="warn" routerLink="/register">
-                        Register
-                    </button>
-
-                </div>
-
-            </form>
-            <div id="google-button" style="margin-top: 20px; text-align: center;"></div>
-
-        </mat-card-content>
-    </mat-card>
+        <div id="google-button" class="google-auth"></div>
+      </div>
+    </div>
+  </div>
 </div>
