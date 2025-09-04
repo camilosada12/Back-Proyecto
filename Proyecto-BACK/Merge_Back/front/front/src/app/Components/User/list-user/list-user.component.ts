@@ -78,8 +78,15 @@ export class ListUserComponent implements OnInit {
       if (!formData.password) {
         delete user.passwordHash;
       }
-      
-      this.userServices.update(this.selectedUserId, user).subscribe({
+      // Crear objeto UserCreate con id
+      const userCreate: UserCreate = {
+        id: this.selectedUserId,
+        name: user.name,
+        email: user.email,
+        password: formData.password,
+        passwordHash: user.passwordHash
+      };
+      this.userServices.update(this.selectedUserId, userCreate).subscribe({
         next: () => {
           console.log('User updated successfully');
           this.showForm = false;
@@ -91,7 +98,15 @@ export class ListUserComponent implements OnInit {
         }
       });
     } else {
-      this.userServices.create(user).subscribe({
+      // Crear objeto UserCreate con id
+      const userCreate: UserCreate = {
+        id: 0, // O el valor que corresponda si es autoincremental
+        name: user.name,
+        email: user.email,
+        password: formData.password,
+        passwordHash: user.passwordHash
+      };
+      this.userServices.create(userCreate).subscribe({
         next: () => {
           console.log('User created successfully');
           this.showForm = false;
