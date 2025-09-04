@@ -19,7 +19,7 @@ export class LoginService {
   }
 
   login(Objeto:Login): Observable<ResponseLogin>{
-    return this.http.post<ResponseLogin>(this.URLBase, Objeto);
+    return this.http.post<ResponseLogin>(this.URLBase + '/Email', Objeto);
   }
 
   validateToken(token:string):Observable<ResponseLogin>{
