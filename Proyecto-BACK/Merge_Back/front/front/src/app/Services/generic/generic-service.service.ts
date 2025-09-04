@@ -27,6 +27,6 @@ export class GenericService<TList, TCreate> {
   }
 
   public delete(id: number): Observable<any> {
-    return this.http.delete(`${this.endpoint}/${id}/?deleteType=1`);
+    return this.http.delete(`${this.endpoint}/${id}?deleteType=1`);
   }
 }

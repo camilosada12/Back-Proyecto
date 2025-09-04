@@ -4,7 +4,7 @@ import { UserService } from '../../../Services/User/user.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-list-user',
@@ -32,9 +32,9 @@ export class ListUserComponent implements OnInit {
 
   initForm() {
     this.userForm = this.fb.group({
-      name: [''],
-      email: [''],
-      password: ['']
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
     });
   }
 
@@ -45,22 +45,63 @@ export class ListUserComponent implements OnInit {
   }
 
   saveUser() {
-    if (this.userForm.valid) {
-      const user = this.userForm.value;
+    // In edit mode, remove password validation if it's empty
+    if (this.isEditMode && !this.userForm.value.password) {
+      this.userForm.get('password')?.clearValidators();
+      this.userForm.get('password')?.updateValueAndValidity();
+    }
 
-      if (this.isEditMode && this.selectedUserId) {
-        this.userServices.update(this.selectedUserId, user).subscribe(() => {
-          this.showForm = false;
-          this.resetForm();
-          this.getAll();
-        });
-      } else {
-        this.userServices.create(user).subscribe(() => {
-          this.showForm = false;
-          this.resetForm();
-          this.getAll();
-        });
+    if (this.userForm.invalid) {
+      console.log('Form is invalid:', this.userForm.errors);
+      Object.keys(this.userForm.controls).forEach(key => {
+        const control = this.userForm.get(key);
+        if (control?.invalid) {
+          console.log(`${key} is invalid:`, control.errors);
+        }
+      });
+      return;
+    }
+
+    const formData = this.userForm.value;
+    console.log('Form data:', formData);
+
+    // Prepare user object with passwordHash instead of password
+    const user = {
+      name: formData.name,
+      email: formData.email,
+      passwordHash: formData.password // Send password as passwordHash for now
+    };
+    console.log('Saving user:', user);
+
+    if (this.isEditMode && this.selectedUserId) {
+      // Remove passwordHash from update if it's empty
+      if (!formData.password) {
+        delete user.passwordHash;
       }
+      
+      this.userServices.update(this.selectedUserId, user).subscribe({
+        next: () => {
+          console.log('User updated successfully');
+          this.showForm = false;
+          this.resetForm();
+          this.getAll();
+        },
+        error: (error) => {
+          console.error('Error updating user:', error);
+        }
+      });
+    } else {
+      this.userServices.create(user).subscribe({
+        next: () => {
+          console.log('User created successfully');
+          this.showForm = false;
+          this.resetForm();
+          this.getAll();
+        },
+        error: (error) => {
+          console.error('Error creating user:', error);
+        }
+      });
     }
   }
 
@@ -76,7 +117,15 @@ export class ListUserComponent implements OnInit {
   }
 
   deleteUser(id: number) {
-    this.userServices.delete(id).subscribe(() => this.getAll());
+    this.userServices.logicalDelete(id).subscribe({
+      next: () => {
+        console.log('User deleted successfully');
+        this.getAll();
+      },
+      error: (error) => {
+        console.error('Error deleting user:', error);
+      }
+    });
   }
 
   deleteLogic(id: number) {
@@ -90,5 +139,9 @@ export class ListUserComponent implements OnInit {
     this.userForm.reset();
     this.isEditMode = false;
     this.selectedUserId = null;
+    
+    // Reset password validators
+    this.userForm.get('password')?.setValidators([Validators.required]);
+    this.userForm.get('password')?.updateValueAndValidity();
   }
 }
