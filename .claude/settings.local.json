@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/C:\\Users\\sedmo\\OneDrive\\Escritorio\\Back-Proyecto\\Proyecto-BACK\\Merge_Back\\taller\\Web/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
