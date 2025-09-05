@@ -1,5 +1,27 @@
 /* App Component Styles */
 .container {
+    margin-left: 250px;
+    margin-top: 64px;
+    padding: 0;
+    width: calc(100% - 250px);
+    height: calc(100vh - 64px);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* For login and register pages - full width */
+.container.full-width {
+    margin-left: 0;
+    margin-top: 0;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+        height: calc(100vh - 64px);
+    }
 }

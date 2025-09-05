@@ -1,6 +1,5 @@
 .sidebar-container {
     display: flex;
-    height: 100vh;
     width: 100%;
 }
 
@@ -16,6 +15,8 @@
     top: 0;
     z-index: 1000;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .logo-section {
@@ -56,6 +57,25 @@
     flex: 1;
     padding: 20px 0;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.nav-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.nav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.nav-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .nav-section {
@@ -121,6 +141,8 @@
     background: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 999;
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .top-bar-content {

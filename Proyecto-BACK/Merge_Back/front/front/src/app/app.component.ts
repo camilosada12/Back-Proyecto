@@ -11,8 +11,10 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'front';
-  /**
-   *
-   */
+  
   constructor(public router: Router) {}
+
+  isLoginOrRegister(): boolean {
+    return this.router.url === '/login' || this.router.url === '/register';
+  }
 }
