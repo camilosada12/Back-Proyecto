@@ -2,11 +2,17 @@
 using Business.Interfaces.IJWT;
 using Business.Mensajeria;
 using Business.Mensajeria.Interfaces;
+using Entity.Domain.Models.Implements.ModelSecurity;
+using Entity.DTOs.Default.Auth;
 using Entity.DTOs.Default.GoogleTokenDto;
-using Entity.DTOs.Default.LoginDto;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Management;
+using System.Text;
 using Utilities.Custom;
 using Utilities.Exceptions;
 namespace Web.Controllers
@@ -23,15 +29,18 @@ namespace Web.Controllers
         private readonly IUserService _userService;
         private readonly ILogger<LoginController> _logger;
         private readonly EncriptePassword _utilities;
+        private readonly JwtSettings _jwt; // para ValidarToken
         //private readonly IServiceEmail _serviceEmail;
         //private readonly INotifyManager _notifyManager;
 
-        public LoginController(EncriptePassword utilities,IToken token, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
+        public LoginController(EncriptePassword utilities,IToken token, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades, IOptions<JwtSettings> jwtOptions) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
         {
             _token = token;
             _userService = userService;
             _logger = logger;
             _utilities = utilities;
+            _jwt = jwtOptions.Value;
+
             //_serviceEmail = serviceEmail;
             //_notifyManager = notifyManager;
         }
@@ -66,13 +75,15 @@ namespace Web.Controllers
         {
             try
             {
-                var token = await _token.GenerateToken(login);
+                var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
 
-                //await _serviceEmail.EnviarEmailBienvenida(login.email);
-                //await _notifyManager.NotifyAsync();
-
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token });
-
+                return StatusCode(StatusCodes.Status200OK, new
+                {
+                    isSuccess = true,
+                    accessToken = access,
+                    refreshToken = refresh,
+                    csrfToken = csrf
+                });
                 //return Ok(token);
             }
             catch (ValidationException ex)
@@ -92,41 +103,48 @@ namespace Web.Controllers
         public IActionResult ValidarToken([FromQuery] string token)
 
         {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var parameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.key)),
+                    ValidateIssuer = true,
+                    ValidIssuer = _jwt.issuer,
+                    ValidateAudience = true,
+                    ValidAudience = _jwt.audience,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
 
-            bool respuesta = _token.validarToken(token);
-            return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
+                handler.ValidateToken(token, parameters, out _);
+                return Ok(new { isSuccess = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Token inválido");
+                return Ok(new { isSuccess = false, message = "Token inválido" });
+            }
 
         }
-
 
 
         [HttpPost("google")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleTokenDto tokenDto)
         {
-            // 1. Validar el token recibido de Google
             var payload = await _token.VerifyGoogleToken(tokenDto.TokenId);
-
-            // 2. Si el token no es válido, rechazar el acceso
             if (payload == null)
                 return Unauthorized("Token inválido de Google");
 
-            // 3. Buscar o crear un usuario en la base de datos con el email recibido en el token de Google
+            // tu flujo crea/recupera usuario con Google
             var user = await _userService.createUserGoogle(payload.Email, payload.Name);
 
-            // 4. Obtener los roles asociados a ese usuario
-            //var roles = await _token.GetRolesByUserId(user.Id);
-            //var permissions = await _rolUserResvice.GetPermissionsByUserId(user.Id);
+            // generar tokens del sistema (reutilizando GenerateTokensAsync)
+            var login = new LoginDto { email = user.email, password = user.password };
+            var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
 
-            var login = new LoginDto
-            {
-                email = user.email,
-                password = user.password,
-            };
-            // 5. Generar un JWT del sistema con los datos del usuario y sus roles
-            var token = await _token.GenerateToken(login);
-
-            // 6. Retornar el token generado para que el frontend lo use en sesiones autenticadas
-            return Ok(new { token });
+            return Ok(new { accessToken = access, refreshToken = refresh, csrfToken = csrf });
         }
 
     }

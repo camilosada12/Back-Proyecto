@@ -12,6 +12,7 @@ namespace Entity.DataInit.EntitiesDataInit
     {
         public static void SeedPaymentAgreement(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<PaymentAgreement>().HasData(
             new PaymentAgreement
             {
@@ -23,7 +24,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 paymentFrequencyId = 1,   // Debe existir en SeedPaymentFrequency
                 active = true,
                 is_deleted = false,
-                created_date = new DateTime(2023, 01, 01)
+                created_date = seedDate
             },
             new PaymentAgreement
             {
@@ -35,7 +36,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 paymentFrequencyId = 2,
                 active = true,
                 is_deleted = false,
-                created_date = new DateTime(2023, 02, 02)
+                created_date = seedDate
             }
         );
 

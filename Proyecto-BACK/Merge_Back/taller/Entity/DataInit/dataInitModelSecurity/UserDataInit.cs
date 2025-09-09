@@ -8,6 +8,7 @@ namespace Entity.DataInit.dataInitModelSecurity
     {
         public static void SeedUser(this ModelBuilder modelBuilder) 
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<User>().HasData(
                  new User
                  {
@@ -18,7 +19,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                      active = true,
                      is_deleted = false,
                      PersonId = 1,
-                     created_date = new DateTime(2023, 01, 01),
+                     created_date = seedDate,
                  },
                  new User
                  {
@@ -29,7 +30,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                      active = true,
                      is_deleted = false,
                      PersonId = 2,
-                     created_date = new DateTime(2023, 02, 01),
+                     created_date = seedDate,
                  }
             );
         }

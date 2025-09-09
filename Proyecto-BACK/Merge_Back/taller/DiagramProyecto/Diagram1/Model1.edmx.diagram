@@ -12,11 +12,11 @@
         <EntityTypeShape EntityType="Model1.PaymentAgreement" Width="1.5" PointX="12.375" PointY="4.125" />
         <EntityTypeShape EntityType="Model1.UserNotification" Width="1.5" PointX="7.5" PointY="5" />
         <EntityTypeShape EntityType="Model1.AccessLog" Width="1.5" PointX="19.25" PointY="3.125" />
-        <EntityTypeShape EntityType="Model1.Module" Width="1.5" PointX="6.75" PointY="10.25" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="Model1.Module" Width="1.5" PointX="4.125" PointY="9.625" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.Permission" Width="1.5" PointX="8.125" PointY="7.5" FillColor="255, 128, 0" />
-        <EntityTypeShape EntityType="Model1.Form" Width="1.5" PointX="4.75" PointY="9.625" IsExpanded="true" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="Model1.Form" Width="1.5" PointX="2.375" PointY="7" IsExpanded="true" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.TypePayment" Width="1.5" PointX="14.375" PointY="4.25" />
-        <EntityTypeShape EntityType="Model1.ModuloForm" Width="1.5" PointX="8.875" PointY="10.875" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="Model1.ModuloForm" Width="1.5" PointX="2.5" PointY="4" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.RolUser" Width="1.5" PointX="7.125" PointY="2.5" FillColor="255, 128, 0" />
         <EntityTypeShape EntityType="Model1.RolFormPermission" Width="1.5" PointX="5.375" PointY="6.875" FillColor="255, 128, 0" />
         <AssociationConnector Association="Model1.FormRolFormPermission" />

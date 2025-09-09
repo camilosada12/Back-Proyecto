@@ -20,6 +20,8 @@ namespace Entity.DataInit.dataInitModelSecurity
         /// <param name="modelBuilder">Instancia de <see cref="ModelBuilder"/> usada para configurar el modelo de datos.</param>
         public static void seedPerson(this ModelBuilder modelBuilder)
         {
+
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             // Seed para Person
             modelBuilder.Entity<Person>().HasData(
              new Person
@@ -33,7 +35,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                  municipalityId = 1,
                  active = true,
                  is_deleted = false,
-                 created_date = new DateTime(2023, 1, 1)
+                 created_date = seedDate
              },
              new Person
              {
@@ -46,7 +48,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                  municipalityId = 4,
                  active = true,
                  is_deleted = false,
-                 created_date = new DateTime(2023, 1, 1)
+                 created_date = seedDate
              }
          );
         }

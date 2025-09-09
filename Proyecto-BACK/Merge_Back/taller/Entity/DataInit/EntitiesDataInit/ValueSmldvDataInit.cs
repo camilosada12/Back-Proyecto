@@ -13,6 +13,7 @@ namespace Entity.DataInit.EntitiesDataInit
     {
         public static void SeedValueSmldv(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<ValueSmldv>().HasData(
                  new ValueSmldv
                  {
@@ -22,7 +23,7 @@ namespace Entity.DataInit.EntitiesDataInit
                      minimunWage = 1300000m,
                      active = true,
                      is_deleted = false,
-                     created_date = new DateTime(2023, 01, 01),
+                     created_date  = seedDate,
                  },
                 new ValueSmldv
                 {
@@ -32,7 +33,7 @@ namespace Entity.DataInit.EntitiesDataInit
                     minimunWage = 1100000m,
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 02, 02),
+                    created_date = seedDate,
                 }
                 );
         }

@@ -3,11 +3,6 @@ using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Repository;
 using Data.Interfaces.IDataImplement.Entities;
 using Entity.Domain.Models.Implements.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Services.Entities
 {
@@ -36,7 +31,10 @@ namespace Business.Services.Entities
             if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que cero.");
 
+
+
             var entity = await _repository.GetByIdAsync(id);
+
             if (entity == null)
                 return null;
 

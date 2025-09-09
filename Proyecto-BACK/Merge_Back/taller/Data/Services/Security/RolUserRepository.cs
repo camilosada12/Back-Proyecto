@@ -75,5 +75,9 @@ namespace Data.Services.Security
                                 .ToList();
             return roles;
         }
+
+        public Task<List<string>> GetRoleNamesByUserIdAsync(int userId)
+    => GetJoinRolesAsync(userId).ContinueWith(t => t.Result.ToList());
+
     }
 }

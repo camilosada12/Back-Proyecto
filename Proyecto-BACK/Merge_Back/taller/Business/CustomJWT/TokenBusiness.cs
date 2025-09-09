@@ -1,133 +1,206 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Business.Interfaces.IJWT;
 using Data.Interfaces.IDataImplement.Security;
-using Entity.DTOs.Default.LoginDto;
+using Data.Interfaces.Security;
+using Data.Services.Security;
+using Entity.Domain.Models.Implements.ModelSecurity;
+using Entity.DTOs.Default.Auth;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Business.Custom
 {
     public class TokenBusiness : IToken
     {
-        private readonly IConfiguration _configuration;
-        private readonly IUserRepository _dataUser;
-        private readonly IRolUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IRolUserRepository _rolUserRepository;
+        private readonly IRefreshTokenRepository _refreshRepo;
+        private readonly JwtSettings _jwtSettings;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public TokenBusiness(IConfiguration configuration, IRolUserRepository userRepository, IUserRepository dataUser)
+        public TokenBusiness(
+            IRolUserRepository rolUserRepository,
+            IUserRepository userRepository,
+            IRefreshTokenRepository refreshRepo,
+            IOptions<JwtSettings> jwtSettings,
+            IPasswordHasher<User> passwordHasher)
         {
-            _configuration = configuration;
+            _rolUserRepository = rolUserRepository;
             _userRepository = userRepository;
-            _dataUser = dataUser;
+            _refreshRepo = refreshRepo;
+            _jwtSettings = jwtSettings.Value;
+            _passwordHasher = passwordHasher;
+
+            EnsureSigningKeyStrength(_jwtSettings.key);
         }
-        public async Task<string> GenerateToken(LoginDto dto)
+
+        public async Task<(string AccessToken, string RefreshToken, string CsrfToken)> GenerateTokensAsync(LoginDto dto)
         {
-            // Crear la información del usuario para el token
+            // 1) Validar credenciales
+            var user = await _userRepository.FindEmail(dto.email)
+                ?? throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
 
-            var user = await _dataUser.ValidateUserAsync(dto);
-            var roles = await GetUserRoles(user.id);
-            var userClaims = new List<Claim>
+            // Verificación con hasher (user.password es el hash almacenado)
+            var pwdResult = _passwordHasher.VerifyHashedPassword(user, user.password, dto.password);
+            if (pwdResult == PasswordVerificationResult.Failed)
+                throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
+
+            // 2) Roles
+            var roles = (await _rolUserRepository.GetJoinRolesAsync(user.id)).ToList();
+
+            // 3) Access token
+            var accessToken = BuildAccessToken(user, roles);
+
+            // 4) Refresh token (rotación, guardamos HASH HMAC-SHA512)
+            var now = DateTime.UtcNow;
+            var refreshPlain = GenerateSecureRandomUrlToken(64);
+            var refreshHash = HashRefreshToken(refreshPlain);
+
+            var refreshEntity = new RefreshToken
             {
-                new Claim("id", user.id.ToString()),
-                new Claim(ClaimTypes.Email, dto.email!)
+                UserId = user.id,
+                TokenHash = refreshHash,
+                CreatedAt = now,
+                ExpiresAt = now.AddDays(_jwtSettings.refreshTokenExpirationDays)
             };
+            await _refreshRepo.AddAsync(refreshEntity);
 
-
-            // Agregar cada rol como un claim
-            foreach (var role in roles)
+            // 4.1) Poda: máximo N tokens activos por usuario
+            const int maxActiveRefreshTokens = 5;
+            var validTokens = (await _refreshRepo.GetValidTokensByUserAsync(user.id)).ToList();
+            if (validTokens.Count > maxActiveRefreshTokens)
             {
-                //userClaims.Add(new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", role));
-
-                userClaims.Add(new Claim("role", role));
+                foreach (var t in validTokens.Skip(maxActiveRefreshTokens))
+                    await _refreshRepo.RevokeAsync(t);
             }
 
-            var SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));
-            var credentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            // 5) CSRF token (double-submit cookie/header)
+            var csrf = GenerateSecureRandomUrlToken(32);
+            return (accessToken, refreshPlain, csrf);
+        }
 
-            //  Crear detalles del Token
-            var jwtConfig = new JwtSecurityToken
-            (
-                claims: userClaims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:exp"])),
-                signingCredentials: credentials
+        public async Task<(string NewAccessToken, string NewRefreshToken)> RefreshAsync(string refreshTokenPlain, string? remoteIp = null)
+        {
+            var hash = HashRefreshToken(refreshTokenPlain);
+            var record = await _refreshRepo.GetByHashAsync(hash)
+                ?? throw new SecurityTokenException("Refresh token inválido");
 
+            if (record.ExpiresAt <= DateTime.UtcNow)
+                throw new SecurityTokenException("Refresh token expirado");
+
+            if (record.IsRevoked)
+            {
+                var all = await _refreshRepo.GetValidTokensByUserAsync(record.UserId);
+                foreach (var t in all)
+                    await _refreshRepo.RevokeAsync(t);
+
+                throw new SecurityTokenException("Refresh token inválido o reutilizado");
+            }
+
+            var user = await _userRepository.GetByIdAsync(record.UserId)
+                ?? throw new SecurityTokenException("Usuario no encontrado");
+
+            var roles = (await _rolUserRepository.GetJoinRolesAsync(user.id)).ToList();
+
+            var newAccessToken = BuildAccessToken(user, roles);
+
+            var now = DateTime.UtcNow;
+            var newRefreshPlain = GenerateSecureRandomUrlToken(64);
+            var newRefreshHash = HashRefreshToken(newRefreshPlain);
+
+            var newRefreshEntity = new RefreshToken
+            {
+                UserId = user.id,
+                TokenHash = newRefreshHash,
+                CreatedAt = now,
+                ExpiresAt = now.AddDays(_jwtSettings.refreshTokenExpirationDays)
+            };
+
+            await _refreshRepo.AddAsync(newRefreshEntity);
+            await _refreshRepo.RevokeAsync(record, replacedByTokenHash: newRefreshHash);
+
+            return (newAccessToken, newRefreshPlain);
+        }
+
+        public async Task RevokeRefreshTokenAsync(string refreshToken)
+        {
+            var hash = HashRefreshToken(refreshToken);
+            var record = await _refreshRepo.GetByHashAsync(hash);
+            if (record != null && !record.IsRevoked)
+                await _refreshRepo.RevokeAsync(record);
+        }
+
+        private string BuildAccessToken(User user, IEnumerable<string> roles)
+        {
+            var now = DateTime.UtcNow;
+            var accessExp = now.AddMinutes(_jwtSettings.accessTokenExpirationMinutes);
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.key));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub,   user.id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.email),
+            new Claim(JwtRegisteredClaimNames.Jti,   Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat,   new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+        };
+
+            foreach (var r in roles.Where(r => !string.IsNullOrWhiteSpace(r)).Distinct())
+                claims.Add(new Claim(ClaimTypes.Role, r));
+
+            var jwt = new JwtSecurityToken(
+                issuer: _jwtSettings.issuer,
+                audience: _jwtSettings.audience,
+                claims: claims,
+                notBefore: now,
+                expires: accessExp,
+                signingCredentials: creds
             );
-            return new JwtSecurityTokenHandler().WriteToken(jwtConfig);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
-        public async Task<IEnumerable<string>> GetUserRoles(int idUser)
+        private string HashRefreshToken(string token)
         {
-            var roles = await _userRepository.GetJoinRolesAsync(idUser);
-            return roles; // devuelve la lista directamente
+            var pepper = Encoding.UTF8.GetBytes(_jwtSettings.key);
+            using var hmac = new HMACSHA512(pepper);
+            var mac = hmac.ComputeHash(Encoding.UTF8.GetBytes(token));
+            return Convert.ToHexString(mac).ToLowerInvariant();
         }
 
-
-        public bool validarToken(string token)
+        private static string GenerateSecureRandomUrlToken(int bytesLength)
         {
-            var ClaimsPrincipal = new ClaimsPrincipal();
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero,
-                IssuerSigningKey = new SymmetricSecurityKey
-                (Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!))
-            };
-
-            try
-            {
-                ClaimsPrincipal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                return true;
-            }
-            catch (SecurityTokenExpiredException)
-            {
-                //Manejar token Expirado
-                return false;
-            }
-            catch (SecurityTokenInvalidSignatureException)
-            {
-                // Manejar firma Invalida
-                return false;
-            }
-            catch (Exception ex)
-            {
-
-                return false;
-            }
+            var bytes = new byte[bytesLength];
+            RandomNumberGenerator.Fill(bytes);
+            return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
         }
 
+        private static void EnsureSigningKeyStrength(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
+                throw new InvalidOperationException("JwtSettings.key debe tener al menos 32 caracteres aleatorios (≥256 bits).");
+        }
 
-        /// <summary>
-        /// Verifica la validez de un token JWT generado por Google (ID Token).
-        /// </summary>
-        /// <param name="tokenId">ID Token recibido desde Google en el frontend</param>
-        /// <returns>Payload del token si es válido; null si no lo es</returns>
         public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId)
         {
             try
             {
                 var settings = new GoogleJsonWebSignature.ValidationSettings
                 {
-                    // Lista de IDs de cliente válidos registrados en Google Cloud Console
                     Audience = new List<string> { "436268030419-5q7o4a4lv3ahg2p12iad63ubptlka6pu.apps.googleusercontent.com" }
                 };
-
-                // Valida el token contra la audiencia esperada
-                var payload = await GoogleJsonWebSignature.ValidateAsync(tokenId, settings);
-                return payload;
+                return await GoogleJsonWebSignature.ValidateAsync(tokenId, settings);
             }
-            catch
-            {
-                // Si el token es inválido o no se pudo validar, retorna null
-                return null;
-            }
+            catch { return null; }
         }
-
-        
     }
+
 }
+

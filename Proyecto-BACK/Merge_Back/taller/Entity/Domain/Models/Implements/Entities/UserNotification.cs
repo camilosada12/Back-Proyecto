@@ -10,7 +10,7 @@ namespace Entity.Domain.Models.Implements.Entities
     public class UserNotification : BaseModel
     {
         public string message {  get; set; }
-        public DateTime shippingDate { get; set; } = DateTime.Now;
+        public DateTime shippingDate { get; set; }
 
         //relaciones
         public List<UserInfraction> userInfraction { get; set; } = new List<UserInfraction>();

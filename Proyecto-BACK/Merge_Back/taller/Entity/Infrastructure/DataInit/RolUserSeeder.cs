@@ -16,7 +16,7 @@ namespace Entity.Infrastructure.DataInit
                     RolId = 1,
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
                 }
             );
         }

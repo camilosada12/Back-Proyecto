@@ -11,6 +11,7 @@ namespace Business.validaciones.Entities.UserNotification
     public class UserNotificationValidator : AbstractValidator<UserNotificationDto>
     {
         public UserNotificationValidator()
+
         {
             RuleFor(x => x.message)
                 .NotEmpty().WithMessage("El mensaje es obligatorio.")
@@ -18,7 +19,7 @@ namespace Business.validaciones.Entities.UserNotification
 
             RuleFor(x => x.shippingDate)
                 .NotEmpty().WithMessage("La fecha de envío es obligatoria.")
-                .LessThanOrEqualTo(DateTime.Now).WithMessage("La fecha de envío no puede ser en el futuro.");
+                .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("La fecha de envío no puede ser en el futuro.");
         }
     }
 

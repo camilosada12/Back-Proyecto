@@ -5,7 +5,7 @@
         public int id { get; set; }
         public bool active { get; set; }
         public bool is_deleted { get; set; }
-        public DateTime created_date { get; set; } = DateTime.Now;
+        public DateTime created_date { get; set; }
 
     }
 }

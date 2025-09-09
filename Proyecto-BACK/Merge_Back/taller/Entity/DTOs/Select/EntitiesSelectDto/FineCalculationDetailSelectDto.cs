@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entity.Domain.Interfaces;
-using Entity.Domain.Models.Base;
-
-namespace Entity.Domain.Models.Implements.Entities
+﻿namespace Entity.Domain.Models.Implements.Entities
 {
     public class FineCalculationDetailSelectDto 
     {
         public int id { get; set; }
-        public string forumula {  get; set; }
-        public decimal percentaje { get; set; }
-        public decimal totalCalculation {  get; set; }
+        public string formula { get; set; }
+        public decimal porcentaje { get; set; }
+        public decimal totalCalculation { get; set; }
+
         public int valueSmldvId { get; set; }
+        public double valueSmldvValue { get; set; }
+        public int currentYear { get; set; }
+        public decimal minimunWage { get; set; }
+
         public int typeInfractionId { get; set; }
-        public string valueSmldvName { get; set; }
-        public string typeInfractionName { get; set; }
+        public string TypeInfractionName { get; set; }
+        public int numerSmldv { get; set; }
+        public string description { get; set; }
 
     }
 }

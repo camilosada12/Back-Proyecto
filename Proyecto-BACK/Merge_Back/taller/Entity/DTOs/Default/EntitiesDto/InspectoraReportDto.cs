@@ -12,8 +12,11 @@ namespace Entity.Domain.Models.Implements.Entities
     public class InspectoraReportDto : IHasId , IInspectoraReport
     {
         public int id { get; set; }
-        public DateTime report_date { get; set; } = DateTime.Now;
+        public DateTime report_date { get; set; } 
         public decimal total_fines { get; set; }
         public string message { get; set; }
+
+        public List<DocumentInfraction> Infractions { get; set; } = new();
+
     }
 }

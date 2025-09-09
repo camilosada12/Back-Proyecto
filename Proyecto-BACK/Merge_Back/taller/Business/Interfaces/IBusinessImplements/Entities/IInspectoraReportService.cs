@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Business.Interfaces.BusinessBasic;
+﻿using Business.Interfaces.BusinessBasic;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.DTOs.Default.EntitiesDto;
 
 namespace Business.Interfaces.IBusinessImplements.Entities
 {
     public interface IInspectoraReportService : IBusiness<InspectoraReportDto, InspectoraReportSelectDto>
     {
+        Task<InspectoraPdfDto> GetByIdAsyncPdf(int id);
     }
 }

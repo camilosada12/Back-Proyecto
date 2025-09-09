@@ -3,10 +3,14 @@ using Entity.Domain.Models;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.Domain.Models.Implements.parameters;
+using Entity.DTOs.Default.Auth;
+using Entity.DTOs.Default.Me;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Default.parameters;
 using Entity.DTOs.Select;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
+using FormDto = Entity.DTOs.Default.ModelSecurityDto.FormDto;
+using RolUserDto = Entity.DTOs.Default.ModelSecurityDto.RolUserDto;
 
 namespace Web.AutoMapper
 {
@@ -60,15 +64,22 @@ namespace Web.AutoMapper
             CreateMap<InspectoraReport, InspectoraReportDto>().ReverseMap();
             CreateMap<InspectoraReport, InspectoraReportSelectDto>().ReverseMap();
 
-            CreateMap<FineCalculationDetail, FineCalculationDetailDto>().ReverseMap();
-            CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>().ReverseMap();
+
+            CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
+                .ForMember(dest => dest.valueSmldvValue, opt => opt.MapFrom(src => src.valueSmldv.value_smldv))
+                .ForMember(dest => dest.currentYear, opt => opt.MapFrom(src => src.valueSmldv.Current_Year))
+                .ForMember(dest => dest.minimunWage, opt => opt.MapFrom(src => src.valueSmldv.minimunWage))
+
+                .ForMember(dest => dest.TypeInfractionName, opt => opt.MapFrom(src => src.typeInfraction.type_Infraction))
+                .ForMember(dest => dest.numerSmldv, opt => opt.MapFrom(src => src.typeInfraction.numer_smldv))
+                .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.typeInfraction.description))
+                .ReverseMap();
+
 
 
             CreateMap<TypeInfraction, TypeInfractionSelectDto>();
-            CreateMap<TypeInfractionDto, TypeInfraction>();
-            CreateMap<TypeInfraction, TypeInfractionDto>();
+            CreateMap<TypeInfraction, TypeInfractionDto>().ReverseMap();
 
-            CreateMap<FineCalculationDetailSelectDto, FineCalculationDetail>();
 
             CreateMap<UserNotification, UserNotificationDto>().ReverseMap();
             CreateMap<UserNotification, UserNotificationSelectDto>().ReverseMap();
@@ -95,6 +106,36 @@ namespace Web.AutoMapper
             CreateMap<documentType, documentTypeSelectDto>().ReverseMap();
 
             //CreateMap<TouristicAttraction, TouristicAttractionApiDto>().ReverseMap();
+
+            CreateMap<User, UserMeDto>()
+                .ForMember(d => d.id, o => o.MapFrom(s => s.id))
+                .ForMember(d => d.email, o => o.MapFrom(s => s.email))
+                .ForMember(d => d.firstName, o => o.MapFrom(s => s.Person.firstName))
+                .ForMember(d => d.lastName, o => o.MapFrom(s => s.Person.lastName))
+                .ForMember(d => d.fullName, o => o.MapFrom(s => s.Person.firstName + " " + s.Person.lastName))
+                .ForMember(d => d.roles, o => o.MapFrom(s => s.rolUsers.Select(r => r.Rol.name)))
+                .ForMember(d => d.permissions, o => o.Ignore()) 
+                .ForMember(d => d.Menu, o => o.Ignore());        
+
+            // Registro
+            CreateMap<RegisterDto, User>()
+                .ForMember(d => d.email, o => o.MapFrom(s => s.email))
+                .ForMember(d => d.password, o => o.Ignore())
+                .ForMember(d => d.name, o => o.MapFrom(s => s.email))
+                .ForMember(d => d.Person, o => o.Ignore());
+
+            CreateMap<RegisterDto, Person>()
+                .ForMember(d => d.firstName, o => o.MapFrom(s => s.firstName))
+                .ForMember(d => d.lastName, o => o.MapFrom(s => s.lastName))
+                .ForMember(d => d.address, o => o.MapFrom(s => s.address))
+                .ForMember(d => d.phoneNumber, o => o.MapFrom(s => s.phone))
+                .ForMember(d => d.documentTypeId, o => o.MapFrom(s => s.documentTypeId))
+                .ForMember(d => d.municipalityId, o => o.MapFrom(s => s.municipalityId));
+
+
+
+
+
         }
 
     }

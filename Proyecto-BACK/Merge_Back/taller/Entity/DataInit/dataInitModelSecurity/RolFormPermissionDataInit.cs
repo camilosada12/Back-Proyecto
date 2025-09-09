@@ -14,20 +14,21 @@ namespace Entity.DataInit.dataInitModelSecurity
         /// <param name="modelBuilder">El constructor del modelo para configuración.</param>
         public static void SeedRolFormPermission(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<RolFormPermission>().HasData(
                 // permisos para el rol usuario (RolId = 2)
-                new RolFormPermission { id = 1, RolId = 2, FormId = 1, PermissionId = 1, is_deleted = false , created_date = new DateTime(2023, 01, 01), }, // leer
-                new RolFormPermission { id = 2, RolId = 2, FormId = 1, PermissionId = 2, is_deleted = false , created_date = new DateTime(2023, 02, 01), }, // crear
-                new RolFormPermission { id = 3, RolId = 2, FormId = 1, PermissionId = 3, is_deleted = false , created_date = new DateTime(2023, 03, 01), }, // editar
-                new RolFormPermission { id = 4, RolId = 2, FormId = 1, PermissionId = 4, is_deleted = false , created_date = new DateTime(2023, 04, 01), }, // eliminar lógico
+                new RolFormPermission { id = 1, RolId = 2, FormId = 1, PermissionId = 1, is_deleted = false , created_date = seedDate, }, // leer
+                new RolFormPermission { id = 2, RolId = 2, FormId = 1, PermissionId = 2, is_deleted = false , created_date = seedDate, }, // crear
+                new RolFormPermission { id = 3, RolId = 2, FormId = 1, PermissionId = 3, is_deleted = false , created_date = seedDate, }, // editar
+                new RolFormPermission { id = 4, RolId = 2, FormId = 1, PermissionId = 4, is_deleted = false , created_date = seedDate, }, // eliminar lógico
 
                 // permisos para el rol admin (RolId = 1)
-                new RolFormPermission { id = 5, RolId = 1, FormId = 1, PermissionId = 1, is_deleted = false , created_date = new DateTime(2023, 05, 01), },
-                new RolFormPermission { id = 6, RolId = 1, FormId = 1, PermissionId = 2, is_deleted = false , created_date = new DateTime(2023, 06, 01), },
-                new RolFormPermission { id = 7, RolId = 1, FormId = 1, PermissionId = 3, is_deleted = false , created_date = new DateTime(2023, 07, 01), },
-                new RolFormPermission { id = 8, RolId = 1, FormId = 1, PermissionId = 4, is_deleted = false , created_date = new DateTime(2023, 08, 01), },
-                new RolFormPermission { id = 9, RolId = 1, FormId = 1, PermissionId = 5, is_deleted = false , created_date = new DateTime(2023, 09, 01), }, // ver eliminados
-                new RolFormPermission { id = 10, RolId = 1, FormId = 1, PermissionId = 6, is_deleted = false , created_date = new DateTime(2023, 10, 01), } // recuperar
+                new RolFormPermission { id = 5, RolId = 1, FormId = 1, PermissionId = 1, is_deleted = false , created_date = seedDate, },
+                new RolFormPermission { id = 6, RolId = 1, FormId = 1, PermissionId = 2, is_deleted = false , created_date = seedDate, },
+                new RolFormPermission { id = 7, RolId = 1, FormId = 1, PermissionId = 3, is_deleted = false , created_date = seedDate, },
+                new RolFormPermission { id = 8, RolId = 1, FormId = 1, PermissionId = 4, is_deleted = false , created_date = seedDate, },
+                new RolFormPermission { id = 9, RolId = 1, FormId = 1, PermissionId = 5, is_deleted = false , created_date = seedDate, }, // ver eliminados
+                new RolFormPermission { id = 10, RolId = 1, FormId = 1, PermissionId = 6, is_deleted = false , created_date = seedDate, } // recuperar
             );
         }
     }

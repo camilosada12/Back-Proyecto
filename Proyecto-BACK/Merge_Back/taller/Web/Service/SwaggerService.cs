@@ -11,79 +11,45 @@ namespace Web.Extensions
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v2" });
-
-                // Config swagger Enum Deletes
-
+                // Ejemplo: mapear enums por nombre
                 c.MapType<DeleteType>(() => new OpenApiSchema
                 {
                     Type = "string",
                     Enum = Enum.GetNames(typeof(DeleteType))
-               .Select(name => new OpenApiString(name) as IOpenApiAny)
-               .ToList()
+                        .Select(name => new OpenApiString(name) as IOpenApiAny)
+                        .ToList()
                 });
 
                 c.MapType<GetAllType>(() => new OpenApiSchema
                 {
                     Type = "string",
                     Enum = Enum.GetNames(typeof(GetAllType))
-              .Select(name => new OpenApiString(name) as IOpenApiAny)
-              .ToList()
+                        .Select(name => new OpenApiString(name) as IOpenApiAny)
+                        .ToList()
                 });
 
+                // 🔐 Bearer Auth
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Ingrese el token JWT con **Bearer {token}**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
 
-    //            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    //            {
-    //                Name = "Authorization",
-    //                Type = SecuritySchemeType.ApiKey,
-    //                Scheme = "Bearer",
-    //                BearerFormat = "JWT",
-    //                In = ParameterLocation.Header,
-    //                Description = "Ingresa tu token JWT como: Bearer {token}"
-    //            });
+                c.AddSecurityDefinition("Bearer", securityScheme);
 
-    //            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    //            {
-    //                {
-    //                    new OpenApiSecurityScheme
-    //                    {
-    //                        Reference = new OpenApiReference
-    //                        {
-    //                            Type = ReferenceType.SecurityScheme,
-    //                            Id = "Bearer"
-    //                        }
-    //                    },
-    //                    new string[] {}
-    //                }
-    //            });
-
-    //            c.AddSecurityDefinition("DbProvider", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    //            {
-    //                Name = "X-DB-Provider",
-    //                Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-    //                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-    //                Description = "Select DB Provider: sqlserver, postgresql, mysql"
-    //            });
-
-    //            c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    //{
-    //    {
-    //        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    //        {
-    //            Name = "X-DB-Provider",
-    //            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-    //            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-    //            Reference = new Microsoft.OpenApi.Models.OpenApiReference
-    //            {
-    //                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-    //                Id = "DbProvider"
-    //            }
-    //        },
-    //        new List<string>()
-    //    }
-    //});
-
-
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                { securityScheme, Array.Empty<string>() }
+            });
             });
 
             return services;

@@ -1,8 +1,11 @@
-﻿using Business.Interfaces.IBusinessImplements;
+﻿using Business.Custom;
+using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
+using Business.Interfaces.IJWT;
 using Business.Mensajeria;
+using Business.Mensajeria.Implements;
 using Business.Services.Entities;
 using Business.Services.parameters;
 
@@ -15,14 +18,15 @@ using Data.Interfaces.DataBasic;
 using Data.Interfaces.IDataImplement.Entities;
 using Data.Interfaces.IDataImplement.parameters;
 using Data.Interfaces.IDataImplement.Security;
+using Data.Interfaces.Security;
 using Data.Repositoy;
 using Data.Services.Entities;
 using Data.Services.Security;
-using Entity.Domain.Interfaces;
-using Entity.Infrastructure.LogService;
-using Microsoft.AspNetCore.DataProtection.Repositories;
+using Entity.Domain.Models.Implements.ModelSecurity;
+using Microsoft.AspNetCore.Identity;
 using Utilities.Custom;
 using Web.AutoMapper;
+using Web.Infrastructure;
 
 namespace Web.Service
 {
@@ -30,61 +34,48 @@ namespace Web.Service
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            // 0) Infra básica
+            // Infra
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(AutoMapperProfile));
-            services.AddSingleton<EncriptePassword>(); // si es stateless; si no, Scoped
+            services.AddSingleton<EncriptePassword>();
+            services.AddMemoryCache();
 
-            // 1) Auditoría / logging
-            services.AddScoped<IAuditService, AuditService>();
+            // Auditoría / logging
+            //services.AddScoped<IAuditService, AuditService>();
 
-            // 2) Persistencia genérica
-            //services.AddDbContext<AppDbContext>(...); // (si aplica)
-            services.AddScoped(typeof(IData<>), typeof(DataGeneric<>)); // ojo: namespace "Data.Repository" (sin typo)
+            // Persistencia genérica
+            services.AddScoped(typeof(IData<>), typeof(DataGeneric<>));
 
-            // 3) Repositorios — PARAMETERS
+            // Repositorios — PARAMETERS
             services.AddScoped<ImunicipalityRepository, municipalityRepository>();
 
-            // 3) Repositorios — SECURITY
+            // Repositorios — SECURITY
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPersonRepository, personRepository>();
             services.AddScoped<IRolUserRepository, RolUserRepository>();
             services.AddScoped<IFormModuleRepository, FormModuleRepository>();
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
 
-            // 3) Repositorios — ENTITIES
+            // Repositorios — ENTITIES
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
             services.AddScoped<IPaymentAgreementRepository, PaymentAgreementRepository>();
             services.AddScoped<IInspectoraReportRepository, InspectoraReportRepository>();
             services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
-
-            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
             services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
-
             services.AddScoped<ITypeInfractionRepository, TypeInfractionRepository>();
-            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
-
-            services.AddScoped<IUserNotificationService, UserNotificationService>();
             services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
-
-            services.AddScoped<IValueSmldvService, ValueSmldvService>();
-            services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
-
-            services.AddScoped<IUserInfractionServices, UserInfractionServices>();
             services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
 
+            // 🔐 Repositorio de refresh tokens (FALTABA)
 
-
-
-
-            // 4) Servicios — PARAMETERS
+            // Servicios — PARAMETERS
             services.AddScoped<IdepartmentServices, departmentServices>();
             services.AddScoped<ImunicipalityServices, municipalityServices>();
             services.AddScoped<IdocumentTypeServices, documentTypeServices>();
             services.AddScoped<IPaymentFrequencyServices, PaymentFrequencyServices>();
             services.AddScoped<ITypePaymentServices, TypePaymentServices>();
 
-            // 4) Servicios — SECURITY
+            // Servicios — SECURITY
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRolService, RolService>();
             services.AddScoped<IPersonService, PersonService>();
@@ -95,15 +86,30 @@ namespace Web.Service
             services.AddScoped<IFormModuleService, FormModuleService>();
             services.AddScoped<IRolFormPermissionService, RolFormPermissionService>();
 
-            // 4) Servicios — ENTITIES
+            // Servicios — ENTITIES
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
             services.AddScoped<IPaymentAgreementServices, PaymentAgreementServices>();
+            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
+            services.AddScoped<IValueSmldvService, ValueSmldvService>();
+            services.AddScoped<IUserNotificationService, UserNotificationService>();
+            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
 
-            //services.AddScoped<IFineCalculationDetailServices, FineCalculationDetailServices>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IToken, TokenBusiness>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IServiceEmail, ServiceEmail>();
+            services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IUserMeRepository, MeRepository>();
+            services.AddScoped<IAuthCookieFactory, AuthCookieFactory>();
 
-            // 5) Integraciones externas
-            // services.AddHttpClient<IApiColombiaGatewayService, ApiColombiaGatewayService>();
+
+
+
+
+
+
 
             return services;
         }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Entity.Migrations
+namespace Entity.Migrations.ApplicationDb
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -147,6 +147,24 @@ namespace Entity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_permission", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "refreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TokenHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    ReplacedByTokenHash = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refreshTokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -477,39 +495,14 @@ namespace Entity.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserInfraction_User",
-                        column: x => x.userId,
-                        principalSchema: "ModelSecurity",
-                        principalTable: "user",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_UserNotification_UserInfraction",
                         column: x => x.UserNotificationId,
                         principalSchema: "Entities",
                         principalTable: "userNotification",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserInfractionDto",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    dateInfraction = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    stateInfraction = table.Column<bool>(type: "bit", nullable: false),
-                    observations = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    userId = table.Column<int>(type: "int", nullable: false),
-                    typeInfractionId = table.Column<int>(type: "int", nullable: false),
-                    UserNotificationId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInfractionDto", x => x.id);
                     table.ForeignKey(
-                        name: "FK_UserInfractionDto_user_userId",
+                        name: "FK_userInfraction_user_userId",
                         column: x => x.userId,
                         principalSchema: "ModelSecurity",
                         principalTable: "user",
@@ -616,8 +609,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "is_deleted", "message", "report_date", "total_fines" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "se integra una nueva multa", new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2m },
-                    { 2, true, new DateTime(2023, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "se integra una nueva multa", new DateTime(2023, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 3m }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "se integra una nueva multa", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2m },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "se integra una nueva multa", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 3m }
                 });
 
             migrationBuilder.InsertData(
@@ -626,10 +619,10 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "daneCode", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, false, "Antioquia" },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 25, false, "Cundinamarca" },
-                    { 3, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 76, false, "Valle del Cauca" },
-                    { 4, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 11, false, "Bogotá, D.C." }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 5, false, "Antioquia" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 25, false, "Cundinamarca" },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 76, false, "Valle del Cauca" },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 11, false, "Bogotá, D.C." }
                 });
 
             migrationBuilder.InsertData(
@@ -638,10 +631,10 @@ namespace Entity.Migrations
                 columns: new[] { "id", "abbreviation", "active", "created_date", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, "CC", true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Cédula de Ciudadanía" },
-                    { 2, "CE", true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Cédula de Extranjería" },
-                    { 3, "TI", true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Tarjeta de Identidad" },
-                    { 4, "PAS", true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Pasaporte" }
+                    { 1, "CC", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "Cédula de Ciudadanía" },
+                    { 2, "CE", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "Cédula de Extranjería" },
+                    { 3, "TI", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "Tarjeta de Identidad" },
+                    { 4, "PAS", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "Pasaporte" }
                 });
 
             migrationBuilder.InsertData(
@@ -650,8 +643,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "description", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Formulario de creacion de acuerdo de pago", false, "Formulario de acuerdo de pago" },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Formulario para agregar nuevas multas", false, "Formulario de creacion de multas" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario de creacion de acuerdo de pago", false, "Formulario de acuerdo de pago" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario para agregar nuevas multas", false, "Formulario de creacion de multas" }
                 });
 
             migrationBuilder.InsertData(
@@ -660,9 +653,9 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "description", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Módulo para administración general", false, "Módulo de hacienda" },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Módulo encargado de crear nuevas multas", false, "Módulo de inspectora" },
-                    { 3, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "modulo encargado para visualizar las multas inspuestas", false, "Modulo de usuario" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Módulo para administración general", false, "Módulo de hacienda" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Módulo encargado de crear nuevas multas", false, "Módulo de inspectora" },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "modulo encargado para visualizar las multas inspuestas", false, "Modulo de usuario" }
                 });
 
             migrationBuilder.InsertData(
@@ -671,10 +664,10 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "dueDayOfMonth", "intervalPage", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 16, "UNICA", false },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 15, "MENSUAL", false },
-                    { 3, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "QUINCENAL", false },
-                    { 4, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, "BIMESTRAL", false }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 16, "UNICA", false },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 15, "MENSUAL", false },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, "QUINCENAL", false },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 10, "BIMESTRAL", false }
                 });
 
             migrationBuilder.InsertData(
@@ -683,12 +676,12 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "description", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "permiso para leer formularios", false, "Leer" },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "permiso para crear formularios", false, "Crear" },
-                    { 3, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "permiso para editar formularios", false, "Editar" },
-                    { 4, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "permiso para eliminar lógicamente formularios", false, "Eliminar" },
-                    { 5, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "permiso para ver formularios eliminados", false, "VerEliminados" },
-                    { 6, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "permiso para recuperar formularios eliminados", false, "Recuperar" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permiso para leer formularios", false, "Leer" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permiso para crear formularios", false, "Crear" },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permiso para editar formularios", false, "Editar" },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permiso para eliminar lógicamente formularios", false, "Eliminar" },
+                    { 5, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permiso para ver formularios eliminados", false, "VerEliminados" },
+                    { 6, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permiso para recuperar formularios eliminados", false, "Recuperar" }
                 });
 
             migrationBuilder.InsertData(
@@ -697,8 +690,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "description", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rol con todos los permisos", false, "Administrador" },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rol estándar para usuarios normales", false, "Usuario" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol con todos los permisos", false, "Administrador" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol estándar para usuarios normales", false, "Usuario" }
                 });
 
             migrationBuilder.InsertData(
@@ -707,8 +700,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "description", "is_deleted", "numer_smldv", "type_Infraction" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "lanzar basura en un lugar publico", false, 2, "infraccion de tipo uno" },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "hacer mucho ruido en un sitio publico", false, 4, "infraccion de tipo dos" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "lanzar basura en un lugar publico", false, 2, "infraccion de tipo uno" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, 4, "infraccion de tipo dos" }
                 });
 
             migrationBuilder.InsertData(
@@ -717,8 +710,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "is_deleted", "message", "shippingDate" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "tienes una infraccion por favor acercate antes del 12 de marzo para sucdazanar tu multa o podria iniciar un cobro coativo luego del plazo", new DateTime(2024, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "tienes una infraccion por favor acercate antes del 12 de julio para sucdazanar tu multa o podria iniciar un cobro coativo luego del plazo", new DateTime(2024, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "tienes una infraccion por favor acercate antes del 12 de marzo para sucdazanar tu multa o podria iniciar un cobro coativo luego del plazo", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc) },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "tienes una infraccion por favor acercate antes del 12 de julio para sucdazanar tu multa o podria iniciar un cobro coativo luego del plazo", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -727,8 +720,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "Current_Year", "active", "created_date", "is_deleted", "minimunWage", "value_smldv" },
                 values: new object[,]
                 {
-                    { 1, 2024, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1300000m, 43.5 },
-                    { 2, 2022, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), false, 1100000m, 43.5 }
+                    { 1, 2024, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1300000m, 43.5 },
+                    { 2, 2022, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1100000m, 43.5 }
                 });
 
             migrationBuilder.InsertData(
@@ -737,8 +730,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "formula", "is_deleted", "porcentaje", "totalCalculation", "typeInfractionId", "valueSmldvId" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "salario minimo * dias = smdlv", false, 0.5m, 100000m, 1, 1 },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "salario minimo * dias = smdlv", false, 0.0m, 150.000m, 2, 2 }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0.5m, 100000m, 1, 1 },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0.0m, 150.000m, 2, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -747,8 +740,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "formid", "is_deleted", "moduleid" },
                 values: new object[,]
                 {
-                    { 1, false, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, false, 1 },
-                    { 2, false, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, false, 2 }
+                    { 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, false, 1 },
+                    { 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, false, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -757,10 +750,10 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "daneCode", "departmentId", "is_deleted", "name" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5001, 1, false, "Medellín" },
-                    { 2, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 76001, 3, false, "Cali" },
-                    { 3, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 11001, 4, false, "Bogotá" },
-                    { 4, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 25754, 2, false, "Soacha" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 5001, 1, false, "Medellín" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 76001, 3, false, "Cali" },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 11001, 4, false, "Bogotá" },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 25754, 2, false, "Soacha" }
                 });
 
             migrationBuilder.InsertData(
@@ -769,16 +762,16 @@ namespace Entity.Migrations
                 columns: new[] { "id", "formid", "permissionid", "rolid", "active", "created_date", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, 2, false, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 2, 1, 2, 2, false, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 3, 1, 3, 2, false, new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 4, 1, 4, 2, false, new DateTime(2023, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 5, 1, 1, 1, false, new DateTime(2023, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 6, 1, 2, 1, false, new DateTime(2023, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 7, 1, 3, 1, false, new DateTime(2023, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 8, 1, 4, 1, false, new DateTime(2023, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 9, 1, 5, 1, false, new DateTime(2023, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 10, 1, 6, 1, false, new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false }
+                    { 1, 1, 1, 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 2, 1, 2, 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 3, 1, 3, 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 4, 1, 4, 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 5, 1, 1, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 6, 1, 2, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 7, 1, 3, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 8, 1, 4, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 9, 1, 5, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 10, 1, 6, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false }
                 });
 
             migrationBuilder.InsertData(
@@ -787,8 +780,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "address", "created_date", "documentTypeId", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber" },
                 values: new object[,]
                 {
-                    { 1, true, "Carrera 10", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Juan", false, "Pérez", 1, "1234567890" },
-                    { 2, true, "Carrera 11", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Sara", false, "Sofía", 4, "312312314" }
+                    { 1, true, "Carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Juan", false, "Pérez", 1, "1234567890" },
+                    { 2, true, "Carrera 11", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Sara", false, "Sofía", 4, "312312314" }
                 });
 
             migrationBuilder.InsertData(
@@ -797,8 +790,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "PersonId", "active", "created_date", "email", "is_deleted", "name", "password" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "camiloandreslosada901@gmail.com", false, "camilosada12", "admin123" },
-                    { 2, 2, true, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sarita@gmail.com", false, "sara12312", "sara12312" }
+                    { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "camiloandreslosada901@gmail.com", false, "camilosada12", "admin123" },
+                    { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "sarita@gmail.com", false, "sara12312", "sara12312" }
                 });
 
             migrationBuilder.InsertData(
@@ -807,8 +800,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "rolId", "userId", "active", "created_date", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, false, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
-                    { 2, 2, 2, false, new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false }
+                    { 1, 1, 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 2, 2, 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false }
                 });
 
             migrationBuilder.InsertData(
@@ -817,8 +810,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "UserNotificationId", "active", "created_date", "dateInfraction", "is_deleted", "observations", "stateInfraction", "typeInfractionId", "userId" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "la persona no opuso resistencia a la infraccion", false, 1, 1 },
-                    { 2, 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "la persona se encontraba en estado de embriagues", false, 2, 2 }
+                    { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona no opuso resistencia a la infraccion", false, 1, 1 },
+                    { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona se encontraba en estado de embriagues", false, 2, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -827,8 +820,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "AgreementDescription", "active", "address", "created_date", "is_deleted", "neighborhood", "paymentFrequencyId", "userInfractionId" },
                 values: new object[,]
                 {
-                    { 1, "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento", true, "carrera 10", new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "eduardo santos", 1, 1 },
-                    { 2, "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento", true, "carrera 1", new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "panamá", 2, 2 }
+                    { 1, "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento", true, "carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "eduardo santos", 1, 1 },
+                    { 2, "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento", true, "carrera 1", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "panamá", 2, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -837,8 +830,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "PaymentAgreementId", "active", "created_date", "inspectoraReportId", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, false },
-                    { 2, 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, false }
+                    { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, false },
+                    { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, false }
                 });
 
             migrationBuilder.InsertData(
@@ -847,8 +840,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "created_date", "description", "is_deleted", "name", "paymentAgreementId" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "se consigno una cantidad de 50.000", false, "efectivo", 1 },
-                    { 2, true, new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "se consigno una cantidad de 80.000", false, "nequi", 2 }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "se consigno una cantidad de 50.000", false, "efectivo", 1 },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "se consigno una cantidad de 80.000", false, "nequi", 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1090,11 +1083,6 @@ namespace Entity.Migrations
                 column: "UserNotificationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInfractionDto_userId",
-                table: "UserInfractionDto",
-                column: "userId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_valueSmldv_Current_Year",
                 schema: "Entities",
                 table: "valueSmldv",
@@ -1118,6 +1106,9 @@ namespace Entity.Migrations
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
+                name: "refreshTokens");
+
+            migrationBuilder.DropTable(
                 name: "rolformpermission",
                 schema: "ModelSecurity");
 
@@ -1128,9 +1119,6 @@ namespace Entity.Migrations
             migrationBuilder.DropTable(
                 name: "typePayment",
                 schema: "Entities");
-
-            migrationBuilder.DropTable(
-                name: "UserInfractionDto");
 
             migrationBuilder.DropTable(
                 name: "InspectoraReport",
@@ -1173,12 +1161,12 @@ namespace Entity.Migrations
                 schema: "Entities");
 
             migrationBuilder.DropTable(
-                name: "user",
-                schema: "ModelSecurity");
-
-            migrationBuilder.DropTable(
                 name: "userNotification",
                 schema: "Entities");
+
+            migrationBuilder.DropTable(
+                name: "user",
+                schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
                 name: "person",

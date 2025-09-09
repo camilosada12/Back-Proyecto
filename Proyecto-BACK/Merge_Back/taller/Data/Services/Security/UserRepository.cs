@@ -1,7 +1,7 @@
 ﻿using Data.Interfaces.IDataImplement.Security;
 using Data.Repositoy;
 using Entity.Domain.Models.Implements.ModelSecurity;
-using Entity.DTOs.Default.LoginDto;
+using Entity.DTOs.Default.Auth;
 using Entity.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Utilities.Custom;
@@ -41,5 +41,9 @@ namespace Data.Services.Security
 
             return user;
         }
+        public Task<User?> GetByEmailAsync(string email) => FindEmail(email);
+public Task<bool> ExistsByEmailAsync(string email)
+    => _dbSet.AnyAsync(u => u.email == email);
+
     }
 }

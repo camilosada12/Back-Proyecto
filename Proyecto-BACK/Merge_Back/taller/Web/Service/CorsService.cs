@@ -4,13 +4,32 @@
     {
         public static IServiceCollection AddCustomCors(this IServiceCollection services, IConfiguration configuration)
         {
-            var allowedOrigins = configuration.GetValue<string>("OrigenesPermitidos")!.Split(",");
+            // Soporta arreglo "AllowedOrigins" o string "OrigenesPermitidos"
+            var fromArray = configuration.GetSection("AllowedOrigins").Get<string[]>();
+            string? fromString = configuration.GetValue<string>("OrigenesPermitidos");
+
+            string[] origins = Array.Empty<string>();
+            if (fromArray is { Length: > 0 })
+            {
+                origins = fromArray;
+            }
+            else if (!string.IsNullOrWhiteSpace(fromString))
+            {
+                origins = fromString.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            }
 
             services.AddCors(options =>
             {
-                options.AddDefaultPolicy(policy =>
+                options.AddPolicy("DefaultCors", policy =>
                 {
-                    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    if (origins.Length > 0)
+                        policy.WithOrigins(origins);
+                    else
+                        policy.AllowAnyOrigin(); // opcional si prefieres restringir siempre
+
+                    policy.AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                 });
             });
 
@@ -18,3 +37,4 @@
         }
     }
 }
+

@@ -17,6 +17,7 @@ namespace Entity.DataInit.dataInitModelSecurity
         {
             // Verifica si los datos ya fueron configurados para evitar duplicados
             var permissionEntity = modelBuilder.Entity<Permission>();
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 
             // Solo agrega los datos si no han sido agregados antes
             permissionEntity.HasData(
@@ -27,7 +28,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "permiso para leer formularios",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Permission
                 {
@@ -36,7 +37,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "permiso para crear formularios",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Permission
                 {
@@ -45,7 +46,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "permiso para editar formularios",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Permission
                 {
@@ -54,7 +55,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "permiso para eliminar lógicamente formularios",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Permission
                 {
@@ -63,7 +64,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "permiso para ver formularios eliminados",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Permission
                 {
@@ -72,7 +73,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "permiso para recuperar formularios eliminados",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 }
             );
         }

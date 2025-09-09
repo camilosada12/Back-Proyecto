@@ -13,7 +13,7 @@ namespace Entity.Domain.Models.Implements.Entities
     public class UserInfractionSelectDto : IUserInfraction
     {
         public int id { get; set; }
-        public DateTime dateInfraction { get; set; } = DateTime.Now;
+        public DateTime dateInfraction { get; set; } 
         public bool stateInfraction {  get; set; }
         public string observations { get; set; }
         public int userId { get; set; }

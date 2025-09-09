@@ -19,6 +19,9 @@ namespace Entity.DataInit.dataInitModelSecurity
         /// <param name="modelBuilder">Instancia de <see cref="ModelBuilder"/> usada para configurar el modelo de datos.</param>
         public static void SeedFormModule(this ModelBuilder modelBuilder)
         {
+
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+
             modelBuilder.Entity<FormModule>().HasData(
                 new FormModule
                 {
@@ -26,7 +29,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     formid = 1,    
                     moduleid = 1, 
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new FormModule
                 {
@@ -34,7 +37,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     formid = 2,
                     moduleid = 2,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 }
             );
         }

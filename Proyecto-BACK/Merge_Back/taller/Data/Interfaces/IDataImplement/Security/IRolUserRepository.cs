@@ -9,5 +9,8 @@ namespace Data.Interfaces.IDataImplement.Security
         Task<IEnumerable<string>> GetJoinRolesAsync(int userId);
         Task<RolUser> AsignateUserRTo(User user);
 
+        Task<List<string>> GetRoleNamesByUserIdAsync(int userId); // alias
+
+
     }
 }

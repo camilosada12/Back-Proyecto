@@ -1,11 +1,7 @@
-using Web.Extensions;
-using Web.Middleware; // ApiExceptionMiddleware, DbContextMiddleware
-using Web.Service;
-
+using Entity.Domain.Models.Implements.ModelSecurity;
 using FluentValidation.AspNetCore;
-using Entity.Domain.Models.Implements.Entities;
-using Business.validaciones.Entities.InspectoraReport;
-using Business.validaciones.Entities.DocumentInfraction;
+using Web.Extensions;
+using Web.Service;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,34 +11,46 @@ var builder = WebApplication.CreateBuilder(args);
 // --------------------
 builder.Services.AddControllers();
 
-// Swagger / OpenAPI
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Swagger / OpenAPI (lo haremos vía extensión AddSwaggerWithJwt)
+// builder.Services.AddEndpointsApiExplorer();
+// builder.Services.AddSwaggerGen();
 
-// FluentValidation (validaciones en Business, ejecutadas en Web)
+// FluentValidation
 builder.Services
-    .AddFluentValidationAutoValidation()          // activa la auto-validación con [ApiController]
-    .AddFluentValidationClientsideAdapters();     // opcional (si usas clientes MVC/Razor)
+    .AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
 
 builder.Services.AddCustomValidators();
 
+// Bind de opciones desde secciones recomendadas
+//builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));      // si tu json tiene "Jwt": { ... }
 
+builder.Services.Configure<CookieSettings>(builder.Configuration.GetSection("CookieSettings"));
 
-
-
+// App services y DI repos/servicios
 builder.Services.AddApplicationServices();
+
+// Swagger con JWT
 builder.Services.AddSwaggerWithJwt();
+
+// DB dinámica (usa tu DbContextFactory)
 builder.Services.AddDatabase(builder.Configuration);
+
+// Auth JWT leyendo JwtSettings (options pattern)
 builder.Services.AddJwtAuthentication(builder.Configuration);
+
+// CORS
 builder.Services.AddCustomCors(builder.Configuration);
+
+
 
 var app = builder.Build();
 
-// 2) Contexto por request (si aplica a tu proyecto)
-builder.Services.AddCustomValidators();
+// archivos estáticos si aplica
 app.UseStaticFiles();
 
-// 4) Swagger (en Dev/Prod según tu lógica)
+// Swagger
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
@@ -53,12 +61,16 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     });
 }
 
-// 5) Redirección HTTPS (habilítalo si sirve en tu hosting)
-//app.UseHttpsRedirection();
+// HTTPS si lo requieres
+// app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors("DefaultCors");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
+MigrationManager.MigrateAllDatabases(app.Services, builder.Configuration);
 
 app.Run();

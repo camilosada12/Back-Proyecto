@@ -17,7 +17,7 @@ namespace Business.validaciones.Entities.ValueSmldv
 
             RuleFor(x => x.Current_Year)
                 .GreaterThan(1900).WithMessage("El año debe ser válido.")
-                .LessThanOrEqualTo(DateTime.Now.Year + 1).WithMessage("El año no puede ser superior al próximo año.");
+                .LessThanOrEqualTo(DateTime.UtcNow.Year + 1).WithMessage("El año no puede ser superior al próximo año.");
 
             RuleFor(x => x.minimunWage)
                 .GreaterThan(0).WithMessage("El salario mínimo debe ser mayor que cero.");

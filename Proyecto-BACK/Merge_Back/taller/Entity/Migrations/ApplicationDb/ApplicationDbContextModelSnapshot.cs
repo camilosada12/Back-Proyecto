@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Entity.Migrations
+namespace Entity.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -61,7 +61,7 @@ namespace Entity.Migrations
                             id = 1,
                             PaymentAgreementId = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             inspectoraReportId = 1,
                             is_deleted = false
                         },
@@ -70,7 +70,7 @@ namespace Entity.Migrations
                             id = 2,
                             PaymentAgreementId = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             inspectoraReportId = 2,
                             is_deleted = false
                         });
@@ -115,20 +115,20 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             message = "se integra una nueva multa",
-                            report_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            report_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             total_fines = 2m
                         },
                         new
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             message = "se integra una nueva multa",
-                            report_date = new DateTime(2023, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            report_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             total_fines = 3m
                         });
                 });
@@ -183,7 +183,7 @@ namespace Entity.Migrations
                             AgreementDescription = "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento",
                             active = true,
                             address = "carrera 10",
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             neighborhood = "eduardo santos",
                             paymentFrequencyId = 1,
@@ -195,7 +195,7 @@ namespace Entity.Migrations
                             AgreementDescription = "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento",
                             active = true,
                             address = "carrera 1",
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             neighborhood = "panamá",
                             paymentFrequencyId = 2,
@@ -243,7 +243,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "lanzar basura en un lugar publico",
                             is_deleted = false,
                             numer_smldv = 2,
@@ -253,7 +253,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "hacer mucho ruido en un sitio publico",
                             is_deleted = false,
                             numer_smldv = 4,
@@ -303,7 +303,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "se consigno una cantidad de 50.000",
                             is_deleted = false,
                             name = "efectivo",
@@ -313,7 +313,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "se consigno una cantidad de 80.000",
                             is_deleted = false,
                             name = "nequi",
@@ -373,8 +373,8 @@ namespace Entity.Migrations
                             id = 1,
                             UserNotificationId = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            dateInfraction = new DateTime(2025, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             observations = "la persona no opuso resistencia a la infraccion",
                             stateInfraction = false,
@@ -386,48 +386,14 @@ namespace Entity.Migrations
                             id = 2,
                             UserNotificationId = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            dateInfraction = new DateTime(2025, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             observations = "la persona se encontraba en estado de embriagues",
                             stateInfraction = false,
                             typeInfractionId = 2,
                             userId = 2
                         });
-                });
-
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfractionDto", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("UserNotificationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("dateInfraction")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("observations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("stateInfraction")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("typeInfractionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("UserInfractionDto");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserNotification", b =>
@@ -463,19 +429,19 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             message = "tienes una infraccion por favor acercate antes del 12 de marzo para sucdazanar tu multa o podria iniciar un cobro coativo luego del plazo",
-                            shippingDate = new DateTime(2024, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            shippingDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
                         new
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             message = "tienes una infraccion por favor acercate antes del 12 de julio para sucdazanar tu multa o podria iniciar un cobro coativo luego del plazo",
-                            shippingDate = new DateTime(2024, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            shippingDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         });
                 });
 
@@ -519,7 +485,7 @@ namespace Entity.Migrations
                             id = 1,
                             Current_Year = 2024,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             minimunWage = 1300000m,
                             value_smldv = 43.5
@@ -529,7 +495,7 @@ namespace Entity.Migrations
                             id = 2,
                             Current_Year = 2022,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             minimunWage = 1100000m,
                             value_smldv = 43.5
@@ -575,7 +541,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario de creacion de acuerdo de pago",
                             is_deleted = false,
                             name = "Formulario de acuerdo de pago"
@@ -584,7 +550,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario para agregar nuevas multas",
                             is_deleted = false,
                             name = "Formulario de creacion de multas"
@@ -629,7 +595,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = false,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 1,
                             is_deleted = false,
                             moduleid = 1
@@ -638,7 +604,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = false,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 2,
                             is_deleted = false,
                             moduleid = 2
@@ -684,7 +650,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Módulo para administración general",
                             is_deleted = false,
                             name = "Módulo de hacienda"
@@ -693,7 +659,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Módulo encargado de crear nuevas multas",
                             is_deleted = false,
                             name = "Módulo de inspectora"
@@ -702,7 +668,7 @@ namespace Entity.Migrations
                         {
                             id = 3,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "modulo encargado para visualizar las multas inspuestas",
                             is_deleted = false,
                             name = "Modulo de usuario"
@@ -748,7 +714,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permiso para leer formularios",
                             is_deleted = false,
                             name = "Leer"
@@ -757,7 +723,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permiso para crear formularios",
                             is_deleted = false,
                             name = "Crear"
@@ -766,7 +732,7 @@ namespace Entity.Migrations
                         {
                             id = 3,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permiso para editar formularios",
                             is_deleted = false,
                             name = "Editar"
@@ -775,7 +741,7 @@ namespace Entity.Migrations
                         {
                             id = 4,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permiso para eliminar lógicamente formularios",
                             is_deleted = false,
                             name = "Eliminar"
@@ -784,7 +750,7 @@ namespace Entity.Migrations
                         {
                             id = 5,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permiso para ver formularios eliminados",
                             is_deleted = false,
                             name = "VerEliminados"
@@ -793,7 +759,7 @@ namespace Entity.Migrations
                         {
                             id = 6,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permiso para recuperar formularios eliminados",
                             is_deleted = false,
                             name = "Recuperar"
@@ -860,7 +826,7 @@ namespace Entity.Migrations
                             id = 1,
                             active = true,
                             address = "Carrera 10",
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentTypeId = 1,
                             firstName = "Juan",
                             is_deleted = false,
@@ -873,7 +839,7 @@ namespace Entity.Migrations
                             id = 2,
                             active = true,
                             address = "Carrera 11",
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentTypeId = 2,
                             firstName = "Sara",
                             is_deleted = false,
@@ -881,6 +847,38 @@ namespace Entity.Migrations
                             municipalityId = 4,
                             phoneNumber = "312312314"
                         });
+                });
+
+            modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ReplacedByTokenHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("refreshTokens");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.Rol", b =>
@@ -922,7 +920,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Rol con todos los permisos",
                             is_deleted = false,
                             name = "Administrador"
@@ -931,7 +929,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Rol estándar para usuarios normales",
                             is_deleted = false,
                             name = "Usuario"
@@ -993,7 +991,7 @@ namespace Entity.Migrations
                             id = 1,
                             PersonId = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             email = "camiloandreslosada901@gmail.com",
                             is_deleted = false,
                             name = "camilosada12",
@@ -1004,7 +1002,7 @@ namespace Entity.Migrations
                             id = 2,
                             PersonId = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             email = "sarita@gmail.com",
                             is_deleted = false,
                             name = "sara12312",
@@ -1048,7 +1046,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 16,
                             intervalPage = "UNICA",
                             is_deleted = false
@@ -1057,7 +1055,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 15,
                             intervalPage = "MENSUAL",
                             is_deleted = false
@@ -1066,7 +1064,7 @@ namespace Entity.Migrations
                         {
                             id = 3,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 1,
                             intervalPage = "QUINCENAL",
                             is_deleted = false
@@ -1075,7 +1073,7 @@ namespace Entity.Migrations
                         {
                             id = 4,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 10,
                             intervalPage = "BIMESTRAL",
                             is_deleted = false
@@ -1121,7 +1119,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 5,
                             is_deleted = false,
                             name = "Antioquia"
@@ -1130,7 +1128,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 25,
                             is_deleted = false,
                             name = "Cundinamarca"
@@ -1139,7 +1137,7 @@ namespace Entity.Migrations
                         {
                             id = 3,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 76,
                             is_deleted = false,
                             name = "Valle del Cauca"
@@ -1148,7 +1146,7 @@ namespace Entity.Migrations
                         {
                             id = 4,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 11,
                             is_deleted = false,
                             name = "Bogotá, D.C."
@@ -1197,7 +1195,7 @@ namespace Entity.Migrations
                             id = 1,
                             abbreviation = "CC",
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             name = "Cédula de Ciudadanía"
                         },
@@ -1206,7 +1204,7 @@ namespace Entity.Migrations
                             id = 2,
                             abbreviation = "CE",
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             name = "Cédula de Extranjería"
                         },
@@ -1215,7 +1213,7 @@ namespace Entity.Migrations
                             id = 3,
                             abbreviation = "TI",
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             name = "Tarjeta de Identidad"
                         },
@@ -1224,7 +1222,7 @@ namespace Entity.Migrations
                             id = 4,
                             abbreviation = "PAS",
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             name = "Pasaporte"
                         });
@@ -1275,7 +1273,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 5001,
                             departmentId = 1,
                             is_deleted = false,
@@ -1285,7 +1283,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 76001,
                             departmentId = 3,
                             is_deleted = false,
@@ -1295,7 +1293,7 @@ namespace Entity.Migrations
                         {
                             id = 3,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 11001,
                             departmentId = 4,
                             is_deleted = false,
@@ -1305,7 +1303,7 @@ namespace Entity.Migrations
                         {
                             id = 4,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             daneCode = 25754,
                             departmentId = 2,
                             is_deleted = false,
@@ -1360,7 +1358,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             active = true,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
                             porcentaje = 0.5m,
@@ -1372,7 +1370,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             active = true,
-                            created_date = new DateTime(2023, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
                             porcentaje = 0.0m,
@@ -1431,7 +1429,7 @@ namespace Entity.Migrations
                             PermissionId = 1,
                             RolId = 2,
                             active = false,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1441,7 +1439,7 @@ namespace Entity.Migrations
                             PermissionId = 2,
                             RolId = 2,
                             active = false,
-                            created_date = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1451,7 +1449,7 @@ namespace Entity.Migrations
                             PermissionId = 3,
                             RolId = 2,
                             active = false,
-                            created_date = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1461,7 +1459,7 @@ namespace Entity.Migrations
                             PermissionId = 4,
                             RolId = 2,
                             active = false,
-                            created_date = new DateTime(2023, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1471,7 +1469,7 @@ namespace Entity.Migrations
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1481,7 +1479,7 @@ namespace Entity.Migrations
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1491,7 +1489,7 @@ namespace Entity.Migrations
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1501,7 +1499,7 @@ namespace Entity.Migrations
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1511,7 +1509,7 @@ namespace Entity.Migrations
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1521,7 +1519,7 @@ namespace Entity.Migrations
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         });
                 });
@@ -1566,7 +1564,7 @@ namespace Entity.Migrations
                             RolId = 1,
                             UserId = 1,
                             active = false,
-                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         },
                         new
@@ -1575,7 +1573,7 @@ namespace Entity.Migrations
                             RolId = 2,
                             UserId = 2,
                             active = false,
-                            created_date = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
                         });
                 });
@@ -1650,26 +1648,16 @@ namespace Entity.Migrations
                         .HasConstraintName("FK_TypeInfraction_UserInfraction");
 
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", "user")
-                        .WithMany()
+                        .WithMany("UserInfractions")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_UserInfraction_User");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("typeInfraction");
 
                     b.Navigation("user");
 
                     b.Navigation("userNotification");
-                });
-
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfractionDto", b =>
-                {
-                    b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", null)
-                        .WithMany("UserInfraction")
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.FormModule", b =>
@@ -1871,7 +1859,7 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.User", b =>
                 {
-                    b.Navigation("UserInfraction");
+                    b.Navigation("UserInfractions");
 
                     b.Navigation("rolUsers");
                 });

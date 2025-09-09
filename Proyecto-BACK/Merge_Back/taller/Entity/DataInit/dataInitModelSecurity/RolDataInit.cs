@@ -19,6 +19,7 @@ namespace Entity.DataInit.dataInitModelSecurity
         /// <param name="modelBuilder">Instancia de <see cref="ModelBuilder"/> usada para configurar el modelo de datos.</param>
         public static void SeedRol(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<Rol>().HasData(
                 new Rol
                 {
@@ -27,7 +28,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "Rol con todos los permisos",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Rol
                 {
@@ -36,7 +37,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "Rol estándar para usuarios normales",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 }
             );
         }

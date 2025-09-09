@@ -22,11 +22,11 @@ namespace Entity.relacionesModel.RelacionesEntities
             builder.ConfigureBaseModel();
 
             // Relación: UserInfraction -> User (muchos a uno)
-            builder.HasOne(ui => ui.user)
-                   .WithMany()
-                   .HasForeignKey(ui => ui.userId)
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_UserInfraction_User");
+            //builder.HasOne(ui => ui.user)
+            //       .WithMany()
+            //       .OnDelete(DeleteBehavior.Restrict)
+            //       .HasConstraintName("FK_UserInfraction_User");
+
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Entity.DataInit.EntitiesDataInit
     {
         public static void SeedUserInfraction(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<UserInfraction>().HasData(
                  new UserInfraction
                  {
@@ -20,12 +21,12 @@ namespace Entity.DataInit.EntitiesDataInit
                      userId = 1,            
                      typeInfractionId = 1,    
                      UserNotificationId = 1, 
-                     dateInfraction = new DateTime(2025,01,25),
+                     dateInfraction = seedDate,
                      stateInfraction = false,
                      observations = "la persona no opuso resistencia a la infraccion",
                      active = true,
                      is_deleted = false,
-                     created_date = new DateTime(2023, 01, 01),
+                     created_date = seedDate,
                  },
                 new UserInfraction
                 {
@@ -33,12 +34,12 @@ namespace Entity.DataInit.EntitiesDataInit
                     userId = 2,
                     typeInfractionId = 2,
                     UserNotificationId = 2,
-                    dateInfraction = new DateTime(2025, 02, 15),
+                    dateInfraction = seedDate,
                     stateInfraction = false,
                     observations = "la persona se encontraba en estado de embriagues",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 02, 02),
+                    created_date = seedDate
                 }
                 );
         }

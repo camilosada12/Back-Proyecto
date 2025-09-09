@@ -12,6 +12,7 @@ namespace Entity.DataInit.dataInitModelSecurity
         /// <param name="modelBuilder">Constructor del modelo EF Core.</param>
         public static void SeedRolUser(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<RolUser>().HasData(
                 new RolUser
                 {
@@ -19,7 +20,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     RolId = 1,   
                     UserId = 1,   
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new RolUser
                 {
@@ -27,7 +28,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     RolId = 2,   
                     UserId = 2,   
                     is_deleted = false,
-                    created_date = new DateTime(2023, 02, 01),
+                    created_date = seedDate
                 }
             );
         }

@@ -19,6 +19,7 @@ namespace Entity.DataInit.dataInitModelSecurity
         /// <param name="modelBuilder">Instancia de <see cref="ModelBuilder"/> usada para configurar el modelo de datos.</param>
         public static void SeedModule(this ModelBuilder modelBuilder)
         {
+            var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<Module>().HasData(
                 new Module
                 {
@@ -27,7 +28,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "Módulo para administración general",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Module
                 {
@@ -36,7 +37,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description = "Módulo encargado de crear nuevas multas",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 },
                 new Module
                 {
@@ -45,7 +46,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     description =  "modulo encargado para visualizar las multas inspuestas",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 01, 01),
+                    created_date = seedDate,
                 }
             );
         }

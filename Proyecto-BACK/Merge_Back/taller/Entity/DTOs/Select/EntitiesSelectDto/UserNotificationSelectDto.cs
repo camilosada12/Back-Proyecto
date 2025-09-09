@@ -12,7 +12,7 @@ namespace Entity.Domain.Models.Implements.Entities
     {
         public int id {  get; set; }
         public string message {  get; set; }
-        public DateTime shippingDate { get; set; } = DateTime.Now;
+        public DateTime shippingDate { get; set; } 
         public bool state { get; set; }
     }
 }

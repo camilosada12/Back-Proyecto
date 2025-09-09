@@ -15,8 +15,9 @@ namespace Entity.Domain.Models.Implements.Entities
         public decimal percentaje { get; set; }
         public decimal totalCalculation {  get; set; }
         public int valueSmldvId { get; set; }
+        public string valueSmldvName { get; set; }
         public int typeInfractionId { get; set; }
-
+        public string type_Infraction { get; set; }
 
     }
 }

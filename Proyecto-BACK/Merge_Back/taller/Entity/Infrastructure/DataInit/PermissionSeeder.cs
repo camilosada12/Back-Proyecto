@@ -16,7 +16,8 @@ namespace Entity.Infrastructure.DataInit
                     description = "Permiso de creacion",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new 
+                    (2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
                 },
                 new Permission
                 {
@@ -25,7 +26,7 @@ namespace Entity.Infrastructure.DataInit
                     description = "Permiso de borrar",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
                 },
                 new Permission
                 {
@@ -34,7 +35,7 @@ namespace Entity.Infrastructure.DataInit
                     description = "Permiso de Actualizar",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
                 },
                 new Permission
                 {
@@ -43,7 +44,7 @@ namespace Entity.Infrastructure.DataInit
                     description = "Permiso de Leer",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
                 }
 
             );

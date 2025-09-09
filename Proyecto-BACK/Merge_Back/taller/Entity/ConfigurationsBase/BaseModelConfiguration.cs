@@ -15,7 +15,7 @@ namespace Entity.ConfigurationsBase
             builder.HasKey(x => x.id);
             builder.Property(x => x.active).IsRequired();
             builder.Property(x => x.is_deleted).IsRequired();
-            builder.Property(x => x.created_date).IsRequired();
+            //builder.Property(x => x.created_date).IsRequired();
         }
     }
 }

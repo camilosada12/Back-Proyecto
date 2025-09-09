@@ -16,7 +16,7 @@ namespace Entity.Infrastructure.DataInit
                     description = "Rol con permisos administrativos",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
                 },
                 new Rol
                 {
@@ -25,7 +25,7 @@ namespace Entity.Infrastructure.DataInit
                     description = "Rol con permisos de usuario",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2025, 1, 1)
+                    created_date = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc)
 
                 }
             );

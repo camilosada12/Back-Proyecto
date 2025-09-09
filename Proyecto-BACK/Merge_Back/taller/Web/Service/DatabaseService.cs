@@ -1,38 +1,56 @@
 ﻿using Entity.Infrastructure.Contexts;
-using Entity.Infrastructure.LogService;
 using Microsoft.EntityFrameworkCore;
-using Web.Infrastructure.Web.Infrastructure;
+
 
 namespace Web.Service
 {
     public static class DatabaseService
     {
-        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration config)
         {
-            // Registrar HttpContextAccessor para acceder a HttpContext
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            var sql = config.GetConnectionString("SqlServer");
+            var pg = config.GetConnectionString("Postgres");
+            var my = config.GetConnectionString("MySql");
 
-            // Registrar AuditManager si lo usas en ApplicationDbContext
-            services.AddScoped<AuditService>();
-
-            // Registrar configuración para inyección
-            services.AddSingleton(configuration);
-
-            // Registrar DbContextFactory
-            services.AddScoped<DbContextFactory>();
-
-            // Registrar ApplicationDbContext para que use la fábrica dinámicamente
-            services.AddScoped<ApplicationDbContext>(provider =>
+            if (!string.IsNullOrWhiteSpace(sql))
             {
-                var factory = provider.GetRequiredService<DbContextFactory>();
-                return factory.CreateDbContext();
-            });
+                services.AddDbContext<ApplicationDbContext>(opt =>
+                    opt.UseSqlServer(sql, s =>
+                    {
+                        s.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                        s.EnableRetryOnFailure();
+                        s.CommandTimeout(60);
+                    }));
+            }
 
-            // Registrar AuditDbContext si es necesario, con proveedor fijo o dinámico
-            services.AddDbContext<AuditDbContext>(options =>
-               options.UseNpgsql(configuration.GetConnectionString("Audit")));
+            if (!string.IsNullOrWhiteSpace(pg))
+            {
+                services.AddDbContext<PostgresDbContext>(opt =>
+                    opt.UseNpgsql(pg, n =>
+                    {
+                        n.MigrationsAssembly(typeof(PostgresDbContext).Assembly.FullName);
+                        n.EnableRetryOnFailure();
+                        n.CommandTimeout(60);
+                    }));
+            }
+
+            if (!string.IsNullOrWhiteSpace(my))
+            {
+                services.AddDbContext<MySqlApplicationDbContext>(opt =>
+                    opt.UseMySql(my, ServerVersion.AutoDetect(my), m =>
+                    {
+                        m.MigrationsAssembly(typeof(MySqlApplicationDbContext).Assembly.FullName);
+                        m.EnableStringComparisonTranslations(); // para Contains, StartsWith, EndsWith
+                    })
+                    .EnableDetailedErrors()
+                    .EnableSensitiveDataLogging() // ⚠️ solo en desarrollo
+                );
+            }
 
             return services;
         }
     }
+
 }
+    
+

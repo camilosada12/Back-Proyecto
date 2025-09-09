@@ -27,8 +27,6 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<PaymentAgreementCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<TypePaymentCreateValidator>();
-            services.AddValidatorsFromAssemblyContaining<InspectoraReportCreateValidator>();
-            services.AddValidatorsFromAssemblyContaining<DocumentInfractionCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<FineCalculationDetailValidator>();
             services.AddValidatorsFromAssemblyContaining<TypeInfractionValidator>();
             services.AddValidatorsFromAssemblyContaining<ValueSmldvValidator>();
@@ -38,15 +36,15 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<departmentCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<municipalityCreateValidator>();
 
-            //ModelSecurity
+            // ModelSecurity
             services.AddValidatorsFromAssemblyContaining<FormCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<ModuloCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<PermissionCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<PersonCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<FormModuleCreateValidator>();
 
-
             return services;
         }
     }
 }
+
