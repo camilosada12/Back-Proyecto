@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Utilities.Exceptions; // ValidationException, ExternalServiceException
+using System.Linq;
 
 namespace Business.Custom
 {

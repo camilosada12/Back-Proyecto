@@ -55,6 +55,7 @@ namespace Web.Service
             services.AddScoped<IRolUserRepository, RolUserRepository>();
             services.AddScoped<IFormModuleRepository, FormModuleRepository>();
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
+            services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
             // Repositorios — ENTITIES
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();

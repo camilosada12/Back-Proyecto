@@ -7,6 +7,7 @@ using Entity.DTOs.Default.Auth;
 using Entity.DTOs.Default.Me;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Default.parameters;
+using Entity.DTOs.Default.RegisterRequestDto;
 using Entity.DTOs.Select;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
 using FormDto = Entity.DTOs.Default.ModelSecurityDto.FormDto;
@@ -41,7 +42,22 @@ namespace Web.AutoMapper
 
 
             CreateMap<Person, PersonSelectDto>().ReverseMap();
-            CreateMap<Person, PersonDto>().ReverseMap();
+            // Automapper en tu Profile (asegura nombres)
+            CreateMap<PersonDto, Person>()
+                .ForMember(d => d.firstName, o => o.MapFrom(s => s.firstName))
+                .ForMember(d => d.lastName, o => o.MapFrom(s => s.lastName))
+                .ReverseMap();
+
+
+            CreateMap<RegisterRequestDto, Person>()
+                .ForMember(d => d.firstName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).firstName))
+                .ForMember(d => d.lastName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).lastName));
+
+
+            CreateMap<RegisterRequestDto, User>()
+                .ForMember(d => d.email, o => o.MapFrom(s => s.email))    // Gmail como login
+                .ForMember(d => d.PasswordHash, o => o.MapFrom(s => s.password));
+
 
             CreateMap<FormModule, FormModuleSelectDto>().ReverseMap();
             CreateMap<FormModule, FormModuleDto>().ReverseMap();

@@ -1,4 +1,5 @@
-﻿using Business.validaciones.Entities.DocumentInfraction;
+﻿using Business.validaciones.Auth;
+using Business.validaciones.Entities.DocumentInfraction;
 using Business.validaciones.Entities.FineCalculationDetail;
 using Business.validaciones.Entities.InspectoraReport;
 using Business.validaciones.Entities.PaymentAgreement;

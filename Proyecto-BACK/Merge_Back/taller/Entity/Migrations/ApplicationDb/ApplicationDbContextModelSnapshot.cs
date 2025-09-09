@@ -778,15 +778,11 @@ namespace Entity.Migrations.ApplicationDb
                         .HasColumnType("bit");
 
                     b.Property<string>("address")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("documentTypeId")
-                        .HasColumnType("int");
 
                     b.Property<string>("firstName")
                         .IsRequired()
@@ -801,22 +797,23 @@ namespace Entity.Migrations.ApplicationDb
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("municipalityId")
+                    b.Property<int?>("municipalityId")
                         .HasColumnType("int");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.HasKey("id");
+                    b.Property<int>("tipoUsuario")
+                        .HasColumnType("int");
 
-                    b.HasIndex("documentTypeId");
+                    b.HasKey("id");
 
                     b.HasIndex("municipalityId");
 
                     b.HasIndex("phoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[phoneNumber] IS NOT NULL");
 
                     b.ToTable("person", "ModelSecurity");
 
@@ -826,26 +823,36 @@ namespace Entity.Migrations.ApplicationDb
                             id = 1,
                             active = true,
                             address = "Carrera 10",
+<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDb/ApplicationDbContextModelSnapshot.cs
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentTypeId = 1,
+=======
+                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+>>>>>>> 34e0831020dd24628bb54f5beb8345230dfc9a08:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDbContextModelSnapshot.cs
                             firstName = "Juan",
                             is_deleted = false,
                             lastName = "Pérez",
                             municipalityId = 1,
-                            phoneNumber = "1234567890"
+                            phoneNumber = "1234567890",
+                            tipoUsuario = 3
                         },
                         new
                         {
                             id = 2,
                             active = true,
                             address = "Carrera 11",
+<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDb/ApplicationDbContextModelSnapshot.cs
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentTypeId = 2,
+=======
+                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+>>>>>>> 34e0831020dd24628bb54f5beb8345230dfc9a08:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDbContextModelSnapshot.cs
                             firstName = "Sara",
                             is_deleted = false,
                             lastName = "Sofía",
                             municipalityId = 4,
-                            phoneNumber = "312312314"
+                            phoneNumber = "312312314",
+                            tipoUsuario = 3
                         });
                 });
 
@@ -944,6 +951,11 @@ namespace Entity.Migrations.ApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<int?>("PersonId")
                         .HasColumnType("int");
 
@@ -953,23 +965,19 @@ namespace Entity.Migrations.ApplicationDb
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("documentNumber")
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<int?>("documentTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasMaxLength(200)
+                        .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.HasKey("id");
 
@@ -977,10 +985,9 @@ namespace Entity.Migrations.ApplicationDb
                         .IsUnique()
                         .HasFilter("[PersonId] IS NOT NULL");
 
-                    b.HasIndex("email")
-                        .IsUnique();
+                    b.HasIndex("documentTypeId");
 
-                    b.HasIndex("name")
+                    b.HasIndex("email")
                         .IsUnique();
 
                     b.ToTable("user", "ModelSecurity");
@@ -989,24 +996,34 @@ namespace Entity.Migrations.ApplicationDb
                         new
                         {
                             id = 1,
+                            PasswordHash = "admin123",
                             PersonId = 1,
                             active = true,
+<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDb/ApplicationDbContextModelSnapshot.cs
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+=======
+                            created_date = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            documentNumber = "123456789",
+                            documentTypeId = 1,
+>>>>>>> 34e0831020dd24628bb54f5beb8345230dfc9a08:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDbContextModelSnapshot.cs
                             email = "camiloandreslosada901@gmail.com",
-                            is_deleted = false,
-                            name = "camilosada12",
-                            password = "admin123"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 2,
+                            PasswordHash = "sara12312",
                             PersonId = 2,
                             active = true,
+<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDb/ApplicationDbContextModelSnapshot.cs
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+=======
+                            created_date = new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            documentNumber = "0123432121",
+                            documentTypeId = 2,
+>>>>>>> 34e0831020dd24628bb54f5beb8345230dfc9a08:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDbContextModelSnapshot.cs
                             email = "sarita@gmail.com",
-                            is_deleted = false,
-                            name = "sara12312",
-                            password = "sara12312"
+                            is_deleted = false
                         });
                 });
 
@@ -1648,7 +1665,11 @@ namespace Entity.Migrations.ApplicationDb
                         .HasConstraintName("FK_TypeInfraction_UserInfraction");
 
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", "user")
+<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDb/ApplicationDbContextModelSnapshot.cs
                         .WithMany("UserInfractions")
+=======
+                        .WithMany("UserInfraction")
+>>>>>>> 34e0831020dd24628bb54f5beb8345230dfc9a08:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/ApplicationDbContextModelSnapshot.cs
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1683,19 +1704,10 @@ namespace Entity.Migrations.ApplicationDb
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.Person", b =>
                 {
-                    b.HasOne("Entity.Domain.Models.Implements.parameters.documentType", "documentType")
-                        .WithMany("person")
-                        .HasForeignKey("documentTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Entity.Domain.Models.Implements.parameters.municipality", "municipality")
                         .WithMany("person")
                         .HasForeignKey("municipalityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("documentType");
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("municipality");
                 });
@@ -1708,7 +1720,14 @@ namespace Entity.Migrations.ApplicationDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("FK_User_Person");
 
+                    b.HasOne("Entity.Domain.Models.Implements.parameters.documentType", "documentType")
+                        .WithMany("person")
+                        .HasForeignKey("documentTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Person");
+
+                    b.Navigation("documentType");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.parameters.municipality", b =>

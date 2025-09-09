@@ -1,4 +1,5 @@
-﻿using Business.Interfaces.IBusinessImplements.Security;
+﻿using Business.Interfaces.BusinessRegister;
+using Business.Interfaces.IBusinessImplements.Security;
 using Business.Interfaces.IJWT;
 using Business.Mensajeria;
 using Business.Mensajeria.Interfaces;
@@ -6,6 +7,7 @@ using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.Auth;
 using Entity.DTOs.Default.GoogleTokenDto;
 using Entity.DTOs.Default.ModelSecurityDto;
+using Entity.DTOs.Default.RegisterRequestDto;
 using Entity.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -47,31 +49,31 @@ namespace Web.Controllers
 
         [HttpPost]
         [Route("Registrarse")]
-        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(RegisterResponseDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> Registrarse(UserDto objeto)
+        public async Task<IActionResult> Registrarse([FromBody] RegisterRequestDto request)
         {
             try
             {
-                var userCreated = await _userService.CreateAsyncUser(objeto);
-                return Ok(new { isSuccess = true });
+                var result = await _userRegistrationService.RegisterAsync(request);
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 var message = ex.Message;
-                if (ex.InnerException != null)
-                    message += " | Inner: " + ex.InnerException.Message;
+                if (ex.InnerException != null) message += " | Inner: " + ex.InnerException.Message;
                 return BadRequest(new { isSuccess = false, message });
             }
         }
 
 
-        [HttpPost]
+
+        [HttpPost("Email")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> Login([FromBody] LoginDto login)
+        [ProducesResponseType(401)]
+        public async Task<IActionResult> LoginEmail([FromBody] EmailLoginDto login)
         {
             try
             {
@@ -86,17 +88,18 @@ namespace Web.Controllers
                 });
                 //return Ok(token);
             }
-            catch (ValidationException ex)
+            catch (UnauthorizedAccessException)
             {
-                _logger.LogWarning(ex, "Validación fallida para el inicio de sesión");
-                return BadRequest(new { message = ex.Message });
+                return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
             }
-            catch (ExternalServiceException ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear el token");
-                return StatusCode(500, new { message = ex.Message });
+                _logger.LogError(ex, "Error en LoginDocumento");
+                return StatusCode(500, new { isSuccess = false, message = "Error interno." });
             }
         }
+
+
 
         [HttpGet]
         [Route("ValidarToken")]

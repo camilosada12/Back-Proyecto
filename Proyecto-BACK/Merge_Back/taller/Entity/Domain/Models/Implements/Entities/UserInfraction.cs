@@ -14,13 +14,15 @@ namespace Entity.Domain.Models.Implements.Entities
         public bool stateInfraction {  get; set; }
         public string observations { get; set; }
         public int userId { get; set; }
-        public int typeInfractionId {get; set; }
-        public int UserNotificationId { get; set; }
+        public User user { get; set; } = null!;             // requerido
 
-        //Relaciones
-        public User user { get; set; }
-        public List<PaymentAgreement> paymentAgreement { get; set; } = new List<PaymentAgreement>();
-        public UserNotification userNotification { get; set; }
-        public TypeInfraction typeInfraction { get; set; }
+        public int typeInfractionId { get; set; }
+        public TypeInfraction typeInfraction { get; set; } = null!;
+
+        public int UserNotificationId { get; set; }
+        public UserNotification userNotification { get; set; } = null!;
+
+        public List<PaymentAgreement> paymentAgreement { get; set; } = new();
     }
+
 }

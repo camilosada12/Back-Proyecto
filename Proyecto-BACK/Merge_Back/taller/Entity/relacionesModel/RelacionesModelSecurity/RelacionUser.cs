@@ -1,4 +1,5 @@
-﻿using Entity.Domain.Models.Implements.ModelSecurity;
+﻿// Entity.relacionesModel.RelacionesModelSecurity.RelacionUser
+using Entity.Domain.Models.Implements.ModelSecurity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,34 +9,35 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            // Tabla opcionalmente puedes nombrarla explícitamente
             builder.ToTable("user", schema: "ModelSecurity");
 
-            //propiedad de name
-            builder.Property(n => n.name)
-                .IsRequired()
-                .HasMaxLength(100);
+            // Campos
+            builder.Property(p => p.PasswordHash)
+                   .IsRequired()
+                   .HasMaxLength(100);
 
-            //propiedad de password
-            builder.Property(p => p.password)
-                .IsRequired()
-                .HasMaxLength (100);
-
-            //propiedad de email
             builder.Property(e => e.email)
-                .IsRequired()
-                .HasMaxLength (200);
+                   .IsRequired()
+                   .HasMaxLength(150);
 
-            // Relación: User -> Person (muchos a uno)
+            // Índice único en email
+            builder.HasIndex(u => u.email)
+                   .IsUnique();
+
+            // 1:1 OPCIONAL User <-> Person (sin cascada)
             builder.HasOne(u => u.Person)
                    .WithOne(p => p.User)
                    .HasForeignKey<User>(u => u.PersonId)
-                   .OnDelete(DeleteBehavior.Restrict) // Evita eliminación en cascada
+                   .IsRequired(false)
+                   .OnDelete(DeleteBehavior.Restrict)
                    .HasConstraintName("FK_User_Person");
 
-
-            builder.HasIndex(u => u.email).IsUnique();
-            builder.HasIndex(u => u.name).IsUnique();
+            // FK opcional: documentType
+            builder.HasOne(p => p.documentType)
+                   .WithMany(dt => dt.person)
+                   .HasForeignKey(p => p.documentTypeId)
+                   .IsRequired(false)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -15,10 +15,7 @@ namespace Entity.relacionesModel.RelacionesEntities
     {
         public void Configure(EntityTypeBuilder<UserInfraction> builder)
         {
-            // Nombre de tabla
             builder.ToTable("userInfraction", schema: "Entities");
-
-            // Propiedades del baseModel
             builder.ConfigureBaseModel();
 
             // Relación: UserInfraction -> User (muchos a uno)
@@ -30,3 +27,4 @@ namespace Entity.relacionesModel.RelacionesEntities
         }
     }
 }
+

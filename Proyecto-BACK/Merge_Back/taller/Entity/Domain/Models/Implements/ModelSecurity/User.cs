@@ -1,7 +1,7 @@
-﻿using Entity.Domain.Interfaces;
+﻿// Entity.Domain.Models.Implements.ModelSecurity.User
 using Entity.Domain.Models.Base;
 using Entity.Domain.Models.Implements.Entities;
-using System.ComponentModel.DataAnnotations;
+using Entity.Domain.Models.Implements.parameters;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entity.Domain.Models.Implements.ModelSecurity
@@ -9,24 +9,23 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
     public class User : BaseModel
     {
         [Column(TypeName = "varchar(100)")]
-        public string name { get; set; }
-
-        [Column(TypeName = "varchar(100)")]
-        public string? password { get; set; }
+        public string PasswordHash { get; set; } = null!;
 
         [Column(TypeName = "varchar(150)")]
-        public string email { get; set; }
+        public string? email { get; set; }   // opcional si se usa documento
 
         // Foreign key
         [ForeignKey("Person")]
         public int? PersonId { get; set; }
-
-        // Navegación hacia Person
         public Person? Person { get; set; }
+
+        public int? documentTypeId { get; set; }
+        public documentType? documentType { get; set; }
 
         // ✅ Aquí debe ser la entidad, no el DTO
         public List<UserInfraction> UserInfractions { get; set; } = new();
 
+        public List<UserInfraction> UserInfraction { get; set; } = new();
         public List<RolUser> rolUsers { get; set; } = new();
     }
 
