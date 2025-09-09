@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Business.Interfaces.IBusinessImplements.Security;
+using Business.Mensajeria.Email.implements;
+using Business.Mensajeria.Email.@interface;
 using Business.Repository;
 using Data.Interfaces.IDataImplement.Security;
 using Entity.Domain.Models.Implements.ModelSecurity;
@@ -24,6 +26,7 @@ namespace Business.Services.Security
         private readonly ILogger<UserService> _logger;
         private readonly EncriptePassword _utilities;
         private readonly IRolUserService _rolUserService;
+        private readonly IServiceEmail _email;
 
         public UserService(
             IUserRepository data,
@@ -32,7 +35,8 @@ namespace Business.Services.Security
             ILogger<UserService> logger,
             EncriptePassword utilities,
             IMapper mapper,
-            IRolUserService rolUserService
+            IRolUserService rolUserService,
+            IServiceEmail email
         ) : base(data, mapper)
         {
             _dataUser = data;
@@ -41,12 +45,13 @@ namespace Business.Services.Security
             _utilities = utilities;
             _logger = logger;
             _rolUserService = rolUserService;
+            _email = email;
         }
 
         // ========= Registro (Person + User + Rol por defecto) =========
         public async Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto dto)
         {
-            // 0) Validación de unicidad por email
+            // 0) Validación de unicidad
             var existing = await _dataUser.FindEmail(dto.email);
             if (existing != null && !existing.is_deleted)
                 throw new InvalidOperationException("Ya existe una cuenta con ese email.");
@@ -59,32 +64,73 @@ namespace Business.Services.Security
                 person.InitializeLogicalState();
                 var personCreated = await _people.CreateAsync(person);
 
-                // 2) Crear User vinculado a la Person
+                // 2) Crear User
                 var user = _mapper.Map<User>(dto);
                 user.PersonId = personCreated.id;
-
                 user.InitializeLogicalState();
+
+                // 2.1) Generar código de verificación
+                var code = new Random().Next(100000, 999999).ToString();
+                user.EmailVerified = false;
+                user.EmailVerificationCode = code;
+                user.EmailVerificationExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15);
+
                 var userCreated = await _dataUser.CreateAsync(user);
 
-                // Persistir
                 await _db.SaveChangesAsync();
                 await tx.CommitAsync();
 
                 // 3) Asignar rol por defecto (no bloqueante)
                 _ = _rolUserService.AsignateUserRTo(userCreated);
 
+                // 4) Enviar email con código (no bloquear respuesta)
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var html = EmailTemplates.CodigoVerificacion(personCreated.firstName ?? "Usuario", code);
+                        await _email.EnviarHtmlAsync(dto.email, "Código de verificación", html);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "No se pudo enviar código de verificación a {Email}", dto.email);
+                    }
+                });
+
                 return new RegisterResponseDto
                 {
                     IsSuccess = true,
-                    Message = "Registro completado."
+                    Message = "Registro completado. Revisa tu correo para ingresar el código de verificación."
                 };
             }
-            catch (Exception ex)
+            catch
             {
                 await tx.RollbackAsync();
-                _logger.LogError(ex, "Error durante el registro de usuario.");
                 throw;
             }
+        }
+
+        // UserService.cs
+        public async Task<bool> VerifyCodeAsync(string code)
+        {
+            code = (code ?? "").Trim();
+            if (code.Length == 0) return false;
+
+            var user = await _dataUser.FindByVerificationCodeAsync(code);
+            if (user == null) return false;
+
+            if (user.EmailVerified) return true;
+
+            if (!user.EmailVerificationExpiresAt.HasValue || user.EmailVerificationExpiresAt.Value < DateTimeOffset.UtcNow)
+                return false;
+
+            user.EmailVerified = true;
+            user.EmailVerifiedAt = DateTimeOffset.UtcNow;
+            user.EmailVerificationCode = null;
+            user.EmailVerificationExpiresAt = null;
+
+            await _db.SaveChangesAsync();
+            return true;
         }
 
         // ========= Crear usuario por Google (si no existe) =========
@@ -115,5 +161,7 @@ namespace Business.Services.Security
 
             return await _dataUser.UpdateAsync(entity);
         }
+
+
     }
 }

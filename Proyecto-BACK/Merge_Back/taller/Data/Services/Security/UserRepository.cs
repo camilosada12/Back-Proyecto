@@ -92,6 +92,33 @@ namespace Data.Services.Security
             var user = await _dbSet.Where(u => u.email == email).FirstOrDefaultAsync();
             return user;
         }
+
+        public async Task<List<User>> GetUnverifiedUsersAsync(CancellationToken ct = default)
+        {
+            var now = DateTimeOffset.UtcNow;
+
+            return await _dbSet
+                .Where(u => !u.EmailVerified
+                            && !u.is_deleted
+                            && u.active
+                            && u.email != null
+                            && (
+                                u.EmailVerificationCode == null
+                                || !u.EmailVerificationExpiresAt.HasValue
+                                || u.EmailVerificationExpiresAt.Value <= now
+                            ))
+                .Include(u => u.Person)
+                .ToListAsync(ct);
+        }
+
+        public Task<User?> FindByVerificationCodeAsync(string code, CancellationToken ct = default)
+        {
+            return _dbSet.FirstOrDefaultAsync(
+                u => u.EmailVerificationCode == code && !u.is_deleted,
+                ct);
+        }
+
+
         //public async Task<User> ValidateUserAsync(LoginDto loginDto)
         //{
         //    // Detecta modo de forma estricta (evita basura de Swagger)

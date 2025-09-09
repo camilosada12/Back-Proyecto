@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250901144925_Initial")]
+    [Migration("20250904220156_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -977,9 +977,26 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("EmailVerificationCode")
+                        .HasMaxLength(6)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<DateTimeOffset?>("EmailVerificationExpiresAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("EmailVerified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTimeOffset?>("EmailVerifiedAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(100)
+                        .IsUnicode(false)
                         .HasColumnType("varchar(100)");
 
                     b.Property<int?>("PersonId")
@@ -1000,6 +1017,7 @@ namespace Entity.Migrations
                     b.Property<string>("email")
                         .IsRequired()
                         .HasMaxLength(150)
+                        .IsUnicode(false)
                         .HasColumnType("varchar(150)");
 
                     b.Property<bool>("is_deleted")
@@ -1022,6 +1040,8 @@ namespace Entity.Migrations
                         new
                         {
                             id = 1,
+                            EmailVerified = true,
+                            EmailVerifiedAt = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             PasswordHash = "admin123",
                             PersonId = 1,
                             active = true,
@@ -1034,6 +1054,8 @@ namespace Entity.Migrations
                         new
                         {
                             id = 2,
+                            EmailVerified = true,
+                            EmailVerifiedAt = new DateTimeOffset(new DateTime(2023, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             PasswordHash = "sara12312",
                             PersonId = 2,
                             active = true,

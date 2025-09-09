@@ -9,5 +9,8 @@ namespace Data.Interfaces.IDataImplement.Security
         Task<User?> FindByEmailAsync(string emailNorm);
         Task<bool> VerifyPasswordAsync(User user, string plainPassword);
         Task<User> FindEmail(string email);
+        Task<List<User>> GetUnverifiedUsersAsync(CancellationToken ct = default);
+        Task<User?> FindByVerificationCodeAsync(string code, CancellationToken ct = default);
+
     }
 }

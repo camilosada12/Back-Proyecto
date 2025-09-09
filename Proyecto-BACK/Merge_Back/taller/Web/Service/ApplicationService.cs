@@ -3,14 +3,10 @@ using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
-using Business.Mensajeria;
+using Business.Mensajeria.Email.@interface;
+using Business.Mensajeria.Email.implements;
 using Business.Services.Entities;
 using Business.Services.parameters;
-
-
-//using Business.Mensajeria.Implements;
-//using Business.Mensajeria.Interfaces;
-//using Business.Messaging.Implements;
 using Business.Services.Security;
 using Data.Interfaces.DataBasic;
 using Data.Interfaces.IDataImplement.Entities;
@@ -21,10 +17,10 @@ using Data.Services.Entities;
 using Data.Services.Security;
 using Entity.Domain.Interfaces;
 using Entity.Domain.Models.Implements.Recaptcha;
-using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.Extensions.Configuration;
-using Utilities.Custom;
+using Microsoft.Extensions.DependencyInjection;
 using Web.AutoMapper;
+using Web.Workers;
 
 namespace Web.Service
 {
@@ -35,14 +31,10 @@ namespace Web.Service
             // 0) Infra básica
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(AutoMapperProfile));
-            services.AddSingleton<EncriptePassword>(); // si es stateless; si no, Scoped
-
-            // 1) Auditoría / logging
-            //services.AddScoped<IAuditService, AuditService>();
+            services.AddSingleton<Utilities.Custom.EncriptePassword>();
 
             // 2) Persistencia genérica
-            //services.AddDbContext<AppDbContext>(...); // (si aplica)
-            services.AddScoped(typeof(IData<>), typeof(DataGeneric<>)); // ojo: namespace "Data.Repository" (sin typo)
+            services.AddScoped(typeof(IData<>), typeof(DataGeneric<>));
 
             // 3) Repositorios — PARAMETERS
             services.AddScoped<ImunicipalityRepository, municipalityRepository>();
@@ -59,20 +51,10 @@ namespace Web.Service
             services.AddScoped<IPaymentAgreementRepository, PaymentAgreementRepository>();
             services.AddScoped<IInspectoraReportRepository, InspectoraReportRepository>();
             services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
-
-            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
             services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
-
             services.AddScoped<ITypeInfractionRepository, TypeInfractionRepository>();
-            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
-
-            services.AddScoped<IUserNotificationService, UserNotificationService>();
             services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
-
-            services.AddScoped<IValueSmldvService, ValueSmldvService>();
             services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
-
-            services.AddScoped<IUserInfractionServices, UserInfractionServices>();
             services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
 
             // 4) Servicios — PARAMETERS
@@ -97,23 +79,25 @@ namespace Web.Service
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
             services.AddScoped<IPaymentAgreementServices, PaymentAgreementServices>();
+            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
+            services.AddScoped<IUserNotificationService, UserNotificationService>();
+            services.AddScoped<IUserInfractionServices, UserInfractionServices>();
+            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
+            services.AddScoped<IValueSmldvService, ValueSmldvService>();
 
-            //Recaptchat
-
+            // Recaptcha
             services.Configure<RecaptchaOptions>(configuration.GetSection("Recaptcha"));
             services.AddHttpClient<IRecaptchaVerifier, RecaptchaVerifier>();
 
-            //cookies
-            services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();   // ADD
+            // Cookies / sesiones (si aplica)
+            services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();
             services.AddScoped<IAuthSessionService, AuthSessionService>();
-
             services.AddDistributedMemoryCache();
 
-
-            //services.AddScoped<IFineCalculationDetailServices, FineCalculationDetailServices>();
-
-            // 5) Integraciones externas
-            // services.AddHttpClient<IApiColombiaGatewayService, ApiColombiaGatewayService>();
+            // Email + Job mensual
+            services.AddScoped<IServiceEmail, ServiceEmail>();
+            services.AddScoped<MonthlyEmailAppService>();
+            services.AddHostedService<MonthlyEmailWorker>(); // <- HOSTED SERVICE (clave)
 
             return services;
         }

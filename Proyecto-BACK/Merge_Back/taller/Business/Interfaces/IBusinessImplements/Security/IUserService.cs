@@ -11,5 +11,6 @@ namespace Business.Interfaces.IBusinessImplements.Security
     {
         Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto dto);
         Task<User> createUserGoogle(string email, string name);
+        Task<bool> VerifyCodeAsync(string code);
     }
 }

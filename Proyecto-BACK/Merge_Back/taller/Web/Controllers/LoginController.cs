@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Utilities.Custom;
 using Microsoft.AspNetCore.Authorization;     // ADD
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication;             // ADD
+using Microsoft.AspNetCore.Authentication;
+using Entity.DTOs.Default.Email;             // ADD
 
 namespace Web.Controllers
 {
@@ -73,6 +74,18 @@ namespace Web.Controllers
                 return BadRequest(new { isSuccess = false, message });
             }
         }
+
+        [HttpPost("verify-code")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> VerifyCode([FromBody] VerifyEmailCodeRequestDto req)
+        {
+            var ok = await _userService.VerifyCodeAsync(req.Code);
+            return ok
+                ? Ok(new { isSuccess = true, message = "Correo verificado correctamente." })
+                : BadRequest(new { isSuccess = false, message = "Código inválido o expirado." });
+        }
+
 
         // ===========================
         // Login por Email + Password (JWT existente)
@@ -192,26 +205,6 @@ namespace Web.Controllers
             return Ok(new { isSuccess = true });
         }
 
-        // ===========================
-        // Endpoint protegido de ejemplo (consulta)
-        // ===========================
-        [Authorize(AuthenticationSchemes = "DocSession")]
-        [HttpGet("mis-multas")]
-        [ProducesResponseType(typeof(object), 200)]
-        [ProducesResponseType(401)]
-        public async Task<IActionResult> MisMultas([FromQuery] int documentTypeId, [FromQuery] string documentNumber)
-        {
-            // Si guardaste PersonId en la sesión, puedes usarlo:
-            var personIdClaim = User.FindFirst("person_id")?.Value;
-            if (long.TryParse(personIdClaim, out var pid))
-            {
-                // return Ok(await _algúnServicio.ObtenerPorPersonaIdAsync(pid));
-            }
-
-            // O consulta por los parámetros (si no guardas PersonId):
-            // return Ok(await _algúnServicio.ObtenerPorDocumentoAsync(documentTypeId, documentNumber));
-            return Ok(new { pendientes = Array.Empty<object>() });
-        }
 
         // ===========================
         // Validar token existente (tu endpoint actual JWT)
@@ -223,6 +216,11 @@ namespace Web.Controllers
             bool respuesta = _token.validarToken(token);
             return Ok(new { isSuccess = respuesta });
         }
+
+        [Authorize(AuthenticationSchemes = "DocSession")]
+        [HttpGet("ping")]
+        public IActionResult Ping() => NoContent(); // 204
+
 
         /*
         [HttpPost("google")]

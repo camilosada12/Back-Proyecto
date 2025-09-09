@@ -48,7 +48,7 @@ namespace Web.Service
 
             //Auth
             services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
-
+            services.AddValidatorsFromAssemblyContaining<DocumentDtoValidator>();
 
             return services;
         }
