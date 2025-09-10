@@ -12,10 +12,10 @@ namespace ControlDeComparendo.Tests
             var settings = new JwtSettings();
 
             // Assert
-            Assert.Equal("WebCDCP.API", settings.issuer);
-            Assert.Equal("WebCDCP.Client", settings.audience);
-            Assert.Equal(15, settings.accessTokenExpirationMinutes);
-            Assert.Equal(7, settings.refreshTokenExpirationDays);
+            Assert.Equal("WebCDCP.API", settings.Issuer);
+            Assert.Equal("WebCDCP.Client", settings.Audience);
+            Assert.Equal(15, settings.AccessTokenExpirationMinutes);
+            Assert.Equal(7, settings.RefreshTokenExpirationDays);
         }
     }
 }

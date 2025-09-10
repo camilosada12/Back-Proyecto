@@ -13,7 +13,6 @@ namespace Data.Interfaces.IDataImplement.Security
         Task<User?> FindByVerificationCodeAsync(string code, CancellationToken ct = default);
 
         Task<User?> GetByEmailAsync(string email);  // nuevo alias
-        Task<User?> FindEmail(string email);        // mantén el tuyo si quieres
         Task<bool> ExistsByEmailAsync(string email);
         //Task<User> ValidateUserAsync(LoginDto loginDto);
         //Task AddAsync(User user);

@@ -34,9 +34,9 @@ namespace ControlDeComparendo.Tests
             var user = new User();
 
             // Assert
-            Assert.NotNull(user.UserInfractions);
+            Assert.NotNull(user.UserInfraction);
             Assert.NotNull(user.rolUsers);
-            Assert.Empty(user.UserInfractions);
+            Assert.Empty(user.UserInfraction);
             Assert.Empty(user.rolUsers);
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 
 namespace Business.Mensajeria.Implements
 {
@@ -51,5 +52,39 @@ namespace Business.Mensajeria.Implements
 
             await smtpCliente.SendMailAsync(mensaje);
         }
+
+        public async Task EnviarHtmlAsync(string to, string subject, string htmlBody)
+        {
+            // Lee de SmtpSettings
+            var host = _config["SmtpSettings:Host"]!;
+            var port = int.Parse(_config["SmtpSettings:Port"]!);
+            var enableSsl = bool.Parse(_config["SmtpSettings:EnableSsl"]!);
+            var fromEmail = _config["SmtpSettings:Email"]!;
+            var password = _config["SmtpSettings:Password"]!;
+
+            using var smtp = new SmtpClient(host, port)
+            {
+                EnableSsl = enableSsl,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromEmail, password),
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
+
+            using var msg = new MailMessage
+            {
+                From = new MailAddress(fromEmail, "Proyecto Hacienda"),
+                Subject = subject,
+                Body = htmlBody,
+                IsBodyHtml = true,
+                BodyEncoding = Encoding.UTF8,
+                SubjectEncoding = Encoding.UTF8
+            };
+            msg.To.Add(to);
+            msg.Headers.Add("X-Priority", "3");
+            msg.Headers.Add("X-Mailer", "Proyecto-Hacienda-Mailer");
+
+            await smtp.SendMailAsync(msg);
+        }
     }
 }
+

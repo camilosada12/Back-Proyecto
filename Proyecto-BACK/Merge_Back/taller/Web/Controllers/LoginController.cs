@@ -1,27 +1,16 @@
 ﻿using Business.ExternalServices.Recaptcha;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Interfaces.IJWT;
-using Business.Mensajeria;
-using Business.Mensajeria.Interfaces;
-using Entity.Domain.Models.Implements.ModelSecurity;
-using Entity.DTOs.Default.Auth;
-using Entity.DTOs.Default.Auth.RegisterReponseDto;
-using Entity.DTOs.Default.GoogleTokenDto;
-using Entity.DTOs.Default.LoginDto;
+using Entity.DTOs.Default.Email;
 using Entity.DTOs.Default.LoginDto.response.LoginResultDto;
 using Entity.DTOs.Default.LoginDto.response.RegisterReponseDto;
+using Entity.DTOs.Default.LoginDto;
 using Entity.DTOs.Default.RegisterRequestDto;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Management;
-using System.Text;
-using Utilities.Custom;
-using Microsoft.AspNetCore.Authorization;     // ADD
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Utilities.Custom;
 using Microsoft.AspNetCore.Authentication;
-using Entity.DTOs.Default.Email;             // ADD
 
 namespace Web.Controllers
 {
@@ -38,8 +27,6 @@ namespace Web.Controllers
         private readonly IAuthSessionService _svc;   // ADD: servicio de sesiones
         private readonly ISystemClock _clock;              // ADD: reloj (tu wrapper)
 
-        private readonly JwtSettings _jwt; // para ValidarToken
-        private readonly IAuthService _userRegistrationService;
         //private readonly IServiceEmail _serviceEmail;
         //private readonly INotifyManager _notifyManager;
 
@@ -54,7 +41,6 @@ namespace Web.Controllers
         //, IServiceEmail serviceEmail,
         //, INotifyManager notifyManager
         )
-        public LoginController(EncriptePassword utilities,IToken token, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades, IOptions<JwtSettings> jwtOptions, IAuthService userRegistrationService) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
         {
             _token = token;
             _userService = userService;
@@ -63,9 +49,6 @@ namespace Web.Controllers
             _recaptcha = recaptcha;
             _svc = svc;                // ADD
             _clock = clock;            // ADD
-            _jwt = jwtOptions.Value;
-            _userRegistrationService = userRegistrationService;
-
             //_serviceEmail = serviceEmail;
             //_notifyManager = notifyManager;
         }
@@ -77,7 +60,7 @@ namespace Web.Controllers
         [ProducesResponseType(typeof(RegisterResponseDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> Registrarse([FromBody] RegisterDto request)
+        public async Task<IActionResult> Registrarse([FromBody] RegisterRequestDto request)
         {
             try
             {
@@ -107,27 +90,6 @@ namespace Web.Controllers
         // ===========================
         // Login por Email + Password (JWT existente)
         // ===========================
-        [HttpPost("Email")]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        public async Task<IActionResult> LoginEmail([FromBody] EmailLoginDto login)
-        {
-            try
-            {
-                var token = await _token.GenerateTokenEmail(login);
-                return Ok(new { isSuccess = true, token });
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error en LoginEmail");
-                return StatusCode(500, new { isSuccess = false, message = "Error interno." });
-            }
-        }
         //[HttpPost("Email")]
         //[ProducesResponseType(typeof(string), 200)]
         //[ProducesResponseType(400)]
@@ -136,7 +98,19 @@ namespace Web.Controllers
         //{
         //    try
         //    {
-        //        var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
+        //        var token = await _token.GenerateTokenEmail(login);
+        //        return Ok(new { isSuccess = true, token });
+        //    }
+        //    catch (UnauthorizedAccessException)
+        //    {
+        //        return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error en LoginEmail");
+        //        return StatusCode(500, new { isSuccess = false, message = "Error interno." });
+        //    }
+        //}
 
         // ===========================
         // Login por Documento (SESIÓN con cookie, SIN JWT)
@@ -184,7 +158,7 @@ namespace Web.Controllers
                     Secure = true,                 // PRODUCCIÓN: true (requiere HTTPS). En dev puedes poner false.
                     SameSite = SameSiteMode.None,  // Si el front está en otro origen/puerto; si es mismo origen, Lax está bien.
                     IsEssential = true,
-                    Expires = sess.AbsoluteExpiresAt.UtcDateTime
+                    Expires = sess.AbsoluteExpiresAt.Date
                 });
 
                 // 4) Responder éxito (sin JWT)
@@ -208,25 +182,6 @@ namespace Web.Controllers
                 return StatusCode(500, new { isSuccess = false, message = "Error interno." });
             }
         }
-        //        return StatusCode(StatusCodes.Status200OK, new
-        //        {
-        //            isSuccess = true,
-        //            accessToken = access,
-        //            refreshToken = refresh,
-        //            csrfToken = csrf
-        //        });
-        //        //return Ok(token);
-        //    }
-        //    catch (UnauthorizedAccessException)
-        //    {
-        //        return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error en LoginDocumento");
-        //        return StatusCode(500, new { isSuccess = false, message = "Error interno." });
-        //    }
-        //}
 
 
         // ===========================
@@ -251,84 +206,20 @@ namespace Web.Controllers
         }
 
 
-        // ===========================
-        // Validar token existente (tu endpoint actual JWT)
-        // ===========================
-        [HttpGet("ValidarToken")]
-        [ProducesResponseType(typeof(object), 200)]
-        public IActionResult ValidarToken([FromQuery] string token)
-        {
-            bool respuesta = _token.validarToken(token);
-            return Ok(new { isSuccess = respuesta });
-        }
-        [HttpGet]
-        [Route("ValidarToken")]
-        public IActionResult ValidarToken([FromQuery] string token)
+    //    // ===========================
+    //    // Validar token existente (tu endpoint actual JWT)
+    //    // ===========================
+    //    [HttpGet("ValidarToken")]
+    //    [ProducesResponseType(typeof(object), 200)]
+    //    public IActionResult ValidarToken([FromQuery] string token)
+    //    {
+    //        bool respuesta = _token.validarToken(token);
+    //        return Ok(new { isSuccess = respuesta });
+    //    }
 
-        {
-            try
-            {
-                var handler = new JwtSecurityTokenHandler();
-                var parameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.key)),
-                    ValidateIssuer = true,
-                    ValidIssuer = _jwt.issuer,
-                    ValidateAudience = true,
-                    ValidAudience = _jwt.audience,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
-
-                handler.ValidateToken(token, parameters, out _);
-                return Ok(new { isSuccess = true });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Token inválido");
-                return Ok(new { isSuccess = false, message = "Token inválido" });
-            }
-
-        [Authorize(AuthenticationSchemes = "DocSession")]
-        [HttpGet("ping")]
-        public IActionResult Ping() => NoContent(); // 204
-
-        }
-
-
-            // 2. Si el token no es válido, rechazar el acceso
-            if (payload == null)
-                return Unauthorized("Token inválido de Google");
-        [HttpPost("google")]
-        public async Task<IActionResult> GoogleLogin([FromBody] GoogleTokenDto tokenDto)
-        {
-            var payload = await _token.VerifyGoogleToken(tokenDto.TokenId);
-            if (payload == null)
-                return Unauthorized("Token inválido de Google");
-
-            // 3. Buscar o crear un usuario en la base de datos con el email recibido en el token de Google
-            var user = await _userService.createUserGoogle(payload.Email, payload.Name);
-            // tu flujo crea/recupera usuario con Google
-            var user = await _userService.createUserGoogle(payload.Email, payload.Name);
-
-            var login = new LoginDto
-            {
-                email = user.email,
-                password = user.password,
-            };
-            // generar tokens del sistema (reutilizando GenerateTokensAsync)
-            var login = new LoginDto { email = user.email, password = user.PasswordHash };
-            var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
-
-            // 4. Generar un JWT del sistema
-            var token = await _token.GenerateToken(login);
-            return Ok(new { accessToken = access, refreshToken = refresh, csrfToken = csrf });
-        }
-
-            // 5. Retornar el token
-            return Ok(new { token });
-        }
-        */
+    //    [Authorize(AuthenticationSchemes = "DocSession")]
+    //    [HttpGet("ping")]
+    //    public IActionResult Ping() => NoContent(); // 204
     }
+
 }

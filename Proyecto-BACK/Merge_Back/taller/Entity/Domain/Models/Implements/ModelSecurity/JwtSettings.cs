@@ -9,9 +9,9 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
    public class JwtSettings
     {
         public string key { get; set; } = null!;
-        public string issuer { get; set; } = "WebCDCP.API";
-        public string audience { get; set; } = "WebCDCP.Client";
-        public int accessTokenExpirationMinutes { get; set; } = 15;
-        public int refreshTokenExpirationDays { get; set; } = 7;
+        public string Issuer { get; set; } = "WebCDCP.API";
+        public string Audience { get; set; } = "WebCDCP.Client";
+        public int AccessTokenExpirationMinutes { get; set; } = 15;
+        public int RefreshTokenExpirationDays { get; set; } = 7;
     }
 }

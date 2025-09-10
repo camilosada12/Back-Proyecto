@@ -73,7 +73,7 @@ namespace Business.Services.Security
                 var code = new Random().Next(100000, 999999).ToString();
                 user.EmailVerified = false;
                 user.EmailVerificationCode = code;
-                user.EmailVerificationExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15);
+                user.EmailVerificationExpiresAt = DateTime.UtcNow.AddMinutes(15);
 
                 var userCreated = await _dataUser.CreateAsync(user);
 
@@ -125,7 +125,7 @@ namespace Business.Services.Security
                 return false;
 
             user.EmailVerified = true;
-            user.EmailVerifiedAt = DateTimeOffset.UtcNow;
+            user.EmailVerifiedAt = DateTime.UtcNow;
             user.EmailVerificationCode = null;
             user.EmailVerificationExpiresAt = null;
 

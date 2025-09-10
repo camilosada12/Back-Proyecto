@@ -12,7 +12,6 @@ namespace ControlDeComparendo.Tests
             {
                 id = 1,
                 name = "Pago en efectivo",
-                description = "El pago se realiza en ventanilla",
                 paymentAgreementId = 2,
                 PaymentAgreement = new PaymentAgreement { id = 2, address = "Calle 123" }
             };

@@ -27,8 +27,8 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
 
         public bool EmailVerified { get; set; } = false;
         public string? EmailVerificationCode { get; set; }
-        public DateTimeOffset? EmailVerificationExpiresAt { get; set; }
-        public DateTimeOffset? EmailVerifiedAt { get; set; }
+        public DateTime? EmailVerificationExpiresAt { get; set; }
+        public DateTime? EmailVerifiedAt { get; set; }
 
         public List<UserInfraction> UserInfraction { get; set; } = new();
         public List<RolUser> rolUsers { get; set; } = new();

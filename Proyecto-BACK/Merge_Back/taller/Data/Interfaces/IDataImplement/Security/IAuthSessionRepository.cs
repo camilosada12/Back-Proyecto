@@ -11,9 +11,9 @@ namespace Data.Interfaces.IDataImplement.Security
     public interface IAuthSessionRepository
     {
         Task CreateAsync(AuthSession s);
-        Task<AuthSession?> GetAsync(Guid sessionId);
-        Task TouchAsync(Guid sessionId, DateTimeOffset now);
-        Task RevokeAsync(Guid sessionId);
+        Task<AuthSession?> GetAsync(int sessionId);
+        Task TouchAsync(int sessionId, DateTime now);
+        Task RevokeAsync(int sessionId);
     }
 
 }

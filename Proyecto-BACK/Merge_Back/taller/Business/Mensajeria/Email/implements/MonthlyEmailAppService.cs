@@ -30,7 +30,7 @@ namespace Business.Mensajeria.Email.implements
         // Se ejecuta el día 4 por el worker
         public async Task EjecutarEnvioMensualAsync(CancellationToken ct = default)
         {
-            var now = DateTimeOffset.UtcNow;
+            var now = DateTime.UtcNow;
 
             var pendientes = await _users.GetUnverifiedUsersAsync(ct);
             if (pendientes.Count == 0)

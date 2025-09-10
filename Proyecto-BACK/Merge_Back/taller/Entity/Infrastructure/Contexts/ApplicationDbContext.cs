@@ -21,27 +21,26 @@ namespace Entity.Infrastructure.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
-        protected readonly IConfiguration _configuration;
+       // protected readonly IConfiguration _configuration;
         //private readonly IAuditService _auditService;
-        private readonly IHttpContextAccessor _http;
+        //private readonly IHttpContextAccessor _http;
         //protected readonly IConfiguration _configuration;
         ////private readonly IAuditService _auditService;
         //private readonly IHttpContextAccessor _http;
 
         public ApplicationDbContext(
-             DbContextOptions<ApplicationDbContext> options,
-             IConfiguration configuration,
-             //IAuditService auditService,
-             IHttpContextAccessor httpContextAccessor
              DbContextOptions<ApplicationDbContext> options
+            // IConfiguration configuration,
+             //IAuditService auditService,
+             //IHttpContextAccessor httpContextAccessor
              //IConfiguration configuration,
              //IAuditService auditService,
              //IHttpContextAccessor httpContextAccessor
          ) : base(options)
         {
-            _configuration = configuration;
+           // _configuration = configuration;
             //_auditService = auditService;
-            _http = httpContextAccessor;
+            //_http = httpContextAccessor;
             //_configuration = configuration;
             ////_auditService = auditService;
             //_http = httpContextAccessor;

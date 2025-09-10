@@ -23,7 +23,7 @@ namespace Business.Services.Security
         private readonly IRolUserRepository _rolUserRepository;
         private readonly ILogger<AuthService> _logger;
         private readonly IMapper _mapper;
-        private readonly IServiceEmail _emailService;
+        //private readonly IServiceEmail _emailService;
         private readonly IPasswordResetCodeRepository _passwordResetRepo;
         private readonly IMemoryCache _cache;
         private readonly IPasswordHasher<User> _passwordHasher;
@@ -33,7 +33,7 @@ namespace Business.Services.Security
             ILogger<AuthService> logger,
             IRolUserRepository rolUserData,
             IMapper mapper,
-            IServiceEmail emailService,
+            //IServiceEmail emailService,
             IPasswordResetCodeRepository passwordResetRepo,
             IUserMeRepository userMeRepository,
             IMemoryCache memoryCache,
@@ -43,7 +43,7 @@ namespace Business.Services.Security
             _logger = logger;
             _rolUserRepository = rolUserData;
             _mapper = mapper;
-            _emailService = emailService;
+           // _emailService = emailService;
             _passwordResetRepo = passwordResetRepo;
             _userMeRepository = userMeRepository;
             _cache = memoryCache;
@@ -104,7 +104,7 @@ namespace Business.Services.Security
             };
 
             await _passwordResetRepo.CreateAsync(resetCode);
-            await _emailService.EnviarEmailBienvenida(email);
+           // await _emailService.EnviarEmailBienvenida(email);
         }
 
         public async Task ResetPasswordAsync(ConfirmResetDto dto)

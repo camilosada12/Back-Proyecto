@@ -11,7 +11,7 @@ namespace Entity.DataInit.EntitiesDataInit
 {
     public static class TypeInfractionDataInit
     {
-       public static void SeddTypeInfraction(this ModelBuilder modelBuilder)
+        public static void SeddTypeInfraction(this ModelBuilder modelBuilder)
         {
             var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<TypeInfraction>().HasData(
@@ -33,7 +33,7 @@ namespace Entity.DataInit.EntitiesDataInit
                     description = "hacer mucho ruido en un sitio publico",
                     active = true,
                     is_deleted = false,
-                    created_date = new DateTime(2023, 02, 02),
+                    created_date = seedDate
                 },
                  new TypeInfraction
                  {
@@ -43,7 +43,7 @@ namespace Entity.DataInit.EntitiesDataInit
                      description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
                      active = true,
                      is_deleted = false,
-                     created_date = new DateTime(2023, 02, 02),
+                     created_date = seedDate
                  },
                   new TypeInfraction
                   {
@@ -53,11 +53,9 @@ namespace Entity.DataInit.EntitiesDataInit
                       description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ",
                       active = true,
                       is_deleted = false,
-                      created_date = new DateTime(2023, 02, 02),
-                  }
-                    created_date = seedDate,
-                }
-                );
+                      created_date = seedDate
+                  });
+                   
         }
     }
 }

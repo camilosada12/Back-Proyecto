@@ -19,7 +19,7 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                 .Include(u => u.typeInfraction)
-                .Include(u => u.user)
+                .Include(u => u.User)
                  .ThenInclude(ui => ui.Person)
                 .Where(u => u.is_deleted == false)
                 .ToListAsync();
@@ -29,7 +29,7 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                  .Include(u => u.typeInfraction)
-                .Include(u => u.user)
+                .Include(u => u.User)
                  .ThenInclude(ui => ui.Person)
                 .Where(u => u.is_deleted == true)
                 .ToListAsync();
@@ -39,7 +39,7 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                 .Include(u => u.typeInfraction)
-                .Include(u => u.user)
+                .Include(u => u.User)
                  .ThenInclude(ui => ui.Person)
                 .FirstOrDefaultAsync(u => u.id == id);
         }
@@ -51,11 +51,11 @@ namespace Data.Services.Entities
             return await _dbSet
                 .AsNoTracking()
                 .Include(u => u.typeInfraction)
-                .Include(u => u.user)
+                .Include(u => u.User)
                     .ThenInclude(ui => ui.Person)
                 .Where(u => !u.is_deleted &&
-                            u.user.documentTypeId == documentTypeId &&
-                            u.user.documentNumber == documentNumber)
+                            u.User.documentTypeId == documentTypeId &&
+                            u.User.documentNumber == documentNumber)
                 .ToListAsync();
         }
     }

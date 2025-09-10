@@ -1,15 +1,6 @@
-﻿    //using Entity.DTOs.Default.LoginDto;
-    //using Google.Apis.Auth;
-    //namespace Business.Interfaces.IJWT
-    //{
-    //    public interface IToken
-    //    {
-    //        Task<string> GenerateTokenEmail(EmailLoginDto dto);
-    //        bool validarToken(string token);
-    //        //Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId);
-    //    }
-    //}
+﻿
 using Entity.DTOs.Default.Auth;
+using Entity.DTOs.Default.LoginDto;
 using Google.Apis.Auth;
 namespace Business.Interfaces.IJWT
 {
@@ -21,6 +12,8 @@ namespace Business.Interfaces.IJWT
         Task<(string AccessToken, string RefreshToken, string CsrfToken)> GenerateTokensAsync(LoginDto dto);
         Task<(string NewAccessToken, string NewRefreshToken)> RefreshAsync(string refreshTokenPlain, string? remoteIp = null);
         Task RevokeRefreshTokenAsync(string refreshToken);
-        Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId);
+        //Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId);
+        //Task<string> GenerateTokenEmail(EmailLoginDto dto);
+        //bool validarToken(string token);
     }
 }

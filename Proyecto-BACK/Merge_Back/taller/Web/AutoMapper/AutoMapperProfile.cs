@@ -95,9 +95,9 @@ namespace Web.AutoMapper
 
             CreateMap<FineCalculationDetail, FineCalculationDetailDto>().ReverseMap();
             CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
-                .ForMember(d => d.valueSmldvCalculation,
+                .ForMember(d => d.valueSmldvValue,
                     o => o.MapFrom(s => (double?)s.valueSmldv.value_smldv))
-                  .ForMember(d => d.typeInfractionName,
+                  .ForMember(d => d.TypeInfractionName,
                  o => o.MapFrom(s => s.typeInfraction != null ? s.typeInfraction.type_Infraction : null));
 
             CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
@@ -126,9 +126,9 @@ namespace Web.AutoMapper
                 .ForMember(p => p.typeInfractionName,
                 o => o.MapFrom(S => S.typeInfraction != null ? S.typeInfraction.type_Infraction : null))
                   .ForMember(d => d.firstName,
-                 o => o.MapFrom(s => s.user != null ? s.user.Person.firstName : null))
+                 o => o.MapFrom(s => s.User != null ? s.User.Person.firstName : null))
                  .ForMember(d => d.lastName,
-                     o => o.MapFrom(s => s.user != null ? s.user.Person.lastName : null));
+                     o => o.MapFrom(s => s.User != null ? s.User.Person.lastName : null));
             CreateMap<UserInfraction, UserInfractionDto>().ReverseMap();
                 
 

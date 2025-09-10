@@ -1,16 +1,11 @@
-﻿using Business.ExternalServices.Recaptcha;
-using Business.Custom;
-using Business.Interfaces.BusinessRegister;
+﻿using Business.Custom;
+using Business.ExternalServices.Recaptcha;
 using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
-using Business.Mensajeria.Email.@interface;
-using Business.Mensajeria.Email.implements;
 using Business.Interfaces.IJWT;
-using Business.Mensajeria;
-using Business.Mensajeria.Implements;
-using Business.Services.Auth;
+using Business.Mensajeria.Email.@interface;
 using Business.Services.Entities;
 using Business.Services.parameters;
 using Business.Services.Security;
@@ -22,16 +17,13 @@ using Data.Interfaces.Security;
 using Data.Repositoy;
 using Data.Services.Entities;
 using Data.Services.Security;
-using Entity.Domain.Interfaces;
-using Entity.Domain.Models.Implements.Recaptcha;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Entity.Domain.Models.Implements.ModelSecurity;
+using Entity.Domain.Models.Implements.Recaptcha;
 using Microsoft.AspNetCore.Identity;
 using Utilities.Custom;
 using Web.AutoMapper;
-using Web.Workers;
 using Web.Infrastructure;
+using ServiceEmail = Business.Mensajeria.Email.implements.ServiceEmail;
 
 namespace Web.Service
 {
@@ -121,13 +113,6 @@ namespace Web.Service
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IUserMeRepository, MeRepository>();
             services.AddScoped<IAuthCookieFactory, AuthCookieFactory>();
-
-
-
-
-
-
-
 
             return services;
         }

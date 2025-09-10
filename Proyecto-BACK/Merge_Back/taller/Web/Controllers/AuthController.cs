@@ -65,17 +65,17 @@ namespace Web.Controllers
             Response.Cookies.Append(
                 _cookieSettings.accessTokenName,
                 access,
-                _cookieFactory.AccessCookieOptions(now.AddMinutes(_jwt.accessTokenExpirationMinutes)));
+                _cookieFactory.AccessCookieOptions(now.AddMinutes(_jwt.AccessTokenExpirationMinutes)));
 
             Response.Cookies.Append(
                 _cookieSettings.refreshTokenName,
                 refresh,
-                _cookieFactory.RefreshCookieOptions(now.AddDays(_jwt.refreshTokenExpirationDays)));
+                _cookieFactory.RefreshCookieOptions(now.AddDays(_jwt.RefreshTokenExpirationDays)));
 
             Response.Cookies.Append(
                 _cookieSettings.csrfCookieName,
                 csrf,
-                _cookieFactory.CsrfCookieOptions(now.AddDays(_jwt.refreshTokenExpirationDays)));
+                _cookieFactory.CsrfCookieOptions(now.AddDays(_jwt.RefreshTokenExpirationDays)));
 
             return Ok(new { isSuccess = true, message = "Login exitoso" });
         }
@@ -112,12 +112,12 @@ namespace Web.Controllers
             Response.Cookies.Append(
                 _cookieSettings.accessTokenName,
                 newAccess,
-                _cookieFactory.AccessCookieOptions(now.AddMinutes(_jwt.accessTokenExpirationMinutes)));
+                _cookieFactory.AccessCookieOptions(now.AddMinutes(_jwt.AccessTokenExpirationMinutes)));
 
             Response.Cookies.Append(
                 _cookieSettings.refreshTokenName,
                 newRefresh,
-                _cookieFactory.RefreshCookieOptions(now.AddDays(_jwt.refreshTokenExpirationDays)));
+                _cookieFactory.RefreshCookieOptions(now.AddDays(_jwt.RefreshTokenExpirationDays)));
 
             return Ok(new { isSuccess = true });
         }
