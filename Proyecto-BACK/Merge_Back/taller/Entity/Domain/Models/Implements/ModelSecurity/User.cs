@@ -22,8 +22,15 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
         public int? documentTypeId { get; set; }
         public documentType? documentType { get; set; }
 
-        // ✅ Aquí debe ser la entidad, no el DTO
-        public List<UserInfraction> UserInfractions { get; set; } = new();
+        [Column(TypeName = "varchar(30)")]
+        public string? documentNumber { get; set; }
+
+        public bool EmailVerified { get; set; } = false;
+        public string? EmailVerificationCode { get; set; }
+        public DateTimeOffset? EmailVerificationExpiresAt { get; set; }
+        public DateTimeOffset? EmailVerifiedAt { get; set; }
+
+        public List<UserInfraction> UserInfraction { get; set; } = new();
         public List<RolUser> rolUsers { get; set; } = new();
     }
 

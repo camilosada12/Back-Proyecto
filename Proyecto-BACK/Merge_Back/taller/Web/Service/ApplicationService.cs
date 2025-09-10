@@ -1,20 +1,18 @@
-﻿using Business.Custom;
+﻿using Business.ExternalServices.Recaptcha;
+using Business.Custom;
 using Business.Interfaces.BusinessRegister;
 using Business.Interfaces.IBusinessImplements;
 using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
+using Business.Mensajeria.Email.@interface;
+using Business.Mensajeria.Email.implements;
 using Business.Interfaces.IJWT;
 using Business.Mensajeria;
 using Business.Mensajeria.Implements;
 using Business.Services.Auth;
 using Business.Services.Entities;
 using Business.Services.parameters;
-
-
-//using Business.Mensajeria.Implements;
-//using Business.Mensajeria.Interfaces;
-//using Business.Messaging.Implements;
 using Business.Services.Security;
 using Data.Interfaces.DataBasic;
 using Data.Interfaces.IDataImplement.Entities;
@@ -24,24 +22,32 @@ using Data.Interfaces.Security;
 using Data.Repositoy;
 using Data.Services.Entities;
 using Data.Services.Security;
+using Entity.Domain.Interfaces;
+using Entity.Domain.Models.Implements.Recaptcha;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Microsoft.AspNetCore.Identity;
 using Utilities.Custom;
 using Web.AutoMapper;
+using Web.Workers;
 using Web.Infrastructure;
 
 namespace Web.Service
 {
     public static class ApplicationService
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Infra
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddSingleton<Utilities.Custom.EncriptePassword>();
             services.AddSingleton<EncriptePassword>();
             services.AddMemoryCache();
 
+            // 2) Persistencia genérica
+            services.AddScoped(typeof(IData<>), typeof(DataGeneric<>));
             // Auditoría / logging
             //services.AddScoped<IAuditService, AuditService>();
 
@@ -57,7 +63,6 @@ namespace Web.Service
             services.AddScoped<IRolUserRepository, RolUserRepository>();
             services.AddScoped<IFormModuleRepository, FormModuleRepository>();
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
-            services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
             // Repositorios — ENTITIES
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
@@ -69,6 +74,7 @@ namespace Web.Service
             services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
             services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
 
+            // 4) Servicios — PARAMETERS
             // 🔐 Repositorio de refresh tokens (FALTABA)
 
             // Servicios — PARAMETERS
@@ -93,6 +99,15 @@ namespace Web.Service
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
             services.AddScoped<IPaymentAgreementServices, PaymentAgreementServices>();
+            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
+            services.AddScoped<IUserNotificationService, UserNotificationService>();
+            services.AddScoped<IUserInfractionServices, UserInfractionServices>();
+            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
+            services.AddScoped<IValueSmldvService, ValueSmldvService>();
+
+            // Recaptcha
+            services.Configure<RecaptchaOptions>(configuration.GetSection("Recaptcha"));
+            services.AddHttpClient<IRecaptchaVerifier, RecaptchaVerifier>();
             services.AddScoped<ITypeInfractionService, TypeInfractionService>();
             services.AddScoped<IValueSmldvService, ValueSmldvService>();
             services.AddScoped<IUserNotificationService, UserNotificationService>();

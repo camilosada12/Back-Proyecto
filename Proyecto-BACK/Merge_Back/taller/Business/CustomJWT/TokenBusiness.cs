@@ -1,64 +1,73 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Business.Interfaces.IJWT;
-using Data.Interfaces.IDataImplement.Security;
-using Data.Interfaces.Security;
-using Data.Services.Security;
-using Entity.Domain.Models.Implements.ModelSecurity;
-using Entity.DTOs.Default.Auth;
-using Google.Apis.Auth;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Utilities.Exceptions; // ValidationException, ExternalServiceException
-using System.Linq;
+//using System.Security.Cryptography;
+//using System.Text;
+//using Business.Interfaces.IJWT;
+//using Data.Interfaces.IDataImplement.Security;
+//using Data.Interfaces.Security;
+//using Data.Services.Security;
+//using Entity.Domain.Models.Implements.ModelSecurity;
+//using Entity.DTOs.Default.Auth;
+//using Google.Apis.Auth;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.Options;
+//using Microsoft.IdentityModel.Tokens;
+//using Utilities.Exceptions; // ValidationException, ExternalServiceException
+//using System.Linq;
 
-namespace Business.Custom
-{
-    public class TokenBusiness : IToken
-    {
-        private readonly IUserRepository _userRepository;
-        private readonly IRolUserRepository _rolUserRepository;
-        private readonly IRefreshTokenRepository _refreshRepo;
-        private readonly JwtSettings _jwtSettings;
-        private readonly IPasswordHasher<User> _passwordHasher;
+//namespace Business.Custom
+//{
+//    public class TokenBusiness : IToken
+//    {
+//        private readonly IUserRepository _userRepository;
+//        private readonly IRolUserRepository _rolUserRepository;
+//        private readonly IRefreshTokenRepository _refreshRepo;
+//        private readonly JwtSettings _jwtSettings;
+//        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public TokenBusiness(
-            IRolUserRepository rolUserRepository,
-            IUserRepository userRepository,
-            IRefreshTokenRepository refreshRepo,
-            IOptions<JwtSettings> jwtSettings,
-            IPasswordHasher<User> passwordHasher)
-        {
-            _rolUserRepository = rolUserRepository;
-            _userRepository = userRepository;
-            _refreshRepo = refreshRepo;
-            _jwtSettings = jwtSettings.Value;
-            _passwordHasher = passwordHasher;
+//        public TokenBusiness(
+//            IRolUserRepository rolUserRepository,
+//            IUserRepository userRepository,
+//            IRefreshTokenRepository refreshRepo,
+//            IOptions<JwtSettings> jwtSettings,
+//            IPasswordHasher<User> passwordHasher)
+//        {
+//            _rolUserRepository = rolUserRepository;
+//            _userRepository = userRepository;
+//            _refreshRepo = refreshRepo;
+//            _jwtSettings = jwtSettings.Value;
+//            _passwordHasher = passwordHasher;
 
-            EnsureSigningKeyStrength(_jwtSettings.key);
-        }
+//            EnsureSigningKeyStrength(_jwtSettings.key);
+//        }
 
-        public async Task<(string AccessToken, string RefreshToken, string CsrfToken)> GenerateTokensAsync(LoginDto dto)
-        {
-            // 1) Validar credenciales
-            var user = await _userRepository.FindEmail(dto.email)
-                ?? throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
+//        public async Task<(string AccessToken, string RefreshToken, string CsrfToken)> GenerateTokensAsync(LoginDto dto)
+//        {
+//            // 1) Validar credenciales
+//            var user = await _userRepository.FindEmail(dto.email)
+//                ?? throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
 
-            // Verificación con hasher (user.password es el hash almacenado)
-            var pwdResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.password);
-            if (pwdResult == PasswordVerificationResult.Failed)
-                throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
+//            // Verificación con hasher (user.password es el hash almacenado)
+//            var pwdResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.password);
+//            if (pwdResult == PasswordVerificationResult.Failed)
+//                throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
 
+            var user = await _dataUser.FindByEmailAsync(email);
+            if (user is null) throw new UnauthorizedAccessException("Credenciales inválidas.");
             // 2) Roles
             var roles = (await _rolUserRepository.GetJoinRolesAsync(user.id)).ToList();
 
+            var ok = await _dataUser.VerifyPasswordAsync(user, pass);
+            if (!ok) throw new UnauthorizedAccessException("Credenciales inválidas.");
             // 3) Access token
             var accessToken = BuildAccessToken(user, roles);
 
+            var roles = await _userRepository.GetJoinRolesAsync(user.id);
+
+            // Aquí SÍ queremos enviar el correo
+            return await BuildJwtAsync(user, roles, includeEmail: true);
+        }
             // 4) Refresh token (rotación, guardamos HASH HMAC-SHA512)
             var now = DateTime.UtcNow;
             var refreshPlain = GenerateSecureRandomUrlToken(64);
@@ -127,6 +136,8 @@ namespace Business.Custom
             await _refreshRepo.AddAsync(newRefreshEntity);
             await _refreshRepo.RevokeAsync(record, replacedByTokenHash: newRefreshHash);
 
+        // ====== Construcción del JWT (reutilizable) ======
+        private Task<string> BuildJwtAsync(User user, IEnumerable<string> roles, bool includeEmail)
             return (newAccessToken, newRefreshPlain);
         }
 
@@ -139,14 +150,20 @@ namespace Business.Custom
         }
 
         private string BuildAccessToken(User user, IEnumerable<string> roles)
-        {
-            var now = DateTime.UtcNow;
-            var accessExp = now.AddMinutes(_jwtSettings.accessTokenExpirationMinutes);
+//        {
+//            var now = DateTime.UtcNow;
+//            var accessExp = now.AddMinutes(_jwtSettings.accessTokenExpirationMinutes);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.key));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+//            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.key));
+//            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new List<Claim>
+//            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+        new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+        new Claim("uid", user.id.ToString())
+    };
         {
             new Claim(JwtRegisteredClaimNames.Sub,   user.id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.email),
@@ -154,55 +171,67 @@ namespace Business.Custom
             new Claim(JwtRegisteredClaimNames.Iat,   new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
         };
 
+            // Solo agrega el email si así se indica
+            if (includeEmail && !string.IsNullOrWhiteSpace(user.email))
+                claims.Add(new Claim(ClaimTypes.Email, user.email)); // http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress
+
+            if (user.documentTypeId.HasValue)
+                claims.Add(new Claim("doc_type_id", user.documentTypeId.Value.ToString()));
+            if (!string.IsNullOrWhiteSpace(user.documentNumber))
+                claims.Add(new Claim("doc_number", user.documentNumber));
+
+            foreach (var r in roles.Where(r => !string.IsNullOrWhiteSpace(r)).Distinct(StringComparer.OrdinalIgnoreCase))
             foreach (var r in roles.Where(r => !string.IsNullOrWhiteSpace(r)).Distinct())
-                claims.Add(new Claim(ClaimTypes.Role, r));
+//                claims.Add(new Claim(ClaimTypes.Role, r));
 
-            var jwt = new JwtSecurityToken(
-                issuer: _jwtSettings.issuer,
-                audience: _jwtSettings.audience,
-                claims: claims,
-                notBefore: now,
-                expires: accessExp,
-                signingCredentials: creds
-            );
+//            var jwt = new JwtSecurityToken(
+//                issuer: _jwtSettings.issuer,
+//                audience: _jwtSettings.audience,
+//                claims: claims,
+//                notBefore: now,
+//                expires: accessExp,
+//                signingCredentials: creds
+//            );
 
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
+//            return new JwtSecurityTokenHandler().WriteToken(jwt);
+//        }
 
+
+        public async Task<IEnumerable<string>> GetUserRoles(int idUser)
         private string HashRefreshToken(string token)
-        {
-            var pepper = Encoding.UTF8.GetBytes(_jwtSettings.key);
-            using var hmac = new HMACSHA512(pepper);
-            var mac = hmac.ComputeHash(Encoding.UTF8.GetBytes(token));
-            return Convert.ToHexString(mac).ToLowerInvariant();
-        }
+//        {
+//            var pepper = Encoding.UTF8.GetBytes(_jwtSettings.key);
+//            using var hmac = new HMACSHA512(pepper);
+//            var mac = hmac.ComputeHash(Encoding.UTF8.GetBytes(token));
+//            return Convert.ToHexString(mac).ToLowerInvariant();
+//        }
 
-        private static string GenerateSecureRandomUrlToken(int bytesLength)
-        {
-            var bytes = new byte[bytesLength];
-            RandomNumberGenerator.Fill(bytes);
-            return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
-        }
+//        private static string GenerateSecureRandomUrlToken(int bytesLength)
+//        {
+//            var bytes = new byte[bytesLength];
+//            RandomNumberGenerator.Fill(bytes);
+//            return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
+//        }
 
-        private static void EnsureSigningKeyStrength(string key)
-        {
-            if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
-                throw new InvalidOperationException("JwtSettings.key debe tener al menos 32 caracteres aleatorios (≥256 bits).");
-        }
+//        private static void EnsureSigningKeyStrength(string key)
+//        {
+//            if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
+//                throw new InvalidOperationException("JwtSettings.key debe tener al menos 32 caracteres aleatorios (≥256 bits).");
+//        }
 
-        public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId)
-        {
-            try
-            {
-                var settings = new GoogleJsonWebSignature.ValidationSettings
-                {
-                    Audience = new List<string> { "436268030419-5q7o4a4lv3ahg2p12iad63ubptlka6pu.apps.googleusercontent.com" }
-                };
-                return await GoogleJsonWebSignature.ValidateAsync(tokenId, settings);
-            }
-            catch { return null; }
-        }
-    }
+//        public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string tokenId)
+//        {
+//            try
+//            {
+//                var settings = new GoogleJsonWebSignature.ValidationSettings
+//                {
+//                    Audience = new List<string> { "436268030419-5q7o4a4lv3ahg2p12iad63ubptlka6pu.apps.googleusercontent.com" }
+//                };
+//                return await GoogleJsonWebSignature.ValidateAsync(tokenId, settings);
+//            }
+//            catch { return null; }
+//        }
+//    }
 
 }
 

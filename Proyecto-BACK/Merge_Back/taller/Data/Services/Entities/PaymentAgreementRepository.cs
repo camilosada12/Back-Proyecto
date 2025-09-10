@@ -22,6 +22,7 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                         .Include(p => p.userInfraction)
+                         .ThenInclude(ui => ui.typeInfraction)
                         .Include(p => p.paymentFrequency)
                         .Where(u => u.is_deleted == false)
                         .ToListAsync();
@@ -31,6 +32,7 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                         .Include(p => p.userInfraction)
+                         .ThenInclude(ui => ui.typeInfraction)
                         .Include(p => p.paymentFrequency)
                         .Where(p => p.is_deleted == true)
                         .ToListAsync();
@@ -40,6 +42,7 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                       .Include(p => p.userInfraction)
+                       .ThenInclude(ui => ui.typeInfraction)
                       .Include(p => p.paymentFrequency)
                       .Where(p => p.id == id)
                       .FirstOrDefaultAsync();

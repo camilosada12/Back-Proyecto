@@ -21,17 +21,27 @@ namespace Entity.Infrastructure.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
+        protected readonly IConfiguration _configuration;
+        //private readonly IAuditService _auditService;
+        private readonly IHttpContextAccessor _http;
         //protected readonly IConfiguration _configuration;
         ////private readonly IAuditService _auditService;
         //private readonly IHttpContextAccessor _http;
 
         public ApplicationDbContext(
+             DbContextOptions<ApplicationDbContext> options,
+             IConfiguration configuration,
+             //IAuditService auditService,
+             IHttpContextAccessor httpContextAccessor
              DbContextOptions<ApplicationDbContext> options
              //IConfiguration configuration,
              //IAuditService auditService,
              //IHttpContextAccessor httpContextAccessor
          ) : base(options)
         {
+            _configuration = configuration;
+            //_auditService = auditService;
+            _http = httpContextAccessor;
             //_configuration = configuration;
             ////_auditService = auditService;
             //_http = httpContextAccessor;
@@ -65,6 +75,8 @@ namespace Entity.Infrastructure.Contexts
         public DbSet<FineCalculationDetail> fineCalculationDetail { get; set; }
         public DbSet<PaymentAgreement> paymentAgreement { get; set; }
 
+
+        public DbSet<AuthSession> AuthSessions { get; set; } = null!;
         public DbSet<RefreshToken> refreshTokens { get; set; }
 
 
@@ -75,6 +87,8 @@ namespace Entity.Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+          
 
             // ============ CONFIGURACIONES (IEntityTypeConfiguration<>) ============
             // Parameters
@@ -104,6 +118,8 @@ namespace Entity.Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new RelacionesUserInfraction());
             modelBuilder.ApplyConfiguration(new RelacionesFineCalculationDetail());
             modelBuilder.ApplyConfiguration(new RelacionesPaymentAgreement());
+
+            modelBuilder.ApplyConfiguration(new AuthSessionConfig());
 
             // ============ SEEDS (ORDEN IMPORTA) ============
 
@@ -151,6 +167,20 @@ namespace Entity.Infrastructure.Contexts
         }
 
 
+        public override int SaveChanges()
+        {
+            try
+            {
+                ChangeTracker.DetectChanges();
+                //_auditService.CaptureAsync(ChangeTracker).GetAwaiter().GetResult();
+                return base.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in SaveChanges: {ex.Message}");
+                throw;
+            }
+        }
         //public override int SaveChanges()
         //{
         //    try
@@ -166,6 +196,21 @@ namespace Entity.Infrastructure.Contexts
         //    }
         //}
 
+        public override async Task<int> SaveChangesAsync(
+            bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                ChangeTracker.DetectChanges();
+                //await _auditService.CaptureAsync(ChangeTracker, cancellationToken);
+                return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in SaveChangesAsync: {ex.Message}");
+                throw;
+            }
+        }
         //public override async Task<int> SaveChangesAsync(
         //    bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         //{

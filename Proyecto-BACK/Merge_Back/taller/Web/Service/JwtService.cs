@@ -9,6 +9,35 @@ namespace Web.Service
 {
     public static class JwtService
     {
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IToken, TokenBusiness>();
+
+            // 👇 aquí NO seteamos DefaultScheme ni DefaultChallenge
+            services.AddAuthentication()
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, config =>
+                {
+                    config.RequireHttpsMetadata = false;
+                    config.SaveToken = true;
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(configuration["Jwt:key"]!)
+                        )
+                    };
+                });
+            //.AddGoogle("Google", options =>
+            //{
+            //    var googleAuth = configuration.GetSection("Authentication:Google");
+            //    options.ClientId = googleAuth["ClientId"]!;
+            //    options.ClientSecret = googleAuth["SecretClient"]!;
+            //    options.CallbackPath = "/signin-google";
+            //});
             public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
             {
                 services.AddAuthentication(config =>
@@ -48,6 +77,10 @@ namespace Web.Service
                     };
                 });
 
+            return services;
+        }
+    }
+}
 
 
                 return services;

@@ -22,6 +22,12 @@ namespace Entity.relacionesModel.RelacionesEntities
 
             // Índice único en name
             builder.HasIndex(tp => tp.name).IsUnique();
+
+            builder.HasOne(tp => tp.PaymentAgreement)
+              .WithMany(pa => pa.typePayments)
+              .HasForeignKey(tp => tp.paymentAgreementId)
+              .OnDelete(DeleteBehavior.Restrict)
+              .HasConstraintName("FK_TypePayment_PaymentAgreement");
         }
     }
 }

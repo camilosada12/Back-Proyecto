@@ -18,11 +18,6 @@ namespace Business.validaciones.Entities.PaymentAgreement
                 .NotEmpty().WithMessage("El barrio es obligatorio.")
                 .Matches(@"^[a-zA-Z\s]+$").WithMessage("El barrio solo puede contener letras y espacios.");
 
-            // Monto financiado (FinanceAmount como descripción de texto)
-            RuleFor(x => x.financeAmount)
-                .NotEmpty().WithMessage("El campo de financiamiento es obligatorio.")
-                .MaximumLength(500).WithMessage("El texto del financiamiento no puede superar los 500 caracteres.")
-                .Matches(@"^[a-zA-Z0-9\s\.\,\-]+$").WithMessage("El campo de financiamiento contiene caracteres inválidos.");
 
             // Descripción del acuerdo
             RuleFor(x => x.AgreementDescription)

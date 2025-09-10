@@ -44,6 +44,10 @@ namespace Web.Service
             services.AddValidatorsFromAssemblyContaining<PersonCreateValidator>();
             services.AddValidatorsFromAssemblyContaining<FormModuleCreateValidator>();
 
+            //Auth
+            services.AddValidatorsFromAssemblyContaining<RegisterRequestDtoValidator>();
+            services.AddValidatorsFromAssemblyContaining<DocumentDtoValidator>();
+
             return services;
         }
     }

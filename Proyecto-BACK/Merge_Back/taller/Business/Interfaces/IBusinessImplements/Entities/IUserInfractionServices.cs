@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Business.Interfaces.BusinessBasic;
-using Entity.Domain.Models.Implements.Entities;
+﻿using Business.Interfaces.BusinessBasic;
+using Entity.Domain.Models.Implements.Entities; // si acá están tus DTOs
+// ^ Ajusta el using según dónde estén tus DTOs (UserInfractionDto, UserInfractionSelectDto)
 
 namespace Business.Interfaces.IBusinessImplements.Entities
 {
     public interface IUserInfractionServices : IBusiness<UserInfractionDto, UserInfractionSelectDto>
     {
+        Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber);
     }
 }

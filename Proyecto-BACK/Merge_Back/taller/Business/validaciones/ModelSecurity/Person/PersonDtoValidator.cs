@@ -28,10 +28,6 @@ namespace Business.Validaciones.ModelSecurity.Person
                 .NotEmpty().WithMessage("La dirección es obligatoria.")
                 .MaximumLength(200).WithMessage("La dirección no puede superar los 200 caracteres.");
 
-            // documentTypeId válido
-            RuleFor(x => x.documentTypeId)
-                .GreaterThan(0)
-                .WithMessage("El tipo de documento debe ser mayor a 0.");
 
             // municipalityId válido
             RuleFor(x => x.municipalityId)

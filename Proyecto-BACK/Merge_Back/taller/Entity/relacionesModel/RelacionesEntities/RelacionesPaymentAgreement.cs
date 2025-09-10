@@ -28,14 +28,6 @@ namespace Entity.relacionesModel.RelacionesEntities
                    .OnDelete(DeleteBehavior.Restrict)
                    .HasConstraintName("FK_PaymentAgreement_UserInfraction");
 
-
-            // Relación: PaymentAgreement -> TypePayment (uno a muchos)
-            builder.HasMany(pa => pa.typePayments)
-                   .WithOne(tp => tp.PaymentAgreement)
-                   .HasForeignKey(tp => tp.paymentAgreementId)
-                   .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_TypePayment_PaymentAgreement");
-
             builder.HasOne(pa => pa.paymentFrequency)
            .WithMany(pf => pf.paymentAgreement)
            .HasForeignKey(pa => pa.paymentFrequencyId)

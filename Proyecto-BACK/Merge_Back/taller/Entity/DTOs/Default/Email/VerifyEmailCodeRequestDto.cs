@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Mensajeria
+namespace Entity.DTOs.Default.Email
 {
-    public interface IServiceEmail
+    public class VerifyEmailCodeRequestDto
     {
-        Task EnviarEmailBienvenida(string emailReceptor);
+        public string Code { get; set; } = null!;
     }
+
 }

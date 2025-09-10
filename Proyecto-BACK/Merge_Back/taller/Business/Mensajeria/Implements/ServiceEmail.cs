@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Business.Mensajeria.Email.@interface;
+using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 

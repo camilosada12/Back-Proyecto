@@ -12,6 +12,8 @@ namespace Web.Service
             var pg = config.GetConnectionString("Postgres");
             var my = config.GetConnectionString("MySql");
 
+            // Registrar AuditManager si lo usas en ApplicationDbContext
+            //services.AddScoped<AuditService>();
             if (!string.IsNullOrWhiteSpace(sql))
             {
                 services.AddDbContext<ApplicationDbContext>(opt =>
@@ -43,6 +45,10 @@ namespace Web.Service
 
                         // 👇 Ignorar schemas (MySQL no soporta schemas)
                         m.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+
+            // Registrar AuditDbContext si es necesario, con proveedor fijo o dinámico
+            //services.AddDbContext<AuditDbContext>(options =>
+            // options.UseSqlServer(configuration.GetConnectionString("Audit")));
 
                         // Habilitar traducciones de comparación de strings
                         m.EnableStringComparisonTranslations();
