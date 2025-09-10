@@ -24,8 +24,6 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
 
         // ✅ Aquí debe ser la entidad, no el DTO
         public List<UserInfraction> UserInfractions { get; set; } = new();
-
-        public List<UserInfraction> UserInfraction { get; set; } = new();
         public List<RolUser> rolUsers { get; set; } = new();
     }
 

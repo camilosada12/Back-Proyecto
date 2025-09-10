@@ -33,8 +33,7 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
 
             // Único filtrado para permitir múltiples NULL en SQL Server
             builder.HasIndex(p => p.phoneNumber)
-                   .IsUnique()
-                   .HasFilter("[phoneNumber] IS NOT NULL");
+                   .IsUnique();
 
             // FK opcional: municipality
             builder.HasOne(p => p.municipality)

@@ -18,12 +18,6 @@ namespace Entity.relacionesModel.RelacionesEntities
             builder.ToTable("userInfraction", schema: "Entities");
             builder.ConfigureBaseModel();
 
-            // Relación: UserInfraction -> User (muchos a uno)
-            //builder.HasOne(ui => ui.user)
-            //       .WithMany()
-            //       .OnDelete(DeleteBehavior.Restrict)
-            //       .HasConstraintName("FK_UserInfraction_User");
-
         }
     }
 }

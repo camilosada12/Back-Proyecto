@@ -12,18 +12,17 @@ namespace ControlDeComparendo.Tests
             // Arrange
             var user = new User
             {
-                name = "Ingrid",
-                password = "12345",
+           
                 email = "ingrid@test.com",
+                PasswordHash = "12345",
                 PersonId = 1
             };
 
             // Act
-            var resultName = user.name;
             var resultEmail = user.email;
 
             // Assert
-            Assert.Equal("Ingrid", resultName);
+            Assert.Equal("Ingrid", resultEmail);
             Assert.Equal("ingrid@test.com", resultEmail);
             Assert.Equal(1, user.PersonId);
         }

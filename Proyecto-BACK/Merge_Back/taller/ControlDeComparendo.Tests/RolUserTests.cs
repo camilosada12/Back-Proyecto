@@ -25,7 +25,7 @@ namespace ControlDeComparendo.Tests
         public void RolUser_Should_Allow_Navigation()
         {
             // Arrange
-            var user = new User { name = "Ingrid" };
+            var user = new User { email = "Ingrid@gmail.com" };
             var rol = new Rol { name = "Admin" };
 
             var rolUser = new RolUser
@@ -37,7 +37,7 @@ namespace ControlDeComparendo.Tests
             // Assert
             Assert.NotNull(rolUser.User);
             Assert.NotNull(rolUser.Rol);
-            Assert.Equal("Ingrid", rolUser.User.name);
+            Assert.Equal("Ingrid", rolUser.User.email);
             Assert.Equal("Admin", rolUser.Rol.name);
         }
     }

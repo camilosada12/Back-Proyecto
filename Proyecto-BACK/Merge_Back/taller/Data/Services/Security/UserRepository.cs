@@ -43,7 +43,7 @@ namespace Data.Services.Security
             //     .FirstOrDefaultAsync(u => u.documentTypeId == documentTypeId && u.documentNumber == docNum);
 
             return await _dbSet
-                .FirstOrDefaultAsync(u => u.documentTypeId == documentTypeId && u.documentNumber == docNum);
+                .FirstOrDefaultAsync(u => u.documentTypeId == documentTypeId);
         }
 
         public Task<bool> VerifyPasswordAsync(User user, string plainPassword)
@@ -114,8 +114,8 @@ namespace Data.Services.Security
         //    return user;
         //}
 
-            return user;
-        }
+        //    return user;
+        //}
         public Task<User?> GetByEmailAsync(string email) => FindEmail(email);
 public Task<bool> ExistsByEmailAsync(string email)
     => _dbSet.AnyAsync(u => u.email == email);

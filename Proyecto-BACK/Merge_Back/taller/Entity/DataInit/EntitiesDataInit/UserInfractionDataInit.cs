@@ -18,7 +18,7 @@ namespace Entity.DataInit.EntitiesDataInit
                  new UserInfraction
                  {
                      id = 1,
-                     userId = 1,            
+                     UserId = 1,            
                      typeInfractionId = 1,    
                      UserNotificationId = 1, 
                      dateInfraction = seedDate,
@@ -31,7 +31,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 new UserInfraction
                 {
                     id = 2,
-                    userId = 2,
+                    UserId = 2,
                     typeInfractionId = 2,
                     UserNotificationId = 2,
                     dateInfraction = seedDate,

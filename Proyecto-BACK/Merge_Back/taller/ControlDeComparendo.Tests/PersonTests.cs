@@ -16,7 +16,6 @@ namespace ControlDeComparendo.Tests
                 lastName = "Medina",
                 phoneNumber = "123456",
                 address = "Calle 123",
-                documentTypeId = 1,
                 municipalityId = 2
             };
 
@@ -25,7 +24,6 @@ namespace ControlDeComparendo.Tests
             Assert.Equal("Medina", person.lastName);
             Assert.Equal("123456", person.phoneNumber);
             Assert.Equal("Calle 123", person.address);
-            Assert.Equal(1, person.documentTypeId);
             Assert.Equal(2, person.municipalityId);
         }
 
@@ -33,12 +31,12 @@ namespace ControlDeComparendo.Tests
         public void Person_Should_Allow_Navigation_To_User()
         {
             // Arrange
-            var user = new User { name = "Ingrid" };
+            var user = new User { email = "Ingrid@gmail.com" };
             var person = new Person { User = user };
 
             // Assert
             Assert.NotNull(person.User);
-            Assert.Equal("Ingrid", person.User.name);
+            Assert.Equal("Ingrid", person.User.email);
         }
     }
 }

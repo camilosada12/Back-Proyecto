@@ -1,6 +1,6 @@
 ﻿using Entity.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure; // 👈 importante
 
 namespace Web.Service
 {
@@ -40,7 +40,12 @@ namespace Web.Service
                     opt.UseMySql(my, ServerVersion.AutoDetect(my), m =>
                     {
                         m.MigrationsAssembly(typeof(MySqlApplicationDbContext).Assembly.FullName);
-                        m.EnableStringComparisonTranslations(); // para Contains, StartsWith, EndsWith
+
+                        // 👇 Ignorar schemas (MySQL no soporta schemas)
+                        m.SchemaBehavior(MySqlSchemaBehavior.Ignore);
+
+                        // Habilitar traducciones de comparación de strings
+                        m.EnableStringComparisonTranslations();
                     })
                     .EnableDetailedErrors()
                     .EnableSensitiveDataLogging() // ⚠️ solo en desarrollo
@@ -50,7 +55,4 @@ namespace Web.Service
             return services;
         }
     }
-
 }
-    
-

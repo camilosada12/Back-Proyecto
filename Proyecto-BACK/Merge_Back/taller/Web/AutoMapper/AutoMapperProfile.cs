@@ -49,9 +49,9 @@ namespace Web.AutoMapper
                 .ReverseMap();
 
 
-            CreateMap<RegisterRequestDto, Person>()
-                .ForMember(d => d.firstName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).firstName))
-                .ForMember(d => d.lastName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).lastName));
+            //CreateMap<RegisterRequestDto, Person>()
+            //    .ForMember(d => d.firstName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).firstName))
+            //    .ForMember(d => d.lastName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).lastName));
 
 
             CreateMap<RegisterRequestDto, User>()
@@ -136,8 +136,8 @@ namespace Web.AutoMapper
             // Registro
             CreateMap<RegisterDto, User>()
                 .ForMember(d => d.email, o => o.MapFrom(s => s.email))
-                .ForMember(d => d.password, o => o.Ignore())
-                .ForMember(d => d.name, o => o.MapFrom(s => s.email))
+                .ForMember(d => d.PasswordHash, o => o.Ignore())
+                //.ForMember(d => d.name, o => o.MapFrom(s => s.email))
                 .ForMember(d => d.Person, o => o.Ignore());
 
             CreateMap<RegisterDto, Person>()
@@ -145,7 +145,7 @@ namespace Web.AutoMapper
                 .ForMember(d => d.lastName, o => o.MapFrom(s => s.lastName))
                 .ForMember(d => d.address, o => o.MapFrom(s => s.address))
                 .ForMember(d => d.phoneNumber, o => o.MapFrom(s => s.phone))
-                .ForMember(d => d.documentTypeId, o => o.MapFrom(s => s.documentTypeId))
+                //.ForMember(d => d.documentTypeId, o => o.MapFrom(s => s.documentTypeId))
                 .ForMember(d => d.municipalityId, o => o.MapFrom(s => s.municipalityId));
 
 

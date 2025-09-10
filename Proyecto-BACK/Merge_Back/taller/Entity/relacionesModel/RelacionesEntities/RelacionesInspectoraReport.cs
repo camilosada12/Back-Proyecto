@@ -16,7 +16,8 @@ namespace Entity.relacionesModel.RelacionesEntities
             builder.ConfigureBaseModel();
 
             builder.Property(x => x.report_date)
-                   .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                   .IsRequired();
+
 
             // Decimal con precisión
             builder.Property(x => x.total_fines)

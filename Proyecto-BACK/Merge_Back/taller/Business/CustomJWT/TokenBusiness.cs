@@ -49,7 +49,7 @@ namespace Business.Custom
                 ?? throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
 
             // Verificación con hasher (user.password es el hash almacenado)
-            var pwdResult = _passwordHasher.VerifyHashedPassword(user, user.password, dto.password);
+            var pwdResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.password);
             if (pwdResult == PasswordVerificationResult.Failed)
                 throw new UnauthorizedAccessException("Usuario o contraseña inválida.");
 

@@ -64,7 +64,7 @@ namespace Business.Services.Security
             var user = _mapper.Map<User>(dto);
 
             // tu entidad usa "password" en minúscula
-            user.password = _passwordHasher.HashPassword(user, dto.password);
+            user.PasswordHash = _passwordHasher.HashPassword(user, dto.password);
             user.Person = person;
 
             await _userRepository.CreateAsync(user);
@@ -117,7 +117,7 @@ namespace Business.Services.Security
                        ?? throw new ValidationException("Usuario no encontrado");
 
             // tu entidad usa "password" en minúscula
-            user.password = _passwordHasher.HashPassword(user, dto.newPassword);
+            user.PasswordHash = _passwordHasher.HashPassword(user, dto.newPassword);
 
             await _userRepository.UpdateAsync(user);
 

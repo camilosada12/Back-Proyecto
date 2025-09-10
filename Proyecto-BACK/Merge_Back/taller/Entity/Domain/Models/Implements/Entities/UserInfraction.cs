@@ -13,14 +13,16 @@ namespace Entity.Domain.Models.Implements.Entities
         public DateTime dateInfraction { get; set; }
         public bool stateInfraction {  get; set; }
         public string observations { get; set; }
-        public int userId { get; set; }
-        public User user { get; set; } = null!;             // requerido
+        public int UserId { get; set; }          // FK
+        public User User { get; set; } = null!;  // Navegación
+        // requerido
 
         public int typeInfractionId { get; set; }
         public TypeInfraction typeInfraction { get; set; } = null!;
 
         public int UserNotificationId { get; set; }
-        public UserNotification userNotification { get; set; } = null!;
+        public UserNotification UserNotification { get; set; } = null!;
+
 
         public List<PaymentAgreement> paymentAgreement { get; set; } = new();
     }

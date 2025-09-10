@@ -20,12 +20,6 @@ namespace Entity.relacionesModel.RelacionesEntities
             // Propiedades del baseModel
             builder.ConfigureBaseModel();
 
-            // Relación: UserNotification -> UserInfraction (uno a muchos)
-            //builder.HasMany(un => un.userInfraction)
-            //       .WithOne(ui => ui.userNotification)
-            //       .HasForeignKey(ui => ui.UserNotificationId)
-            //       .OnDelete(DeleteBehavior.Restrict)
-            //       .HasConstraintName("FK_UserNotification_UserInfraction");
         }
     }
 }

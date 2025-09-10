@@ -5,7 +5,9 @@ using Business.Mensajeria;
 using Business.Mensajeria.Interfaces;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.Auth;
+using Entity.DTOs.Default.Auth.RegisterReponseDto;
 using Entity.DTOs.Default.GoogleTokenDto;
+using Entity.DTOs.Default.LoginDto;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Default.RegisterRequestDto;
 using Entity.Infrastructure.Contexts;
@@ -32,16 +34,18 @@ namespace Web.Controllers
         private readonly ILogger<LoginController> _logger;
         private readonly EncriptePassword _utilities;
         private readonly JwtSettings _jwt; // para ValidarToken
+        private readonly IAuthService _userRegistrationService;
         //private readonly IServiceEmail _serviceEmail;
         //private readonly INotifyManager _notifyManager;
 
-        public LoginController(EncriptePassword utilities,IToken token, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades, IOptions<JwtSettings> jwtOptions) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
+        public LoginController(EncriptePassword utilities,IToken token, ILogger<LoginController> logger, IUserService userService, ApplicationDbContext context, EncriptePassword utilidades, IOptions<JwtSettings> jwtOptions, IAuthService userRegistrationService) //, IServiceEmail serviceEmail, INotifyManager notifyManager)
         {
             _token = token;
             _userService = userService;
             _logger = logger;
             _utilities = utilities;
             _jwt = jwtOptions.Value;
+            _userRegistrationService = userRegistrationService;
 
             //_serviceEmail = serviceEmail;
             //_notifyManager = notifyManager;
@@ -52,7 +56,7 @@ namespace Web.Controllers
         [ProducesResponseType(typeof(RegisterResponseDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> Registrarse([FromBody] RegisterRequestDto request)
+        public async Task<IActionResult> Registrarse([FromBody] RegisterDto request)
         {
             try
             {
@@ -69,35 +73,35 @@ namespace Web.Controllers
 
 
 
-        [HttpPost("Email")]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        public async Task<IActionResult> LoginEmail([FromBody] EmailLoginDto login)
-        {
-            try
-            {
-                var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
+        //[HttpPost("Email")]
+        //[ProducesResponseType(typeof(string), 200)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //public async Task<IActionResult> LoginEmail([FromBody] EmailLoginDto login)
+        //{
+        //    try
+        //    {
+        //        var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
 
-                return StatusCode(StatusCodes.Status200OK, new
-                {
-                    isSuccess = true,
-                    accessToken = access,
-                    refreshToken = refresh,
-                    csrfToken = csrf
-                });
-                //return Ok(token);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error en LoginDocumento");
-                return StatusCode(500, new { isSuccess = false, message = "Error interno." });
-            }
-        }
+        //        return StatusCode(StatusCodes.Status200OK, new
+        //        {
+        //            isSuccess = true,
+        //            accessToken = access,
+        //            refreshToken = refresh,
+        //            csrfToken = csrf
+        //        });
+        //        //return Ok(token);
+        //    }
+        //    catch (UnauthorizedAccessException)
+        //    {
+        //        return Unauthorized(new { isSuccess = false, message = "Credenciales inválidas." });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error en LoginDocumento");
+        //        return StatusCode(500, new { isSuccess = false, message = "Error interno." });
+        //    }
+        //}
 
 
 
@@ -144,7 +148,7 @@ namespace Web.Controllers
             var user = await _userService.createUserGoogle(payload.Email, payload.Name);
 
             // generar tokens del sistema (reutilizando GenerateTokensAsync)
-            var login = new LoginDto { email = user.email, password = user.password };
+            var login = new LoginDto { email = user.email, password = user.PasswordHash };
             var (access, refresh, csrf) = await _token.GenerateTokensAsync(login);
 
             return Ok(new { accessToken = access, refreshToken = refresh, csrfToken = csrf });

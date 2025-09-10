@@ -17,7 +17,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 new InspectoraReport
                 {
                     id = 1,
-                    report_date = seedDate,
                     total_fines = 2,
                     message = "se integra una nueva multa",
                     active = true,
@@ -27,12 +26,11 @@ namespace Entity.DataInit.EntitiesDataInit
                  new InspectoraReport
                  {
                      id = 2,
-                     report_date = seedDate,
                      total_fines = 3,
                      message = "se integra una nueva multa",
                      active = true,
                      is_deleted = false,
-                     created_date = seedDate,
+                     created_date = seedDate
                  }
                 );
         }

@@ -90,7 +90,7 @@ public class PostgresDbContext : DbContext
             modelBuilder.ApplyConfiguration(new RelacionesDocumentInfraction());
             modelBuilder.ApplyConfiguration(new RelacionesTypePayment());
             modelBuilder.ApplyConfiguration(new RelacionesUserInfraction());
-            modelBuilder.ApplyConfiguration(new RelacionesFineCalculationDetail());
+        modelBuilder.ApplyConfiguration(new RelacionesFineCalculationDetail());
             modelBuilder.ApplyConfiguration(new RelacionesPaymentAgreement());
 
             // ============ SEEDS ============

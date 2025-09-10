@@ -26,7 +26,7 @@ namespace ControlDeComparendo.Tests
         public void Rol_Should_Allow_Adding_Relations()
         {
             // Arrange
-            var user = new User { name = "Ingrid" };
+            var user = new User { email = "Ingrid@gmail.com" };
             var rolUser = new RolUser { User = user };
             var rol = new Rol();
 
@@ -34,7 +34,7 @@ namespace ControlDeComparendo.Tests
 
             // Assert
             Assert.Single(rol.rolUsers);
-            Assert.Equal("Ingrid", rol.rolUsers.First().User.name);
+            Assert.Equal("Ingrid", rol.rolUsers.First().User.email);
         }
     }
 }
