@@ -55,6 +55,7 @@ namespace Web.Service
             services.AddScoped<IRolUserRepository, RolUserRepository>();
             services.AddScoped<IFormModuleRepository, FormModuleRepository>();
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
+            services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();
 
             // Repositorios — ENTITIES
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
@@ -86,6 +87,7 @@ namespace Web.Service
             services.AddScoped<IRolUserService, RolUserService>();
             services.AddScoped<IFormModuleService, FormModuleService>();
             services.AddScoped<IRolFormPermissionService, RolFormPermissionService>();
+            services.AddScoped<IAuthSessionService, AuthSessionService>();
 
             // Servicios — ENTITIES
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();

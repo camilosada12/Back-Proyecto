@@ -192,7 +192,7 @@ namespace Web.Controllers
         [ProducesResponseType(typeof(object), 200)]
         public async Task<IActionResult> Logout()
         {
-            if (Request.Cookies.TryGetValue("ph_session", out var raw) && Guid.TryParse(raw, out var sid))
+            if (Request.Cookies.TryGetValue("ph_session", out var raw) && int.TryParse(raw, out var sid))
                 await _svc.RevokeAsync(sid);
 
             Response.Cookies.Delete("ph_session", new CookieOptions

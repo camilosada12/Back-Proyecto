@@ -10,6 +10,7 @@ using Entity.DTOs.Default.parameters;
 using Entity.DTOs.Default.RegisterRequestDto;
 using Entity.DTOs.Select;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
+using Helpers.NameSplitter;
 using FormDto = Entity.DTOs.Default.ModelSecurityDto.FormDto;
 using RolUserDto = Entity.DTOs.Default.ModelSecurityDto.RolUserDto;
 
@@ -51,9 +52,9 @@ namespace Web.AutoMapper
                 .ReverseMap();
 
 
-            //CreateMap<RegisterRequestDto, Person>()
-            //    .ForMember(d => d.firstName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).firstName))
-            //    .ForMember(d => d.lastName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).lastName));
+            CreateMap<RegisterRequestDto, Person>()
+                .ForMember(d => d.firstName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).firstName))
+                .ForMember(d => d.lastName, o => o.MapFrom(s => NameSplitter.Split(s.NombreCompleto).lastName));
 
 
             CreateMap<RegisterRequestDto, User>()

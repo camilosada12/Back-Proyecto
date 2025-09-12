@@ -56,58 +56,63 @@ namespace Business.Services.Security
             if (existing != null && !existing.is_deleted)
                 throw new InvalidOperationException("Ya existe una cuenta con ese email.");
 
-            await using var tx = await _db.Database.BeginTransactionAsync();
-            try
+            // Usar la estrategia de ejecución para manejar transacciones con reintentos
+            var strategy = _db.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
             {
-                // 1) Crear Person
-                var person = _mapper.Map<Person>(dto);
-                person.InitializeLogicalState();
-                var personCreated = await _people.CreateAsync(person);
-
-                // 2) Crear User
-                var user = _mapper.Map<User>(dto);
-                user.PersonId = personCreated.id;
-                user.InitializeLogicalState();
-
-                // 2.1) Generar código de verificación
-                var code = new Random().Next(100000, 999999).ToString();
-                user.EmailVerified = false;
-                user.EmailVerificationCode = code;
-                user.EmailVerificationExpiresAt = DateTime.UtcNow.AddMinutes(15);
-
-                var userCreated = await _dataUser.CreateAsync(user);
-
-                await _db.SaveChangesAsync();
-                await tx.CommitAsync();
-
-                // 3) Asignar rol por defecto (no bloqueante)
-                _ = _rolUserService.AsignateUserRTo(userCreated);
-
-                // 4) Enviar email con código (no bloquear respuesta)
-                _ = Task.Run(async () =>
+                await using var tx = await _db.Database.BeginTransactionAsync();
+                try
                 {
-                    try
-                    {
-                        var html = EmailTemplates.CodigoVerificacion(personCreated.firstName ?? "Usuario", code);
-                        await _email.EnviarHtmlAsync(dto.email, "Código de verificación", html);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "No se pudo enviar código de verificación a {Email}", dto.email);
-                    }
-                });
+                    // 1) Crear Person
+                    var person = _mapper.Map<Person>(dto);
+                    person.InitializeLogicalState();
+                    var personCreated = await _people.CreateAsync(person);
 
-                return new RegisterResponseDto
+                    // 2) Crear User
+                    var user = _mapper.Map<User>(dto);
+                    user.PersonId = personCreated.id;
+                    user.InitializeLogicalState();
+
+                    // 2.1) Generar código de verificación
+                    var code = new Random().Next(100000, 999999).ToString();
+                    user.EmailVerified = false;
+                    user.EmailVerificationCode = code;
+                    user.EmailVerificationExpiresAt = DateTime.UtcNow.AddMinutes(15);
+
+                    var userCreated = await _dataUser.CreateAsync(user);
+
+                    await _db.SaveChangesAsync();
+                    await tx.CommitAsync();
+
+                    // 3) Asignar rol por defecto (no bloqueante)
+                    _ = _rolUserService.AsignateUserRTo(userCreated);
+
+                    // 4) Enviar email con código (no bloquear respuesta)
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var html = EmailTemplates.CodigoVerificacion(personCreated.firstName ?? "Usuario", code);
+                            await _email.EnviarHtmlAsync(dto.email, "Código de verificación", html);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "No se pudo enviar código de verificación a {Email}", dto.email);
+                        }
+                    });
+
+                    return new RegisterResponseDto
+                    {
+                        IsSuccess = true,
+                        Message = "Registro completado. Revisa tu correo para ingresar el código de verificación."
+                    };
+                }
+                catch
                 {
-                    IsSuccess = true,
-                    Message = "Registro completado. Revisa tu correo para ingresar el código de verificación."
-                };
-            }
-            catch
-            {
-                await tx.RollbackAsync();
-                throw;
-            }
+                    await tx.RollbackAsync();
+                    throw;
+                }
+            });
         }
 
         // UserService.cs

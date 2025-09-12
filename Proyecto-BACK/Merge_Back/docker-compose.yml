@@ -73,6 +73,16 @@ services:
       mysqlBack:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./front/front
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
 volumes:
   sql_data:
   postgres_data:
