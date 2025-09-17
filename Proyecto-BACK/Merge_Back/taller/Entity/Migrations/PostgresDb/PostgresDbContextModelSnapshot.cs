@@ -130,76 +130,6 @@ namespace Entity.Migrations.PostgresDb
                         });
                 });
 
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.PaymentAgreement", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
-
-                    b.Property<string>("AgreementDescription")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("active")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("created_date")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("is_deleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("neighborhood")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("paymentFrequencyId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("userInfractionId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("paymentFrequencyId");
-
-                    b.HasIndex("userInfractionId");
-
-                    b.ToTable("paymentAgreement", "Entities");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            AgreementDescription = "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento",
-                            active = true,
-                            address = "carrera 10",
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false,
-                            neighborhood = "eduardo santos",
-                            paymentFrequencyId = 1,
-                            userInfractionId = 1
-                        },
-                        new
-                        {
-                            id = 2,
-                            AgreementDescription = "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento",
-                            active = true,
-                            address = "carrera 1",
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false,
-                            neighborhood = "panamá",
-                            paymentFrequencyId = 2,
-                            userInfractionId = 2
-                        });
-                });
-
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypeInfraction", b =>
                 {
                     b.Property<int>("id")
@@ -307,8 +237,6 @@ namespace Entity.Migrations.PostgresDb
                     b.HasIndex("name")
                         .IsUnique();
 
-                    b.HasIndex("paymentAgreementId");
-
                     b.ToTable("typePayment", "Entities");
 
                     b.HasData(
@@ -319,7 +247,7 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             name = "efectivo",
-                            paymentAgreementId = 1
+                            paymentAgreementId = 0
                         },
                         new
                         {
@@ -328,7 +256,34 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             name = "nequi",
-                            paymentAgreementId = 2
+                            paymentAgreementId = 0
+                        },
+                        new
+                        {
+                            id = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            name = "tarjeta crédito",
+                            paymentAgreementId = 0
+                        },
+                        new
+                        {
+                            id = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            name = "tarjeta débito",
+                            paymentAgreementId = 0
+                        },
+                        new
+                        {
+                            id = 5,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            name = "daviplata",
+                            paymentAgreementId = 0
                         });
                 });
 
@@ -362,8 +317,8 @@ namespace Entity.Migrations.PostgresDb
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("stateInfraction")
-                        .HasColumnType("boolean");
+                    b.Property<int>("stateInfraction")
+                        .HasColumnType("integer");
 
                     b.Property<int>("typeInfractionId")
                         .HasColumnType("integer");
@@ -388,22 +343,48 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "la persona no opuso resistencia a la infraccion",
-                            stateInfraction = false,
+                            observations = "la persona no opuso resistencia a la infracción",
+                            stateInfraction = 0,
                             typeInfractionId = 1
                         },
                         new
                         {
                             id = 2,
+                            UserId = 1,
+                            UserNotificationId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            observations = "portaba un cuchillo en la vía pública",
+                            stateInfraction = 0,
+                            typeInfractionId = 3
+                        },
+                        new
+                        {
+                            id = 3,
+                            UserId = 2,
+                            UserNotificationId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            observations = "la persona se encontraba en estado de embriaguez",
+                            stateInfraction = 0,
+                            typeInfractionId = 2
+                        },
+                        new
+                        {
+                            id = 4,
                             UserId = 2,
                             UserNotificationId = 2,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "la persona se encontraba en estado de embriagues",
-                            stateInfraction = false,
-                            typeInfractionId = 2
+                            observations = "agredió verbalmente a la autoridad",
+                            stateInfraction = 0,
+                            typeInfractionId = 4
                         });
                 });
 
@@ -789,7 +770,6 @@ namespace Entity.Migrations.PostgresDb
                         .HasColumnType("boolean");
 
                     b.Property<string>("address")
-                        .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("created_date")
@@ -812,7 +792,6 @@ namespace Entity.Migrations.PostgresDb
                         .HasColumnType("integer");
 
                     b.Property<string>("phoneNumber")
-                        .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
                     b.Property<int>("tipoUsuario")
@@ -822,9 +801,6 @@ namespace Entity.Migrations.PostgresDb
 
                     b.HasIndex("municipalityId");
 
-                    b.HasIndex("phoneNumber")
-                        .IsUnique();
-
                     b.ToTable("person", "ModelSecurity");
 
                     b.HasData(
@@ -832,26 +808,22 @@ namespace Entity.Migrations.PostgresDb
                         {
                             id = 1,
                             active = true,
-                            address = "Carrera 10",
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             firstName = "Juan",
                             is_deleted = false,
                             lastName = "Pérez",
                             municipalityId = 1,
-                            phoneNumber = "1234567890",
                             tipoUsuario = 3
                         },
                         new
                         {
                             id = 2,
                             active = true,
-                            address = "Carrera 11",
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             firstName = "Sara",
                             is_deleted = false,
                             lastName = "Sofía",
                             municipalityId = 4,
-                            phoneNumber = "312312314",
                             tipoUsuario = 3
                         });
                 });
@@ -1019,7 +991,7 @@ namespace Entity.Migrations.PostgresDb
                             PersonId = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            documentNumber = "123456789",
+                            documentNumber = "1234567890",
                             documentTypeId = 1,
                             email = "camiloandreslosada901@gmail.com",
                             is_deleted = false
@@ -1410,6 +1382,157 @@ namespace Entity.Migrations.PostgresDb
                         });
                 });
 
+            modelBuilder.Entity("PaymentAgreement", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<decimal>("AccruedInterest")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<string>("AgreementDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("AgreementEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("AgreementStart")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("BaseAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("CoactiveActivatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int?>("Installments")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsCoactive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsPaid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastInterestAppliedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("MonthlyFee")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OutstandingAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("expeditionCedula")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("is_deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("neighborhood")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<int>("paymentFrequencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("typePaymentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("userInfractionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("paymentFrequencyId");
+
+                    b.HasIndex("typePaymentId");
+
+                    b.HasIndex("userInfractionId");
+
+                    b.ToTable("paymentAgreement", "Entities");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            AccruedInterest = 0m,
+                            AgreementDescription = "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento",
+                            AgreementEnd = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            BaseAmount = 800000m,
+                            Email = "user1@example.com",
+                            Installments = 4,
+                            IsCoactive = false,
+                            IsPaid = false,
+                            MonthlyFee = 200000m,
+                            OutstandingAmount = 800000m,
+                            PhoneNumber = "3101234567",
+                            active = true,
+                            address = "carrera 10",
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2016, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            neighborhood = "eduardo santos",
+                            paymentFrequencyId = 1,
+                            typePaymentId = 1,
+                            userInfractionId = 1
+                        },
+                        new
+                        {
+                            id = 2,
+                            AccruedInterest = 0m,
+                            AgreementDescription = "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento",
+                            AgreementEnd = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            BaseAmount = 100000m,
+                            Email = "user2@example.com",
+                            Installments = 2,
+                            IsCoactive = false,
+                            IsPaid = false,
+                            MonthlyFee = 50000m,
+                            OutstandingAmount = 100000m,
+                            PhoneNumber = "3009876543",
+                            active = true,
+                            address = "carrera 1",
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            neighborhood = "panamá",
+                            paymentFrequencyId = 2,
+                            typePaymentId = 2,
+                            userInfractionId = 2
+                        });
+                });
+
             modelBuilder.Entity("RolFormPermission", b =>
                 {
                     b.Property<int>("id")
@@ -1610,7 +1733,7 @@ namespace Entity.Migrations.PostgresDb
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.DocumentInfraction", b =>
                 {
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.PaymentAgreement", "paymentAgreement")
+                    b.HasOne("PaymentAgreement", "paymentAgreement")
                         .WithMany("documentInfraction")
                         .HasForeignKey("PaymentAgreementId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1627,38 +1750,6 @@ namespace Entity.Migrations.PostgresDb
                     b.Navigation("inspectoraReport");
 
                     b.Navigation("paymentAgreement");
-                });
-
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.PaymentAgreement", b =>
-                {
-                    b.HasOne("Entity.Domain.Models.Implements.parameters.PaymentFrequency", "paymentFrequency")
-                        .WithMany("paymentAgreement")
-                        .HasForeignKey("paymentFrequencyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.UserInfraction", "userInfraction")
-                        .WithMany("paymentAgreement")
-                        .HasForeignKey("userInfractionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_PaymentAgreement_UserInfraction");
-
-                    b.Navigation("paymentFrequency");
-
-                    b.Navigation("userInfraction");
-                });
-
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypePayment", b =>
-                {
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.PaymentAgreement", "PaymentAgreement")
-                        .WithMany("typePayments")
-                        .HasForeignKey("paymentAgreementId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_TypePayment_PaymentAgreement");
-
-                    b.Navigation("PaymentAgreement");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfraction", b =>
@@ -1769,6 +1860,35 @@ namespace Entity.Migrations.PostgresDb
                     b.Navigation("valueSmldv");
                 });
 
+            modelBuilder.Entity("PaymentAgreement", b =>
+                {
+                    b.HasOne("Entity.Domain.Models.Implements.parameters.PaymentFrequency", "paymentFrequency")
+                        .WithMany("paymentAgreement")
+                        .HasForeignKey("paymentFrequencyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypePayment", "TypePayment")
+                        .WithMany("PaymentAgreements")
+                        .HasForeignKey("typePaymentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_PaymentAgreement_TypePayment");
+
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.UserInfraction", "userInfraction")
+                        .WithMany("paymentAgreement")
+                        .HasForeignKey("userInfractionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_PaymentAgreement_UserInfraction");
+
+                    b.Navigation("TypePayment");
+
+                    b.Navigation("paymentFrequency");
+
+                    b.Navigation("userInfraction");
+                });
+
             modelBuilder.Entity("RolFormPermission", b =>
                 {
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.Form", "Form")
@@ -1825,18 +1945,16 @@ namespace Entity.Migrations.PostgresDb
                     b.Navigation("documentInfraction");
                 });
 
-            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.PaymentAgreement", b =>
-                {
-                    b.Navigation("documentInfraction");
-
-                    b.Navigation("typePayments");
-                });
-
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypeInfraction", b =>
                 {
                     b.Navigation("fineCalculationDetail");
 
                     b.Navigation("userInfractions");
+                });
+
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypePayment", b =>
+                {
+                    b.Navigation("PaymentAgreements");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfraction", b =>
@@ -1908,6 +2026,11 @@ namespace Entity.Migrations.PostgresDb
             modelBuilder.Entity("Entity.Domain.Models.Implements.parameters.municipality", b =>
                 {
                     b.Navigation("person");
+                });
+
+            modelBuilder.Entity("PaymentAgreement", b =>
+                {
+                    b.Navigation("documentInfraction");
                 });
 #pragma warning restore 612, 618
         }

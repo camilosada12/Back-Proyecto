@@ -10,7 +10,7 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
     // Entity/Domain/Models/Implements/ModelSecurity/AuthSession.cs
     public class AuthSession : BaseModel
     {
-        public int SessionId { get; set; }
+        public Guid SessionId { get; set; }
         public long? PersonId { get; set; }               // si mapeas persona
         public DateTime CreatedAt { get; set; }
         public DateTime LastActivityAt { get; set; }

@@ -15,7 +15,7 @@ namespace Entity.DTOs.Default.Auth
         public string lastName { get; set; } = null!;
         public string phone { get; set; } = null!;
         public string address { get; set; } = null!;
-
+        public int NumberDocument { get; set; }
         public int municipalityId { get; set; }
         public int documentTypeId { get; set; }
     }

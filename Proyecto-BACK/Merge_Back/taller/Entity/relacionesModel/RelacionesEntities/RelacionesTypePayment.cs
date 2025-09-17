@@ -14,20 +14,18 @@ namespace Entity.relacionesModel.RelacionesEntities
     {
         public void Configure(EntityTypeBuilder<TypePayment> builder)
         {
-            // Nombre de tabla
             builder.ToTable("typePayment", schema: "Entities");
 
-            // Propiedades del baseModel
             builder.ConfigureBaseModel();
 
-            // Índice único en name
             builder.HasIndex(tp => tp.name).IsUnique();
 
-            builder.HasOne(tp => tp.PaymentAgreement)
-              .WithMany(pa => pa.typePayments)
-              .HasForeignKey(tp => tp.paymentAgreementId)
-              .OnDelete(DeleteBehavior.Restrict)
-              .HasConstraintName("FK_TypePayment_PaymentAgreement");
+            // relación 1:N desde TypePayment -> PaymentAgreement
+            builder.HasMany(tp => tp.PaymentAgreements)
+                   .WithOne(pa => pa.TypePayment)
+                   .HasForeignKey(pa => pa.typePaymentId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }

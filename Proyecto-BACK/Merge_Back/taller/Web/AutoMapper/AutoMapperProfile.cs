@@ -9,6 +9,7 @@ using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Default.parameters;
 using Entity.DTOs.Default.RegisterRequestDto;
 using Entity.DTOs.Select;
+using Entity.DTOs.Select.Entities;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
 using FormDto = Entity.DTOs.Default.ModelSecurityDto.FormDto;
 using RolUserDto = Entity.DTOs.Default.ModelSecurityDto.RolUserDto;
@@ -74,13 +75,41 @@ namespace Web.AutoMapper
             CreateMap<TypePayment, TypePaymentSelectDto>().ReverseMap();
 
             CreateMap<PaymentAgreement, PaymentAgreementDto>().ReverseMap();
+            CreateMap<PaymentAgreement, PaymentAgreementDto>()
+     .ReverseMap()
+     .ForMember(dest => dest.Installments, opt => opt.MapFrom(src => src.Installments))
+     .ForMember(dest => dest.MonthlyFee, opt => opt.MapFrom(src => src.MonthlyFee));
+
             CreateMap<PaymentAgreement, PaymentAgreementSelectDto>()
-                .ForMember(p => p.userInfractionName,
-                o => o.MapFrom(S => S.userInfraction != null ? S.userInfraction.observations : null))
-                .ForMember(p => p.paymentFrequencyName,
-                o => o.MapFrom(S => S.paymentFrequency != null ? S.paymentFrequency.intervalPage : null))
-                  .ForMember(d => d.TypeInfractionName,
-                 o => o.MapFrom(s => s.userInfraction != null ? s.userInfraction.typeInfraction.type_Infraction : null));
+                .ForMember(d => d.PersonName,
+                    o => o.MapFrom(s => s.userInfraction.User.Person != null
+                        ? $"{s.userInfraction.User.Person.firstName} {s.userInfraction.User.Person.lastName}"
+                        : string.Empty))
+                .ForMember(d => d.DocumentNumber,
+                    o => o.MapFrom(s => s.userInfraction.User.documentNumber ?? string.Empty))
+                .ForMember(d => d.DocumentType,
+                    o => o.MapFrom(s => s.userInfraction.User.documentType != null
+                        ? s.userInfraction.User.documentType.name
+                        : string.Empty))
+                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.userInfraction.User.email ?? string.Empty))
+                .ForMember(d => d.address, o => o.MapFrom(s => s.address))
+                .ForMember(d => d.Infringement, o => o.MapFrom(s => s.userInfraction.observations))
+                .ForMember(d => d.TypeFine, o => o.MapFrom(s => s.userInfraction.typeInfraction.type_Infraction))
+                .ForMember(d => d.ValorSMDLV,
+                    o => o.MapFrom(s => s.userInfraction.typeInfraction.fineCalculationDetail != null
+                        ? s.userInfraction.typeInfraction.fineCalculationDetail
+                            .Select(f => f.valueSmldv.value_smldv)
+                            .FirstOrDefault()
+                        : 0))
+                .ForMember(d => d.PaymentMethod, o => o.MapFrom(s => s.TypePayment != null ? s.TypePayment.name : string.Empty))
+                .ForMember(d => d.FrequencyPayment, o => o.MapFrom(s => s.paymentFrequency.intervalPage))
+                // 🔹 nuevos campos
+                .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
+                .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee));
+
+
+
 
             CreateMap<DocumentInfraction, DocumentInfractionDto>().ReverseMap();
             CreateMap<DocumentInfraction, DocumentInfractionSelectDto>()

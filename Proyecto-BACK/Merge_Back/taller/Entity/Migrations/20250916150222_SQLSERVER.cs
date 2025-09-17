@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity.Migrations
 {
     /// <inheritdoc />
-    public partial class sqlserver : Migration
+    public partial class SQLSERVER : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +29,7 @@ namespace Entity.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SessionId = table.Column<int>(type: "int", nullable: false),
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PersonId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastActivityAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -229,6 +229,24 @@ namespace Entity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "typePayment",
+                schema: "Entities",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    paymentAgreementId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_typePayment", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "userNotification",
                 schema: "Entities",
                 columns: table => new
@@ -405,8 +423,8 @@ namespace Entity.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     firstName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     lastName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    phoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
-                    address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
+                    phoneNumber = table.Column<string>(type: "varchar(20)", nullable: true),
+                    address = table.Column<string>(type: "varchar(100)", nullable: true),
                     tipoUsuario = table.Column<int>(type: "int", nullable: false),
                     municipalityId = table.Column<int>(type: "int", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
@@ -504,7 +522,7 @@ namespace Entity.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     dateInfraction = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    stateInfraction = table.Column<bool>(type: "bit", nullable: false),
+                    stateInfraction = table.Column<int>(type: "int", nullable: false),
                     observations = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     typeInfractionId = table.Column<int>(type: "int", nullable: false),
@@ -546,11 +564,26 @@ namespace Entity.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    neighborhood = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AgreementDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    neighborhood = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    AgreementDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    expeditionCedula = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AgreementStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AgreementEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
                     userInfractionId = table.Column<int>(type: "int", nullable: false),
                     paymentFrequencyId = table.Column<int>(type: "int", nullable: false),
+                    typePaymentId = table.Column<int>(type: "int", nullable: false),
+                    BaseAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AccruedInterest = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
+                    OutstandingAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Installments = table.Column<int>(type: "int", nullable: true),
+                    MonthlyFee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsCoactive = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    CoactiveActivatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastInterestAppliedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -558,6 +591,13 @@ namespace Entity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_paymentAgreement", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_PaymentAgreement_TypePayment",
+                        column: x => x.typePaymentId,
+                        principalSchema: "Entities",
+                        principalTable: "typePayment",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PaymentAgreement_UserInfraction",
                         column: x => x.userInfractionId,
@@ -600,31 +640,6 @@ namespace Entity.Migrations
                     table.ForeignKey(
                         name: "FK_DocumentInfraction_PaymentAgreement",
                         column: x => x.PaymentAgreementId,
-                        principalSchema: "Entities",
-                        principalTable: "paymentAgreement",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "typePayment",
-                schema: "Entities",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    paymentAgreementId = table.Column<int>(type: "int", nullable: false),
-                    active = table.Column<bool>(type: "bit", nullable: false),
-                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
-                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_typePayment", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_TypePayment_PaymentAgreement",
-                        column: x => x.paymentAgreementId,
                         principalSchema: "Entities",
                         principalTable: "paymentAgreement",
                         principalColumn: "id",
@@ -736,6 +751,19 @@ namespace Entity.Migrations
 
             migrationBuilder.InsertData(
                 schema: "Entities",
+                table: "typePayment",
+                columns: new[] { "id", "active", "created_date", "is_deleted", "name", "paymentAgreementId" },
+                values: new object[,]
+                {
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "efectivo", 0 },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "nequi", 0 },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "tarjeta crédito", 0 },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "tarjeta débito", 0 },
+                    { 5, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "daviplata", 0 }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Entities",
                 table: "userNotification",
                 columns: new[] { "id", "active", "created_date", "is_deleted", "message", "shippingDate" },
                 values: new object[,]
@@ -810,8 +838,8 @@ namespace Entity.Migrations
                 columns: new[] { "id", "active", "address", "created_date", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber", "tipoUsuario" },
                 values: new object[,]
                 {
-                    { 1, true, "Carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Juan", false, "Pérez", 1, "1234567890", 3 },
-                    { 2, true, "Carrera 11", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Sara", false, "Sofía", 4, "312312314", 3 }
+                    { 1, true, null, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Juan", false, "Pérez", 1, null, 3 },
+                    { 2, true, null, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Sara", false, "Sofía", 4, null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -820,7 +848,7 @@ namespace Entity.Migrations
                 columns: new[] { "id", "EmailVerificationCode", "EmailVerificationExpiresAt", "EmailVerified", "EmailVerifiedAt", "PasswordHash", "PersonId", "active", "created_date", "documentNumber", "documentTypeId", "email", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, null, null, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin123", 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "123456789", 1, "camiloandreslosada901@gmail.com", false },
+                    { 1, null, null, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin123", 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "1234567890", 1, "camiloandreslosada901@gmail.com", false },
                     { 2, null, null, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "sara12312", 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "0123432121", 2, "sarita@gmail.com", false }
                 });
 
@@ -840,18 +868,20 @@ namespace Entity.Migrations
                 columns: new[] { "id", "UserId", "UserNotificationId", "active", "created_date", "dateInfraction", "is_deleted", "observations", "stateInfraction", "typeInfractionId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona no opuso resistencia a la infraccion", false, 1 },
-                    { 2, 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona se encontraba en estado de embriagues", false, 2 }
+                    { 1, 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona no opuso resistencia a la infracción", 0, 1 },
+                    { 2, 1, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "portaba un cuchillo en la vía pública", 0, 3 },
+                    { 3, 2, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona se encontraba en estado de embriaguez", 0, 2 },
+                    { 4, 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "agredió verbalmente a la autoridad", 0, 4 }
                 });
 
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "paymentAgreement",
-                columns: new[] { "id", "AgreementDescription", "active", "address", "created_date", "is_deleted", "neighborhood", "paymentFrequencyId", "userInfractionId" },
+                columns: new[] { "id", "AgreementDescription", "AgreementEnd", "AgreementStart", "BaseAmount", "CoactiveActivatedOn", "Email", "Installments", "LastInterestAppliedOn", "MonthlyFee", "OutstandingAmount", "PhoneNumber", "active", "address", "created_date", "expeditionCedula", "is_deleted", "neighborhood", "paymentFrequencyId", "typePaymentId", "userInfractionId" },
                 values: new object[,]
                 {
-                    { 1, "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento", true, "carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "eduardo santos", 1, 1 },
-                    { 2, "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento", true, "carrera 1", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "panamá", 2, 2 }
+                    { 1, "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 800000m, null, "user1@example.com", 4, null, 200000m, 800000m, "3101234567", true, "carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc), false, "eduardo santos", 1, 1, 1 },
+                    { 2, "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 100000m, null, "user2@example.com", 2, null, 50000m, 100000m, "3009876543", true, "carrera 1", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc), false, "panamá", 2, 2, 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -862,16 +892,6 @@ namespace Entity.Migrations
                 {
                     { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, false },
                     { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, false }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "Entities",
-                table: "typePayment",
-                columns: new[] { "id", "active", "created_date", "is_deleted", "name", "paymentAgreementId" },
-                values: new object[,]
-                {
-                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "efectivo", 1 },
-                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "nequi", 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -984,6 +1004,12 @@ namespace Entity.Migrations
                 column: "paymentFrequencyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_paymentAgreement_typePaymentId",
+                schema: "Entities",
+                table: "paymentAgreement",
+                column: "typePaymentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_paymentAgreement_userInfractionId",
                 schema: "Entities",
                 table: "paymentAgreement",
@@ -1007,14 +1033,6 @@ namespace Entity.Migrations
                 schema: "ModelSecurity",
                 table: "person",
                 column: "municipalityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_person_phoneNumber",
-                schema: "ModelSecurity",
-                table: "person",
-                column: "phoneNumber",
-                unique: true,
-                filter: "[phoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_rol_name",
@@ -1067,12 +1085,6 @@ namespace Entity.Migrations
                 table: "typePayment",
                 column: "name",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_typePayment_paymentAgreementId",
-                schema: "Entities",
-                table: "typePayment",
-                column: "paymentAgreementId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_user_documentTypeId",
@@ -1152,11 +1164,11 @@ namespace Entity.Migrations
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
-                name: "typePayment",
+                name: "InspectoraReport",
                 schema: "Entities");
 
             migrationBuilder.DropTable(
-                name: "InspectoraReport",
+                name: "paymentAgreement",
                 schema: "Entities");
 
             migrationBuilder.DropTable(
@@ -1180,7 +1192,7 @@ namespace Entity.Migrations
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
-                name: "paymentAgreement",
+                name: "typePayment",
                 schema: "Entities");
 
             migrationBuilder.DropTable(

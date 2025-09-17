@@ -24,16 +24,7 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
                    .IsRequired()
                    .HasMaxLength(100);
 
-            // Opcionales
-            builder.Property(p => p.phoneNumber)
-                   .HasMaxLength(20);
 
-            builder.Property(p => p.address)
-                   .HasMaxLength(100);
-
-            // Único filtrado para permitir múltiples NULL en SQL Server
-            builder.HasIndex(p => p.phoneNumber)
-                   .IsUnique();
 
             // FK opcional: municipality
             builder.HasOne(p => p.municipality)

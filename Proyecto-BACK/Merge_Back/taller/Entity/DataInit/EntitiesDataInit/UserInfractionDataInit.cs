@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
-using Entity.Domain.Models.Implements.ModelSecurity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Entity.DataInit.EntitiesDataInit
@@ -15,33 +11,59 @@ namespace Entity.DataInit.EntitiesDataInit
         {
             var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             modelBuilder.Entity<UserInfraction>().HasData(
-                 new UserInfraction
-                 {
-                     id = 1,
-                     UserId = 1,            
-                     typeInfractionId = 1,    
-                     UserNotificationId = 1, 
-                     dateInfraction = seedDate,
-                     stateInfraction = false,
-                     observations = "la persona no opuso resistencia a la infraccion",
-                     active = true,
-                     is_deleted = false,
-                     created_date = seedDate,
-                 },
+                new UserInfraction
+                {
+                    id = 1,
+                    UserId = 1,
+                    typeInfractionId = 1,
+                    UserNotificationId = 1,
+                    dateInfraction = seedDate,
+                    stateInfraction = EstadoMulta.Pendiente, 
+                    observations = "la persona no opuso resistencia a la infracción",
+                    active = true,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
                 new UserInfraction
                 {
                     id = 2,
-                    UserId = 2,
-                    typeInfractionId = 2,
+                    UserId = 1,
+                    typeInfractionId = 3,
                     UserNotificationId = 2,
                     dateInfraction = seedDate,
-                    stateInfraction = false,
-                    observations = "la persona se encontraba en estado de embriagues",
+                    stateInfraction = EstadoMulta.Pendiente, 
+                    observations = "portaba un cuchillo en la vía pública",
                     active = true,
                     is_deleted = false,
-                    created_date = seedDate
+                    created_date = seedDate,
+                },
+                new UserInfraction
+                {
+                    id = 3,
+                    UserId = 2,
+                    typeInfractionId = 2,
+                    UserNotificationId = 1,
+                    dateInfraction = seedDate,
+                    stateInfraction = EstadoMulta.Pendiente,
+                    observations = "la persona se encontraba en estado de embriaguez",
+                    active = true,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new UserInfraction
+                {
+                    id = 4,
+                    UserId = 2,
+                    typeInfractionId = 4,
+                    UserNotificationId = 2,
+                    dateInfraction = seedDate,
+                    stateInfraction = EstadoMulta.Pendiente,
+                    observations = "agredió verbalmente a la autoridad",
+                    active = true,
+                    is_deleted = false,
+                    created_date = seedDate,
                 }
-                );
+            );
         }
     }
 }
