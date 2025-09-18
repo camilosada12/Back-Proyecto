@@ -17,7 +17,7 @@ namespace Entity.DTOs.Select.Entities
         // Datos de la infracción
         public string Infringement { get; set; } = null!;
         public string TypeFine { get; set; } = null!;
-        public int ValorSMDLV { get; set; }
+        public decimal ValorSMDLV { get; set; }
 
         // Datos del acuerdo
         public DateTime AgreementStart { get; set; }

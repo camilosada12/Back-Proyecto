@@ -14,9 +14,9 @@ public class RelacionesFineCalculationDetail : IEntityTypeConfiguration<FineCalc
                .HasMaxLength(200)
                .IsRequired();
 
-        builder.Property(x => x.porcentaje)
-               .HasColumnType("decimal(5,2)")
-               .IsRequired();
+        //builder.Property(x => x.porcentaje)
+        //       .HasColumnType("decimal(5,2)")
+        //       .IsRequired();
 
         builder.Property(x => x.totalCalculation)
                .HasColumnType("decimal(12,2)")

@@ -1,9 +1,11 @@
 ﻿using Data.Interfaces.IDataImplement.Entities;
 using Data.Repositoy;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.Domain.Models.Implements.parameters;
 using Entity.Infrastructure.Contexts;
 using Entity.Init;
 using Microsoft.EntityFrameworkCore;
+using Utilities.Exceptions;
 
 public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymentAgreementRepository
 {
@@ -69,20 +71,59 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                     .ThenInclude(fd => fd.valueSmldv)
             .ToListAsync();
 
-        return infractions.Select(infraction => new PaymentAgreementInitDto
+        return infractions.Select(infraction =>
         {
-            PersonName = $"{infraction.User.Person?.firstName ?? ""} {infraction.User.Person?.lastName ?? ""}".Trim(),
-            DocumentNumber = infraction.User?.documentNumber ?? string.Empty,
-            DocumentType = infraction.User?.documentType?.name ?? string.Empty,
-            InfractionId = infraction.id,  // 👈 aquí guardamos el ID de la multa
-            Infringement = infraction.observations ?? string.Empty,
-            TypeFine = infraction.typeInfraction?.description ?? string.Empty,
-            ValorSMDLV = (decimal)(infraction.typeInfraction?.fineCalculationDetail?
-                            .FirstOrDefault()?.valueSmldv?.value_smldv ?? 0),
+            // 👇 Tomamos el detalle de cálculo más reciente
+            var detail = infraction.typeInfraction?.fineCalculationDetail?
+                .OrderByDescending(fd => fd.valueSmldv.Current_Year)
+                .FirstOrDefault();
 
-            UserId = infraction.UserId
+            return new PaymentAgreementInitDto
+            {
+                PersonName = $"{infraction.User.Person?.firstName ?? ""} {infraction.User.Person?.lastName ?? ""}".Trim(),
+                DocumentNumber = infraction.User?.documentNumber ?? string.Empty,
+                DocumentType = infraction.User?.documentType?.name ?? string.Empty,
+                InfractionId = infraction.id,
+                Infringement = infraction.observations ?? string.Empty,
+                TypeFine = infraction.typeInfraction?.description ?? string.Empty,
+
+                // Valor unitario de SMDLV (por si el front lo necesita mostrar)
+                ValorSMDLV = (decimal)(detail?.valueSmldv?.value_smldv ?? 0),
+
+                // ✅ Ahora el monto base ya viene precalculado en FineCalculationDetail
+                BaseAmount = detail != null
+                ? (detail.totalCalculation > 0
+                    ? detail.totalCalculation
+                    : detail.numer_smldv * (decimal)(detail.valueSmldv?.value_smldv ?? 0))
+                : 0,
+
+
+                UserId = infraction.UserId
+            };
         });
     }
+
+    public async Task<UserInfraction?> GetUserInfractionWithDetailsAsync(int userInfractionId)
+    {
+        return await _context.userInfraction
+            .Include(ui => ui.User)
+                .ThenInclude(u => u.Person)
+            .Include(ui => ui.typeInfraction)
+                .ThenInclude(ti => ti.fineCalculationDetail)
+                    .ThenInclude(fd => fd.valueSmldv)
+            .FirstOrDefaultAsync(ui => ui.id == userInfractionId);
+    }
+
+    public async Task<PaymentFrequency?> GetPaymentFrequencyAsync(int id)
+    {
+        return await _context.paymentFrequency.FindAsync(id);
+    }
+
+    public async Task<TypePayment?> GetTypePaymentAsync(int id)
+    {
+        return await _context.typePayment.FindAsync(id);
+    }
+
 
 }
 

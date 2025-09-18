@@ -1,40 +1,63 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Entity.Migrations.PostgresDb
+namespace Entity.Migrations
 {
     /// <inheritdoc />
-    public partial class POSGRETS : Migration
+    public partial class sqlserver : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "ModelSecurity");
+
             migrationBuilder.EnsureSchema(
                 name: "Parameters");
 
             migrationBuilder.EnsureSchema(
                 name: "Entities");
 
-            migrationBuilder.EnsureSchema(
-                name: "ModelSecurity");
+            migrationBuilder.CreateTable(
+                name: "AuthSession",
+                schema: "ModelSecurity",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PersonId = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastActivityAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AbsoluteExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    Ip = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserAgent = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthSession", x => x.id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "department",
                 schema: "Parameters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
-                    daneCode = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    daneCode = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,13 +69,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Parameters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false),
                     abbreviation = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,13 +87,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,14 +105,14 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    report_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    total_fines = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
-                    message = table.Column<string>(type: "text", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    report_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    total_fines = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,13 +124,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,13 +142,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Parameters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     intervalPage = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    dueDayOfMonth = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    dueDayOfMonth = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,13 +160,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,14 +177,14 @@ namespace Entity.Migrations.PostgresDb
                 name: "refreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    TokenHash = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsRevoked = table.Column<bool>(type: "boolean", nullable: false),
-                    ReplacedByTokenHash = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TokenHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    ReplacedByTokenHash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,13 +196,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    description = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -191,14 +214,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    type_Infraction = table.Column<string>(type: "text", nullable: false),
-                    numer_smldv = table.Column<int>(type: "integer", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    type_Infraction = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -210,13 +232,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    paymentAgreementId = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    paymentAgreementId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,13 +250,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    message = table.Column<string>(type: "text", nullable: false),
-                    shippingDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    shippingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -246,14 +268,14 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    value_smldv = table.Column<double>(type: "double precision", nullable: false),
-                    Current_Year = table.Column<int>(type: "integer", nullable: false),
-                    minimunWage = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    value_smldv = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Current_Year = table.Column<int>(type: "int", nullable: false),
+                    minimunWage = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -265,14 +287,14 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Parameters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
-                    daneCode = table.Column<int>(type: "integer", nullable: false),
-                    departmentId = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    daneCode = table.Column<int>(type: "int", nullable: false),
+                    departmentId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -291,13 +313,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    formid = table.Column<int>(type: "integer", nullable: false),
-                    moduleid = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    formid = table.Column<int>(type: "int", nullable: false),
+                    moduleid = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -323,14 +345,14 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    rolid = table.Column<int>(type: "integer", nullable: false),
-                    formid = table.Column<int>(type: "integer", nullable: false),
-                    permissionid = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    rolid = table.Column<int>(type: "int", nullable: false),
+                    formid = table.Column<int>(type: "int", nullable: false),
+                    permissionid = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -363,16 +385,16 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    formula = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    porcentaje = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
-                    totalCalculation = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
-                    valueSmldvId = table.Column<int>(type: "integer", nullable: false),
-                    typeInfractionId = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    formula = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    numer_smldv = table.Column<int>(type: "int", nullable: false),
+                    totalCalculation = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
+                    valueSmldvId = table.Column<int>(type: "int", nullable: false),
+                    typeInfractionId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -396,17 +418,17 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     firstName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     lastName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     phoneNumber = table.Column<string>(type: "varchar(20)", nullable: true),
                     address = table.Column<string>(type: "varchar(100)", nullable: true),
-                    tipoUsuario = table.Column<int>(type: "integer", nullable: false),
-                    municipalityId = table.Column<int>(type: "integer", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    tipoUsuario = table.Column<int>(type: "int", nullable: false),
+                    municipalityId = table.Column<int>(type: "int", nullable: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -425,20 +447,20 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     PasswordHash = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     email = table.Column<string>(type: "varchar(150)", unicode: false, maxLength: 150, nullable: false),
-                    PersonId = table.Column<int>(type: "integer", nullable: true),
-                    documentTypeId = table.Column<int>(type: "integer", nullable: true),
+                    PersonId = table.Column<int>(type: "int", nullable: true),
+                    documentTypeId = table.Column<int>(type: "int", nullable: true),
                     documentNumber = table.Column<string>(type: "varchar(30)", nullable: true),
-                    EmailVerified = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    EmailVerificationCode = table.Column<string>(type: "character varying(6)", unicode: false, maxLength: 6, nullable: true),
-                    EmailVerificationExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    EmailVerifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    EmailVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    EmailVerificationCode = table.Column<string>(type: "varchar(6)", unicode: false, maxLength: 6, nullable: true),
+                    EmailVerificationExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EmailVerifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -464,13 +486,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    userId = table.Column<int>(type: "integer", nullable: false),
-                    rolId = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userId = table.Column<int>(type: "int", nullable: false),
+                    rolId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -496,17 +518,17 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    dateInfraction = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    stateInfraction = table.Column<int>(type: "integer", nullable: false),
-                    observations = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    typeInfractionId = table.Column<int>(type: "integer", nullable: false),
-                    UserNotificationId = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    dateInfraction = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    stateInfraction = table.Column<int>(type: "int", nullable: false),
+                    observations = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    typeInfractionId = table.Column<int>(type: "int", nullable: false),
+                    UserNotificationId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -539,31 +561,31 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    address = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    neighborhood = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
-                    AgreementDescription = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    expeditionCedula = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    AgreementStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AgreementEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    userInfractionId = table.Column<int>(type: "integer", nullable: false),
-                    paymentFrequencyId = table.Column<int>(type: "integer", nullable: false),
-                    typePaymentId = table.Column<int>(type: "integer", nullable: false),
-                    BaseAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    AccruedInterest = table.Column<decimal>(type: "numeric(18,2)", nullable: false, defaultValue: 0m),
-                    OutstandingAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    Installments = table.Column<int>(type: "integer", nullable: true),
-                    MonthlyFee = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
-                    IsPaid = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    IsCoactive = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    CoactiveActivatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastInterestAppliedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    neighborhood = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    AgreementDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    expeditionCedula = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AgreementStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AgreementEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    userInfractionId = table.Column<int>(type: "int", nullable: false),
+                    paymentFrequencyId = table.Column<int>(type: "int", nullable: false),
+                    typePaymentId = table.Column<int>(type: "int", nullable: false),
+                    BaseAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AccruedInterest = table.Column<decimal>(type: "decimal(18,2)", nullable: false, defaultValue: 0m),
+                    OutstandingAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Installments = table.Column<int>(type: "int", nullable: true),
+                    MonthlyFee = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    IsCoactive = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    CoactiveActivatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastInterestAppliedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -596,13 +618,13 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Entities",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    inspectoraReportId = table.Column<int>(type: "integer", nullable: false),
-                    PaymentAgreementId = table.Column<int>(type: "integer", nullable: false),
-                    active = table.Column<bool>(type: "boolean", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    inspectoraReportId = table.Column<int>(type: "int", nullable: false),
+                    PaymentAgreementId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -717,13 +739,13 @@ namespace Entity.Migrations.PostgresDb
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "typeInfraction",
-                columns: new[] { "id", "active", "created_date", "description", "is_deleted", "numer_smldv", "type_Infraction" },
+                columns: new[] { "id", "active", "created_date", "description", "is_deleted", "type_Infraction" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "lanzar basura en un lugar publico", false, 2, "infraccion de tipo uno" },
-                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, 4, "infraccion de tipo dos" },
-                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.", false, 8, "infraccion de tipo Tres" },
-                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ", false, 16, "infraccion de tipo Cuatro" }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "lanzar basura en un lugar publico", false, "infraccion de tipo uno" },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, "infraccion de tipo dos" },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.", false, "infraccion de tipo Tres" },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ", false, "infraccion de tipo Cuatro" }
                 });
 
             migrationBuilder.InsertData(
@@ -755,18 +777,20 @@ namespace Entity.Migrations.PostgresDb
                 columns: new[] { "id", "Current_Year", "active", "created_date", "is_deleted", "minimunWage", "value_smldv" },
                 values: new object[,]
                 {
-                    { 1, 2024, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1300000m, 43.5 },
-                    { 2, 2022, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1100000m, 43.5 }
+                    { 1, 2024, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1300000m, 43500m },
+                    { 2, 2022, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1100000m, 43500m }
                 });
 
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "FineCalculationDetail",
-                columns: new[] { "id", "active", "created_date", "formula", "is_deleted", "porcentaje", "totalCalculation", "typeInfractionId", "valueSmldvId" },
+                columns: new[] { "id", "active", "created_date", "formula", "is_deleted", "numer_smldv", "totalCalculation", "typeInfractionId", "valueSmldvId" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0.5m, 100000m, 1, 1 },
-                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0.0m, 150.000m, 2, 2 }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 4, 0m, 1, 1 },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 8, 0m, 2, 1 },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 16, 0m, 3, 1 },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 32, 0m, 4, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -857,8 +881,10 @@ namespace Entity.Migrations.PostgresDb
                 columns: new[] { "id", "AgreementDescription", "AgreementEnd", "AgreementStart", "BaseAmount", "CoactiveActivatedOn", "Email", "Installments", "LastInterestAppliedOn", "MonthlyFee", "OutstandingAmount", "PhoneNumber", "active", "address", "created_date", "expeditionCedula", "is_deleted", "neighborhood", "paymentFrequencyId", "typePaymentId", "userInfractionId" },
                 values: new object[,]
                 {
-                    { 1, "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 800000m, null, "user1@example.com", 4, null, 200000m, 800000m, "3101234567", true, "carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc), false, "eduardo santos", 1, 1, 1 },
-                    { 2, "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 100000m, null, "user2@example.com", 2, null, 50000m, 100000m, "3009876543", true, "carrera 1", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc), false, "panamá", 2, 2, 2 }
+                    { 1, "se realizará a 4 cuotas iguales", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 130500m, null, "user1@example.com", 4, null, 32625m, 130500m, "3101234567", true, "carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc), false, "eduardo santos", 1, 1, 1 },
+                    { 2, "se realizará a 2 cuotas iguales", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 174000m, null, "user2@example.com", 2, null, 87000m, 174000m, "3009876543", true, "carrera 1", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc), false, "panamá", 2, 2, 2 },
+                    { 3, "se realizará a 8 cuotas iguales", new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 348000m, null, "user3@example.com", 8, null, 43500m, 348000m, "3015558888", true, "calle 20 #15-40", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2018, 3, 10, 0, 0, 0, 0, DateTimeKind.Utc), false, "la merced", 2, 3, 3 },
+                    { 4, "se realizará a 12 cuotas iguales", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 835200m, null, "user4@example.com", 12, null, 69600m, 835200m, "3024449999", true, "avenida 5 #45-12", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2019, 5, 22, 0, 0, 0, 0, DateTimeKind.Utc), false, "san martin", 3, 1, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -870,6 +896,13 @@ namespace Entity.Migrations.PostgresDb
                     { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, false },
                     { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, false }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AuthSession_SessionId",
+                schema: "ModelSecurity",
+                table: "AuthSession",
+                column: "SessionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_department_daneCode",
@@ -1074,7 +1107,8 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 table: "user",
                 column: "PersonId",
-                unique: true);
+                unique: true,
+                filter: "[PersonId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_userInfraction_typeInfractionId",
@@ -1105,6 +1139,10 @@ namespace Entity.Migrations.PostgresDb
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AuthSession",
+                schema: "ModelSecurity");
+
             migrationBuilder.DropTable(
                 name: "DocumentInfraction",
                 schema: "Entities");

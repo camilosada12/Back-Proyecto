@@ -83,12 +83,8 @@ namespace Business.Services.Entities
                 if (!validationResult.IsValid)
                     throw new FVValidationException(validationResult.Errors);
 
-                var userInfraction = await _context.userInfraction
-                    .Include(ui => ui.User)
-                        .ThenInclude(u => u.Person)
-                    .Include(ui => ui.typeInfraction)
-                    .FirstOrDefaultAsync(ui => ui.id == dto.userInfractionId);
-
+                // 🔹 Consultar infracción desde Data con todos sus detalles
+                var userInfraction = await _paymentAgreementRepository.GetUserInfractionWithDetailsAsync(dto.userInfractionId);
                 if (userInfraction == null)
                     throw new BusinessException($"La infracción con ID {dto.userInfractionId} no existe.");
 
@@ -97,27 +93,17 @@ namespace Business.Services.Entities
                         $"La infracción con ID {dto.userInfractionId} no permite acuerdos de pago porque está en estado {userInfraction.stateInfraction}."
                     );
 
-                var frequency = await _context.paymentFrequency.FindAsync(dto.paymentFrequencyId);
-                if (frequency == null)
-                    throw new BusinessException($"La frecuencia de pago con ID {dto.paymentFrequencyId} no existe.");
+                // 🔹 Validar frecuencia y tipo de pago
+                var frequency = await _paymentAgreementRepository.GetPaymentFrequencyAsync(dto.paymentFrequencyId)
+                    ?? throw new BusinessException($"La frecuencia de pago con ID {dto.paymentFrequencyId} no existe.");
 
-                var typePayment = await _context.typePayment.FindAsync(dto.typePaymentId);
-                if (typePayment == null)
-                    throw new BusinessException($"El método de pago con ID {dto.typePaymentId} no existe.");
+                var typePayment = await _paymentAgreementRepository.GetTypePaymentAsync(dto.typePaymentId)
+                    ?? throw new BusinessException($"El método de pago con ID {dto.typePaymentId} no existe.");
 
-                if (dto.Installments.HasValue && dto.MonthlyFee.HasValue)
-                {
-                    var total = dto.Installments.Value * dto.MonthlyFee.Value;
+                // 🔹 Obtener montos desde FineCalculationDetail (ya precalculado)
+                var (baseAmount, installments, monthlyFee) = CalcularMontos(userInfraction, dto);
 
-                    if (total != dto.BaseAmount)
-                    {
-                        throw new BusinessException(
-                            $"El total de cuotas ({dto.Installments} x {dto.MonthlyFee} = {total}) no coincide con el monto base ({dto.BaseAmount})."
-                        );
-                    }
-                }
-
-
+                // 🔹 Crear entidad PaymentAgreement
                 var agreement = new PaymentAgreement
                 {
                     AgreementStart = dto.AgreementStart,
@@ -131,17 +117,17 @@ namespace Business.Services.Entities
                     PhoneNumber = dto.PhoneNumber,
                     Email = dto.Email,
                     AgreementDescription = dto.AgreementDescription
-                        ?? $"Acuerdo para {userInfraction.User.Person?.firstName} {userInfraction.User.Person?.lastName} - " +
-                           $"Infracción: {userInfraction.typeInfraction.description}",
-                    BaseAmount = dto.BaseAmount,
+                        ?? $"Acuerdo para {userInfraction.User.Person?.firstName} {userInfraction.User.Person?.lastName} - Infracción: {userInfraction.typeInfraction.description}",
+                    BaseAmount = baseAmount,
                     AccruedInterest = 0m,
-                    OutstandingAmount = dto.BaseAmount,
+                    OutstandingAmount = baseAmount,
                     IsPaid = false,
                     IsCoactive = false,
-                    Installments = dto.Installments,
-                    MonthlyFee = dto.MonthlyFee
+                    Installments = installments,
+                    MonthlyFee = monthlyFee
                 };
 
+                // 🔹 Cambiar estado de la infracción
                 userInfraction.stateInfraction = EstadoMulta.ConAcuerdoPago;
                 _context.userInfraction.Update(userInfraction);
 
@@ -152,10 +138,10 @@ namespace Business.Services.Entities
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error al crear acuerdo de pago");
                 throw new BusinessException("Error al crear el acuerdo de pago.", ex);
             }
         }
-
 
         public override async Task<bool> UpdateAsync(PaymentAgreementDto dto)
         {
@@ -166,7 +152,7 @@ namespace Business.Services.Entities
                 var updateValidator = new PaymentAgreementUpdateValidator();
                 var validationResult = updateValidator.Validate(dto);
                 if (!validationResult.IsValid)
-                    throw new FVValidationException(validationResult.Errors); // 👈 alias usado
+                    throw new FVValidationException(validationResult.Errors);
 
                 var entity = await _context.paymentAgreement.FindAsync(dto.id);
                 if (entity == null)
@@ -274,5 +260,44 @@ namespace Business.Services.Entities
         {
             return await _paymentAgreementRepository.GetInitDataAsync(userInfractionId);
         }
+
+        public (decimal BaseAmount, int Installments, decimal MonthlyFee) CalcularMontos(
+            UserInfraction userInfraction,
+            PaymentAgreementDto dto)
+        {
+            var detail = userInfraction.typeInfraction.fineCalculationDetail
+                .OrderByDescending(fd => fd.valueSmldv.Current_Year)
+                .FirstOrDefault();
+
+            if (detail == null)
+                throw new BusinessException("No existe detalle de cálculo para esta infracción.");
+
+            // ✅ Siempre recalculamos el monto base en runtime
+            decimal baseAmount = detail.numer_smldv * (decimal)detail.valueSmldv.value_smldv;
+
+            // Número de cuotas (por defecto 1 si no viene en el DTO)
+            int installments = dto.Installments ?? 1;
+
+            // Cuota mensual redondeada
+            decimal monthlyFee = Math.Round(
+                baseAmount / installments,
+                0,
+                MidpointRounding.AwayFromZero
+            );
+
+            // Validación si el frontend envía cuotas + valor
+            if (dto.Installments.HasValue && dto.MonthlyFee.HasValue)
+            {
+                var total = dto.Installments.Value * dto.MonthlyFee.Value;
+                if (total != baseAmount)
+                    throw new BusinessException(
+                        $"El total de cuotas ({dto.Installments} x {dto.MonthlyFee} = {total}) no coincide con el monto base ({baseAmount})."
+                    );
+            }
+
+            return (baseAmount, installments, monthlyFee);
+        }
+
+
     }
 }

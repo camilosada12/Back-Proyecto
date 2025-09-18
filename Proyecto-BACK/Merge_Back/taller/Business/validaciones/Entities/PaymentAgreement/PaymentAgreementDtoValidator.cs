@@ -51,8 +51,8 @@ namespace Business.validaciones.Entities.PaymentAgreement
                 .GreaterThan(x => x.AgreementStart).WithMessage("La fecha de fin debe ser mayor a la fecha de inicio.");
 
             // Monto base
-            RuleFor(x => x.BaseAmount)
-                .GreaterThan(0).WithMessage("El monto base debe ser mayor que 0.");
+            //RuleFor(x => x.BaseAmount)
+            //    .GreaterThan(0).WithMessage("El monto base debe ser mayor que 0.");
 
             // Estado de pago (se valida que siempre tenga valor)
             RuleFor(x => x.IsPaid)

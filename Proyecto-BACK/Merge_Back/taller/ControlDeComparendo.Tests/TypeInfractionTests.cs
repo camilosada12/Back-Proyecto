@@ -13,13 +13,11 @@ namespace ControlDeComparendo.Tests.Entities
             {
                 id = 1,
                 type_Infraction = "Leve",
-                numer_smldv = 2,
                 description = "Infracción leve"
             };
 
             Assert.Equal(1, ti.id);
             Assert.Equal("Leve", ti.type_Infraction);
-            Assert.Equal(2, ti.numer_smldv);
             Assert.Equal("Infracción leve", ti.description);
         }
 

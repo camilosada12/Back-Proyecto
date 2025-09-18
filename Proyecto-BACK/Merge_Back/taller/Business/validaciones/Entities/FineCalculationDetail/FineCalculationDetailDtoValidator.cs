@@ -16,9 +16,9 @@ namespace Business.validaciones.Entities.FineCalculationDetail
                 .NotEmpty().WithMessage("La fórmula es obligatoria.")
                 .MaximumLength(200).WithMessage("La fórmula no debe exceder los 200 caracteres.");
 
-            RuleFor(x => x.percentaje)
-                .InclusiveBetween(0, 100)
-                .WithMessage("El porcentaje debe estar entre 0% y 100%.");
+            //RuleFor(x => x.percentaje)
+            //    .InclusiveBetween(0, 100)
+            //    .WithMessage("El porcentaje debe estar entre 0% y 100%.");
 
             RuleFor(x => x.totalCalculation)
                 .GreaterThanOrEqualTo(0).WithMessage("El cálculo total no puede ser negativo.");

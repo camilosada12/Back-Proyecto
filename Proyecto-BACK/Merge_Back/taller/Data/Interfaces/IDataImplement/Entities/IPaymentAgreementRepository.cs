@@ -1,5 +1,6 @@
 ﻿using Data.Interfaces.DataBasic;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.Domain.Models.Implements.parameters;
 using Entity.Init;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,8 @@ namespace Data.Interfaces.IDataImplement.Entities
     public interface IPaymentAgreementRepository : IData<PaymentAgreement>
     {
         Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId);
+        Task<UserInfraction?> GetUserInfractionWithDetailsAsync(int userInfractionId);
+        Task<PaymentFrequency?> GetPaymentFrequencyAsync(int id);
+        Task<TypePayment?> GetTypePaymentAsync(int id);
     }
 }

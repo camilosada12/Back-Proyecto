@@ -152,9 +152,6 @@ namespace Entity.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("numer_smldv")
-                        .HasColumnType("int");
-
                     b.Property<string>("type_Infraction")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -174,7 +171,6 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "lanzar basura en un lugar publico",
                             is_deleted = false,
-                            numer_smldv = 2,
                             type_Infraction = "infraccion de tipo uno"
                         },
                         new
@@ -184,7 +180,6 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "hacer mucho ruido en un sitio publico",
                             is_deleted = false,
-                            numer_smldv = 4,
                             type_Infraction = "infraccion de tipo dos"
                         },
                         new
@@ -194,7 +189,6 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
                             is_deleted = false,
-                            numer_smldv = 8,
                             type_Infraction = "infraccion de tipo Tres"
                         },
                         new
@@ -204,7 +198,6 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ",
                             is_deleted = false,
-                            numer_smldv = 16,
                             type_Infraction = "infraccion de tipo Cuatro"
                         });
                 });
@@ -462,8 +455,9 @@ namespace Entity.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("value_smldv")
-                        .HasColumnType("float");
+                    b.Property<decimal>("value_smldv")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("id");
 
@@ -481,7 +475,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             minimunWage = 1300000m,
-                            value_smldv = 43.5
+                            value_smldv = 43500m
                         },
                         new
                         {
@@ -491,7 +485,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
                             minimunWage = 1100000m,
-                            value_smldv = 43.5
+                            value_smldv = 43500m
                         });
                 });
 
@@ -1388,8 +1382,8 @@ namespace Entity.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("porcentaje")
-                        .HasColumnType("decimal(5,2)");
+                    b.Property<int>("numer_smldv")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("totalCalculation")
                         .HasColumnType("decimal(12,2)");
@@ -1416,8 +1410,8 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
-                            porcentaje = 0.5m,
-                            totalCalculation = 100000m,
+                            numer_smldv = 4,
+                            totalCalculation = 0m,
                             typeInfractionId = 1,
                             valueSmldvId = 1
                         },
@@ -1428,10 +1422,34 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
-                            porcentaje = 0.0m,
-                            totalCalculation = 150.000m,
+                            numer_smldv = 8,
+                            totalCalculation = 0m,
                             typeInfractionId = 2,
-                            valueSmldvId = 2
+                            valueSmldvId = 1
+                        },
+                        new
+                        {
+                            id = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formula = "salario minimo * dias = smdlv",
+                            is_deleted = false,
+                            numer_smldv = 16,
+                            totalCalculation = 0m,
+                            typeInfractionId = 3,
+                            valueSmldvId = 1
+                        },
+                        new
+                        {
+                            id = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formula = "salario minimo * dias = smdlv",
+                            is_deleted = false,
+                            numer_smldv = 32,
+                            totalCalculation = 0m,
+                            typeInfractionId = 4,
+                            valueSmldvId = 1
                         });
                 });
 
@@ -1538,16 +1556,16 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             AccruedInterest = 0m,
-                            AgreementDescription = "se realizará a 4 cuotas de 200.000 los 15 de cada mes desde este momento",
+                            AgreementDescription = "se realizará a 4 cuotas iguales",
                             AgreementEnd = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            BaseAmount = 800000m,
+                            BaseAmount = 130500m,
                             Email = "user1@example.com",
                             Installments = 4,
                             IsCoactive = false,
                             IsPaid = false,
-                            MonthlyFee = 200000m,
-                            OutstandingAmount = 800000m,
+                            MonthlyFee = 32625m,
+                            OutstandingAmount = 130500m,
                             PhoneNumber = "3101234567",
                             active = true,
                             address = "carrera 10",
@@ -1563,16 +1581,16 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             AccruedInterest = 0m,
-                            AgreementDescription = "se realizará a 2 cuotas de 50.000 los 12 de cada mes desde este momento",
+                            AgreementDescription = "se realizará a 2 cuotas iguales",
                             AgreementEnd = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            BaseAmount = 100000m,
+                            BaseAmount = 174000m,
                             Email = "user2@example.com",
                             Installments = 2,
                             IsCoactive = false,
                             IsPaid = false,
-                            MonthlyFee = 50000m,
-                            OutstandingAmount = 100000m,
+                            MonthlyFee = 87000m,
+                            OutstandingAmount = 174000m,
                             PhoneNumber = "3009876543",
                             active = true,
                             address = "carrera 1",
@@ -1583,6 +1601,56 @@ namespace Entity.Migrations
                             paymentFrequencyId = 2,
                             typePaymentId = 2,
                             userInfractionId = 2
+                        },
+                        new
+                        {
+                            id = 3,
+                            AccruedInterest = 0m,
+                            AgreementDescription = "se realizará a 8 cuotas iguales",
+                            AgreementEnd = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            BaseAmount = 348000m,
+                            Email = "user3@example.com",
+                            Installments = 8,
+                            IsCoactive = false,
+                            IsPaid = false,
+                            MonthlyFee = 43500m,
+                            OutstandingAmount = 348000m,
+                            PhoneNumber = "3015558888",
+                            active = true,
+                            address = "calle 20 #15-40",
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2018, 3, 10, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            neighborhood = "la merced",
+                            paymentFrequencyId = 2,
+                            typePaymentId = 3,
+                            userInfractionId = 3
+                        },
+                        new
+                        {
+                            id = 4,
+                            AccruedInterest = 0m,
+                            AgreementDescription = "se realizará a 12 cuotas iguales",
+                            AgreementEnd = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            BaseAmount = 835200m,
+                            Email = "user4@example.com",
+                            Installments = 12,
+                            IsCoactive = false,
+                            IsPaid = false,
+                            MonthlyFee = 69600m,
+                            OutstandingAmount = 835200m,
+                            PhoneNumber = "3024449999",
+                            active = true,
+                            address = "avenida 5 #45-12",
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2019, 5, 22, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false,
+                            neighborhood = "san martin",
+                            paymentFrequencyId = 3,
+                            typePaymentId = 1,
+                            userInfractionId = 4
                         });
                 });
 

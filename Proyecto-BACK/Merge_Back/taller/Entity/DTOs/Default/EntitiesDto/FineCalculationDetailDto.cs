@@ -12,7 +12,8 @@ namespace Entity.Domain.Models.Implements.Entities
     {
         public int id { get; set; }
         public string forumula {  get; set; }
-        public decimal percentaje { get; set; }
+        public int numer_smldv { get; set; }
+        //public decimal percentaje { get; set; }
         public decimal totalCalculation {  get; set; }
         public int valueSmldvId { get; set; }
         public string valueSmldvName { get; set; }

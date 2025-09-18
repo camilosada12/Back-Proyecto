@@ -16,8 +16,6 @@ namespace Business.validaciones.Entities.TypeInfraction
                 .NotEmpty().WithMessage("El tipo de infracción es obligatorio.")
                 .MaximumLength(100).WithMessage("El tipo de infracción no debe superar los 100 caracteres.");
 
-            RuleFor(x => x.numer_smldv)
-                .GreaterThan(0).WithMessage("El número de SMMLV debe ser mayor que cero.");
 
             RuleFor(x => x.description)
                 .NotEmpty().WithMessage("La descripción es obligatoria.")

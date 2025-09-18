@@ -9,11 +9,12 @@ namespace Entity.Domain.Models.Implements.Entities
 {
     public class ValueSmldv : BaseModel
     {
-        public double value_smldv { get; set; }
+        public decimal value_smldv { get; set; }   // 👈 decimal para pesos colombianos
         public int Current_Year { get; set; }
         public decimal minimunWage { get; set; }
 
-        //Relaciones
+        // Relaciones
         public ICollection<FineCalculationDetail> fineCalculationDetail { get; set; }
     }
+
 }

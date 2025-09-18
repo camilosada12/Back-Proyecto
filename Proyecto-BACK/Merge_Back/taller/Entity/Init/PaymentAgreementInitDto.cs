@@ -17,6 +17,7 @@ namespace Entity.Init
         public int InfractionId { get; set; }
         public int UserId { get; set; }
         public string Infringement { get; set; } = null!;
+        public decimal BaseAmount { get; set;  }
         public string TypeFine { get; set; } = null!;
         public decimal ValorSMDLV { get; set; }
     }

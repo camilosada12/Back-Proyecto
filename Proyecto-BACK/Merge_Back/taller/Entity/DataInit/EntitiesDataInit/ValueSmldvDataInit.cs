@@ -18,7 +18,7 @@ namespace Entity.DataInit.EntitiesDataInit
                  new ValueSmldv
                  {
                      id = 1,
-                     value_smldv = 43.500,
+                     value_smldv = 43500m,
                      Current_Year = 2024,
                      minimunWage = 1300000m,
                      active = true,
@@ -28,7 +28,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 new ValueSmldv
                 {
                     id = 2,
-                    value_smldv = 43.500,
+                    value_smldv = 43500m,
                     Current_Year = 2022,
                     minimunWage = 1100000m,
                     active = true,
