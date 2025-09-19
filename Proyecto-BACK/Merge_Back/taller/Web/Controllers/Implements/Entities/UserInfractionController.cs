@@ -1,17 +1,19 @@
 ﻿using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Interfaces.PDF;
-using Business.Mensajeria.Email.@interface;
 using Business.Mensajeria.Email.implements;
+using Business.Mensajeria.Email.@interface;
+using Business.Services.Security;
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.DTOs.Default.AnexarMulta;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Exceptions;
 using Web.Controllers.ControllersBase.Web.Controllers.BaseController;
-using Business.Services.Security;
 
 namespace Web.Controllers.Implements.Entities
 {
@@ -66,6 +68,33 @@ namespace Web.Controllers.Implements.Entities
             var items = await _service.GetByDocumentAsync(documentTypeId, documentNumber.Trim());
             return Ok(new { isSuccess = true, count = items.Count, data = items });
         }
+
+        [HttpPost("create-with-person")]
+        [ProducesResponseType(typeof(UserInfractionSelectDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> CreateWithPerson([FromBody] CreateInfractionRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new { isSuccess = false, message = "Datos inválidos." });
+
+            try
+            {
+                var result = await _service.CreateWithPersonAsync(dto);
+                return Ok(new { isSuccess = true, message = "Multa registrada exitosamente.", data = result });
+            }
+            catch (BusinessException ex)
+            {
+                _logger.LogWarning(ex, "Error de negocio al crear multa con persona");
+                return BadRequest(new { isSuccess = false, message = ex.Message });
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Error inesperado al crear multa con persona");
+                return StatusCode(500, new { isSuccess = false, message = "Error interno del servidor." });
+            }
+        }
+
 
         // GET: api/UserInfraction/{id}/pdf
         [HttpGet("{id}/pdf")]

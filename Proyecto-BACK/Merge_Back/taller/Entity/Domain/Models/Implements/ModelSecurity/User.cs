@@ -9,7 +9,7 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
     public class User : BaseModel
     {
         [Column(TypeName = "varchar(100)")]
-        public string PasswordHash { get; set; } = null!;
+        public string? PasswordHash { get; set; } = null!;
 
         [Column(TypeName = "varchar(150)")]
         public string? email { get; set; }   // opcional si se usa documento

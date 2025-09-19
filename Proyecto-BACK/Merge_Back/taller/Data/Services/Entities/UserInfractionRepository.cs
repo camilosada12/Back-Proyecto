@@ -41,7 +41,7 @@ namespace Data.Services.Entities
                 .Include(u => u.typeInfraction)
                 .Include(u => u.User)
                  .ThenInclude(ui => ui.Person)
-                .FirstOrDefaultAsync(u => u.id == id);
+                .FirstOrDefaultAsync(u => u.id == id);  
         }
 
         public async Task<IReadOnlyList<UserInfraction>> GetByDocumentAsync(int documentTypeId, string documentNumber)

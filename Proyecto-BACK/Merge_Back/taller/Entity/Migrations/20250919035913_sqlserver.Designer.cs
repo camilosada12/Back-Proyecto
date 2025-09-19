@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250919022818_sqlserver")]
+    [Migration("20250919035913_sqlserver")]
     partial class sqlserver
     {
         /// <inheritdoc />
@@ -1024,7 +1024,6 @@ namespace Entity.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("email")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .IsUnicode(false)
                         .HasColumnType("varchar(150)");
@@ -1039,9 +1038,6 @@ namespace Entity.Migrations
                         .HasFilter("[PersonId] IS NOT NULL");
 
                     b.HasIndex("documentTypeId");
-
-                    b.HasIndex("email")
-                        .IsUnique();
 
                     b.ToTable("user", "ModelSecurity");
 

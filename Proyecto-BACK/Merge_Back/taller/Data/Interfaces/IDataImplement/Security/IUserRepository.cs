@@ -14,6 +14,8 @@ namespace Data.Interfaces.IDataImplement.Security
 
         Task<User?> GetByEmailAsync(string email);  // nuevo alias
         Task<bool> ExistsByEmailAsync(string email);
+
+        Task<User?> FindByDocumentAsync(int documentTypeId, string documentNumber);
         //Task<User> ValidateUserAsync(LoginDto loginDto);
         //Task AddAsync(User user);
     }

@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Entity.Migrations.PostgresDb
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20250919022832_posgrets")]
-    partial class posgrets
+    [Migration("20250919035927_pogrets")]
+    partial class pogrets
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -972,7 +972,6 @@ namespace Entity.Migrations.PostgresDb
                         .HasColumnType("integer");
 
                     b.Property<string>("email")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .IsUnicode(false)
                         .HasColumnType("varchar(150)");
@@ -986,9 +985,6 @@ namespace Entity.Migrations.PostgresDb
                         .IsUnique();
 
                     b.HasIndex("documentTypeId");
-
-                    b.HasIndex("email")
-                        .IsUnique();
 
                     b.ToTable("user", "ModelSecurity");
 

@@ -1,5 +1,6 @@
 ﻿using Business.Interfaces.BusinessBasic;
-using Entity.Domain.Models.Implements.Entities; // si acá están tus DTOs
+using Entity.Domain.Models.Implements.Entities;
+using Entity.DTOs.Default.AnexarMulta; // si acá están tus DTOs
 // ^ Ajusta el using según dónde estén tus DTOs (UserInfractionDto, UserInfractionSelectDto)
 
 namespace Business.Interfaces.IBusinessImplements.Entities
@@ -8,6 +9,6 @@ namespace Business.Interfaces.IBusinessImplements.Entities
     {
         Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber);
         Task<UserInfractionSelectDto> GetByIdAsyncPdf(int id);
-
+        Task<UserInfractionSelectDto> CreateWithPersonAsync(CreateInfractionRequestDto dto);
     }
 }

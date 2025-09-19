@@ -969,7 +969,6 @@ namespace Entity.Migrations.PostgresDb
                         .HasColumnType("integer");
 
                     b.Property<string>("email")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .IsUnicode(false)
                         .HasColumnType("varchar(150)");
@@ -983,9 +982,6 @@ namespace Entity.Migrations.PostgresDb
                         .IsUnique();
 
                     b.HasIndex("documentTypeId");
-
-                    b.HasIndex("email")
-                        .IsUnique();
 
                     b.ToTable("user", "ModelSecurity");
 
