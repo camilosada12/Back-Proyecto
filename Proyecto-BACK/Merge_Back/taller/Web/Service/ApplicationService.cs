@@ -32,7 +32,6 @@ using Web.Configurations;
 using Web.Infrastructure;
 using ServiceEmail = Business.Mensajeria.Email.implements;
 using Web.WebBackgroundService;
-using ServiceEmail = Business.Mensajeria.Email.implements.ServiceEmail;
 
 namespace Web.Service
 {
@@ -69,8 +68,8 @@ namespace Web.Service
 
 
             
-            services.AddHostedService<InfractionDiscountBackgroundService>();
-            services.AddScoped<DiscountService>();
+            //services.AddHostedService<InfractionDiscountBackgroundService>();
+            //services.AddScoped<DiscountService>();
 
 
 

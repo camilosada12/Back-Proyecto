@@ -94,7 +94,7 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                 BaseAmount = detail != null
                 ? (detail.totalCalculation > 0
                     ? detail.totalCalculation
-                    : detail.numer_smldv * (decimal)(detail.valueSmldv?.value_smldv ?? 0))
+                    : (detail.typeInfraction?.numer_smldv ?? 0) * (decimal)(detail.valueSmldv?.value_smldv ?? 0))
                 : 0,
 
 

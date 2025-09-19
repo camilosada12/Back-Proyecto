@@ -12,18 +12,23 @@ namespace ControlDeComparendo.Tests
             {
                 id = 1,
                 formula = "SMLDV * 2",
-                //porcentaje = 0.2m,
                 totalCalculation = 300000,
                 valueSmldvId = 10,
                 typeInfractionId = 5,
                 valueSmldv = new ValueSmldv { id = 10, minimunWage = 1300000 },
-                typeInfraction = new TypeInfraction { id = 5, description = "Infracción grave" }
+                typeInfraction = new TypeInfraction
+                {
+                    id = 5,
+                    description = "Infracción grave",
+                    numer_smldv = 8 // 🔹 Nuevo campo requerido
+                }
             };
 
             Assert.Equal(1, detail.id);
             Assert.Equal("SMLDV * 2", detail.formula);
             Assert.NotNull(detail.valueSmldv);
             Assert.NotNull(detail.typeInfraction);
+            Assert.Equal(8, detail.typeInfraction.numer_smldv); 
         }
     }
 }

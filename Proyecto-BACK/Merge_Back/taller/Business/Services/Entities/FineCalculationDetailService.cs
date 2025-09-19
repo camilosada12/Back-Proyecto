@@ -12,16 +12,19 @@ namespace Business.Services.Entities
     {
         private readonly IFineCalculationDetailRepository _repository;
         private readonly IValueSmldvRepository _valueSmldvRepository;
+        private readonly ITypeInfractionRepository _typeInfractionRepository;
         private readonly IMapper _mapper;
 
         public FineCalculationDetailService(
             IFineCalculationDetailRepository repository,
             IMapper mapper,
-            IValueSmldvRepository valueSmldvRepository
+            IValueSmldvRepository valueSmldvRepository,
+            ITypeInfractionRepository typeInfractionRepository
         ) : base(repository, mapper)
         {
             _repository = repository;
             _valueSmldvRepository = valueSmldvRepository;
+            _typeInfractionRepository = typeInfractionRepository;
             _mapper = mapper;
         }
 
@@ -42,8 +45,12 @@ namespace Business.Services.Entities
             if (valueSmldv == null)
                 throw new InvalidOperationException("No existe el valor de SMLDV seleccionado.");
 
-            // ✅ siempre calcular totalCalculation
-            dto.totalCalculation = dto.numer_smldv * (decimal)valueSmldv.value_smldv;
+            var typeInfraction = await _typeInfractionRepository.GetByIdAsync(dto.typeInfractionId);
+            if (typeInfraction == null)
+                throw new InvalidOperationException("No existe el tipo de infracción seleccionado.");
+
+            // ✅ siempre calcular totalCalculation usando el numer_smldv de TypeInfraction
+            dto.totalCalculation = typeInfraction.numer_smldv * (decimal)valueSmldv.value_smldv;
 
             var entity = _mapper.Map<FineCalculationDetail>(dto);
 
@@ -60,8 +67,11 @@ namespace Business.Services.Entities
             var valueSmldv = await _valueSmldvRepository.GetByIdAsync(dto.valueSmldvId)
                 ?? throw new InvalidOperationException("No existe el valor de SMLDV seleccionado.");
 
+            var typeInfraction = await _typeInfractionRepository.GetByIdAsync(dto.typeInfractionId)
+                ?? throw new InvalidOperationException("No existe el tipo de infracción seleccionado.");
+
             // ✅ recalcular al actualizar
-            dto.totalCalculation = dto.numer_smldv * (decimal)valueSmldv.value_smldv;
+            dto.totalCalculation = typeInfraction.numer_smldv * (decimal)valueSmldv.value_smldv;
 
             var entity = _mapper.Map<FineCalculationDetail>(dto);
             await _repository.UpdateAsync(entity);
@@ -84,9 +94,6 @@ namespace Business.Services.Entities
 
             if (string.IsNullOrWhiteSpace(dto.formula))
                 throw new ArgumentException("La fórmula es obligatoria.");
-
-            if (dto.numer_smldv <= 0)
-                throw new ArgumentException("El número de SMLDV debe ser mayor que cero.");
 
             if (dto.valueSmldvId <= 0)
                 throw new ArgumentException("Debe asociarse un valor de SMLDV válido.");

@@ -273,7 +273,8 @@ namespace Business.Services.Entities
                 throw new BusinessException("No existe detalle de cálculo para esta infracción.");
 
             // ✅ Siempre recalculamos el monto base en runtime
-            decimal baseAmount = detail.numer_smldv * (decimal)detail.valueSmldv.value_smldv;
+            decimal baseAmount = userInfraction.typeInfraction.numer_smldv * (decimal)detail.valueSmldv.value_smldv;
+
 
             // Número de cuotas (por defecto 1 si no viene en el DTO)
             int installments = dto.Installments ?? 1;

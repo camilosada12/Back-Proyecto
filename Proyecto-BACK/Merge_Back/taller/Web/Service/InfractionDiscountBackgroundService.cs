@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Services;
+using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +34,9 @@ public class InfractionDiscountBackgroundService : BackgroundService
 
                 // Traer todas las infracciones activas
                 var activeInfractions = await dbContext.userInfraction
-                    .Where(i => i.stateInfraction)
-                    .ToListAsync(stoppingToken);
+                 .Where(i => i.stateInfraction == EstadoMulta.Pendiente)
+                 .ToListAsync(stoppingToken);
+
 
                 foreach (var infraction in activeInfractions)
                 {

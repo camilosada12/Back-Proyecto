@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Xunit;
-using Entity.Domain.Models.Implements.Entities; // Ajusta este namespace si tu proyecto usa otro
+using Entity.Domain.Models.Implements.Entities;
 
 namespace ControlDeComparendo.Tests.Entities
 {
@@ -13,12 +13,14 @@ namespace ControlDeComparendo.Tests.Entities
             {
                 id = 1,
                 type_Infraction = "Leve",
-                description = "Infracción leve"
+                description = "Infracción leve",
+                numer_smldv = 4 // 🔹 Nuevo campo
             };
 
             Assert.Equal(1, ti.id);
             Assert.Equal("Leve", ti.type_Infraction);
             Assert.Equal("Infracción leve", ti.description);
+            Assert.Equal(4, ti.numer_smldv); // 🔹 Validación
         }
 
         [Fact]
@@ -26,20 +28,21 @@ namespace ControlDeComparendo.Tests.Entities
         {
             var ti = new TypeInfraction();
 
-            // En tu clase userInfractions está inicializada -> no debe ser null y debe estar vacía
             Assert.NotNull(ti.userInfractions);
             Assert.Empty(ti.userInfractions);
 
-            // fineCalculationDetail NO está inicializada en la clase que pegaste -> por defecto es null
-            Assert.Null(ti.fineCalculationDetail);
+            Assert.NotNull(ti.fineCalculationDetail); // 🔹 ahora lo inicializaste con `new List<>();`
+            Assert.Empty(ti.fineCalculationDetail);
         }
 
         [Fact]
         public void Can_Assign_FineCalculationDetail_After_Initialization()
         {
-            var ti = new TypeInfraction();
+            var ti = new TypeInfraction
+            {
+                numer_smldv = 2 // 🔹 requerido
+            };
 
-            // Simular inicialización manual (lo que haría EF al cargar relaciones, por ejemplo)
             ti.fineCalculationDetail = new List<FineCalculationDetail>
             {
                 new FineCalculationDetail { id = 10, formula = "SMLDV * 2", totalCalculation = 200000 }
@@ -51,4 +54,3 @@ namespace ControlDeComparendo.Tests.Entities
         }
     }
 }
-

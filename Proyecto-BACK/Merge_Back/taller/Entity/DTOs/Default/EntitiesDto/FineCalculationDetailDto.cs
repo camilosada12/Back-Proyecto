@@ -11,8 +11,6 @@ namespace Entity.Domain.Models.Implements.Entities
     public class FineCalculationDetailDto : IHasId
     {
         public int id { get; set; }
-        public string forumula {  get; set; }
-        public int numer_smldv { get; set; }
         //public decimal percentaje { get; set; }
         public string formula {  get; set; }
         public decimal percentaje { get; set; }

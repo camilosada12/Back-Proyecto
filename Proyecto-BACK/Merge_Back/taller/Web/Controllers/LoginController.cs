@@ -56,24 +56,24 @@ namespace Web.Controllers
         // ===========================
         // Registro de usuario normal
         // ===========================
-        [HttpPost("Registrarse")]
-        [ProducesResponseType(typeof(RegisterResponseDto), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> Registrarse([FromBody] RegisterRequestDto request)
-        {
-            try
-            {
-                var result = await _userService.RegisterAsync(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                var message = ex.Message;
-                if (ex.InnerException != null) message += " | Inner: " + ex.InnerException.Message;
-                return BadRequest(new { isSuccess = false, message });
-            }
-        }
+        //[HttpPost("Registrarse")]
+        //[ProducesResponseType(typeof(RegisterResponseDto), 200)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(500)]
+        //public async Task<IActionResult> Registrarse([FromBody] RegisterRequestDto request)
+        //{
+        //    try
+        //    {
+        //        var result = await _userService.RegisterAsync(request);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var message = ex.Message;
+        //        if (ex.InnerException != null) message += " | Inner: " + ex.InnerException.Message;
+        //        return BadRequest(new { isSuccess = false, message });
+        //    }
+        //}
 
         [HttpPost("verify-code")]
         [ProducesResponseType(200)]

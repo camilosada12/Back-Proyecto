@@ -12,6 +12,7 @@ namespace Entity.Domain.Models.Implements.Entities
     {
         public int id { get; set; }
         public string type_Infraction { get; set; }
+        public int numer_smldv { get; set; }
         public string description { get; set; }
         
     }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Entity.Domain.Models.Implements.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +15,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 1,
                     formula = "salario minimo * dias = smdlv",
-                    numer_smldv = 4,
-                    //porcentaje = 0.5M,
                     totalCalculation = 0,
                     valueSmldvId = 1,
                     typeInfractionId = 1,
@@ -32,8 +26,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 2,
                     formula = "salario minimo * dias = smdlv",
-                    numer_smldv = 8,
-                    //porcentaje = 0.0M,
                     totalCalculation = 0,
                     valueSmldvId = 1,
                     typeInfractionId = 2,
@@ -45,8 +37,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 3,
                     formula = "salario minimo * dias = smdlv",
-                    numer_smldv = 16,
-                    //porcentaje = 0.0M,
                     totalCalculation = 0,
                     valueSmldvId = 1,
                     typeInfractionId = 3,
@@ -58,8 +48,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 4,
                     formula = "salario minimo * dias = smdlv",
-                    numer_smldv = 32,
-                    //porcentaje = 0.2M,
                     totalCalculation = 0,
                     valueSmldvId = 1,
                     typeInfractionId = 4,

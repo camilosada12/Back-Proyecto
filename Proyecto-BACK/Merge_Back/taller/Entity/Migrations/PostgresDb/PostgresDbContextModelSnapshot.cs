@@ -151,6 +151,9 @@ namespace Entity.Migrations.PostgresDb
                     b.Property<bool>("is_deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("numer_smldv")
+                        .HasColumnType("integer");
+
                     b.Property<string>("type_Infraction")
                         .IsRequired()
                         .HasColumnType("text");
@@ -170,6 +173,7 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "lanzar basura en un lugar publico",
                             is_deleted = false,
+                            numer_smldv = 4,
                             type_Infraction = "infraccion de tipo uno"
                         },
                         new
@@ -179,6 +183,7 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "hacer mucho ruido en un sitio publico",
                             is_deleted = false,
+                            numer_smldv = 8,
                             type_Infraction = "infraccion de tipo dos"
                         },
                         new
@@ -188,6 +193,7 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
                             is_deleted = false,
+                            numer_smldv = 16,
                             type_Infraction = "infraccion de tipo Tres"
                         },
                         new
@@ -195,8 +201,9 @@ namespace Entity.Migrations.PostgresDb
                             id = 4,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ",
+                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.",
                             is_deleted = false,
+                            numer_smldv = 32,
                             type_Infraction = "infraccion de tipo Cuatro"
                         });
                 });
@@ -350,6 +357,7 @@ namespace Entity.Migrations.PostgresDb
                             UserId = 1,
                             UserNotificationId = 2,
                             active = true,
+                            amountToPay = 0m,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
@@ -363,6 +371,7 @@ namespace Entity.Migrations.PostgresDb
                             UserId = 2,
                             UserNotificationId = 1,
                             active = true,
+                            amountToPay = 0m,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
@@ -1334,9 +1343,6 @@ namespace Entity.Migrations.PostgresDb
                     b.Property<bool>("is_deleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("numer_smldv")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("totalCalculation")
                         .HasColumnType("decimal(12,2)");
 
@@ -1362,7 +1368,6 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
-                            numer_smldv = 4,
                             totalCalculation = 0m,
                             typeInfractionId = 1,
                             valueSmldvId = 1
@@ -1374,7 +1379,6 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
-                            numer_smldv = 8,
                             totalCalculation = 0m,
                             typeInfractionId = 2,
                             valueSmldvId = 1
@@ -1386,7 +1390,6 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
-                            numer_smldv = 16,
                             totalCalculation = 0m,
                             typeInfractionId = 3,
                             valueSmldvId = 1
@@ -1398,7 +1401,6 @@ namespace Entity.Migrations.PostgresDb
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formula = "salario minimo * dias = smdlv",
                             is_deleted = false,
-                            numer_smldv = 32,
                             totalCalculation = 0m,
                             typeInfractionId = 4,
                             valueSmldvId = 1
