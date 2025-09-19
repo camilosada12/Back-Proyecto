@@ -5,6 +5,7 @@ using Business.Mensajeria.Email.implements;
 using Business.Mensajeria.Email.@interface;
 using Business.Repository;
 using Business.Strategy.StrategyGet.Implement;
+using Business.Validaciones.Entities.UserInfraction;
 using Data.Interfaces.IDataImplement.Entities;   // <- IUserInfractionRepository
 using Data.Interfaces.IDataImplement.Security;   // <- IUserRepository
 using Entity.Domain.Enums;
@@ -184,6 +185,15 @@ public class UserInfractionServices
     // 🚨 Nuevo método: Crear multa con datos de persona (cuando no hay User todavía)
     public async Task<UserInfractionSelectDto> CreateWithPersonAsync(CreateInfractionRequestDto dto)
     {
+        // Validar el DTO
+        var validator = new CreateInfractionRequestValidator();
+        var validationResult = validator.Validate(dto);
+
+        if (!validationResult.IsValid)
+            throw new BusinessException(
+                string.Join(" | ", validationResult.Errors.Select(e => e.ErrorMessage))
+            );
+
         // 1. Buscar si ya existe el usuario por documento
         var user = await _users.FindByDocumentAsync(dto.DocumentTypeId, dto.DocumentNumber);
 
