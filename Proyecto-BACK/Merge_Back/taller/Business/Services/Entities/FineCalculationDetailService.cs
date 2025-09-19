@@ -6,8 +6,9 @@ using Entity.Domain.Models.Implements.Entities;
 
 namespace Business.Services.Entities
 {
-    public class FineCalculationDetailService : BusinessBasic<FineCalculationDetailDto, FineCalculationDetailSelectDto, FineCalculationDetail>,
-            IFineCalculationDetailService
+    public class FineCalculationDetailService :
+        BusinessBasic<FineCalculationDetailDto, FineCalculationDetailSelectDto, FineCalculationDetail>,
+        IFineCalculationDetailService
     {
         private readonly IFineCalculationDetailRepository _repository;
         private readonly IValueSmldvRepository _valueSmldvRepository;
@@ -16,49 +17,34 @@ namespace Business.Services.Entities
         public FineCalculationDetailService(
             IFineCalculationDetailRepository repository,
             IMapper mapper,
-            IValueSmldvRepository valueSmldvRepository) // 👈 se inyecta también el IMapper
-            : base(repository, mapper) // 👈 ahora pasas los dos parámetros requeridos
+            IValueSmldvRepository valueSmldvRepository
+        ) : base(repository, mapper)
         {
             _repository = repository;
             _valueSmldvRepository = valueSmldvRepository;
             _mapper = mapper;
         }
 
-        // 🔎 Si quieres lógica extra además de lo que hace BusinessBasic
-        // Si estás redefiniendo el comportamiento:
         public override async Task<FineCalculationDetailSelectDto?> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("El Id debe ser mayor que cero.");
 
-
-
             var entity = await _repository.GetByIdAsync(id);
-
-            if (entity == null)
-                return null;
-
-            return _mapper.Map<FineCalculationDetailSelectDto>(entity);
+            return entity == null ? null : _mapper.Map<FineCalculationDetailSelectDto>(entity);
         }
-
 
         public async Task<FineCalculationDetail> CreateAsync(FineCalculationDetailDto dto)
         {
             Validate(dto);
 
-            if (dto.percentaje > 100)
-                throw new InvalidOperationException("El porcentaje no puede ser mayor a 100.");
-
-            // 🔎 Buscar el valor real en la BD
             var valueSmldv = await _valueSmldvRepository.GetByIdAsync(dto.valueSmldvId);
             if (valueSmldv == null)
                 throw new InvalidOperationException("No existe el valor de SMLDV seleccionado.");
 
-            // Calcular total si no viene
-            if (dto.totalCalculation <= 0)
-                dto.totalCalculation = dto.percentaje * (decimal)valueSmldv.value_smldv / 100;
+            // ✅ siempre calcular totalCalculation
+            dto.totalCalculation = dto.numer_smldv * (decimal)valueSmldv.value_smldv;
 
-            // Mapear DTO → Entidad
             var entity = _mapper.Map<FineCalculationDetail>(dto);
 
             return await _repository.CreateAsync(entity);
@@ -71,8 +57,13 @@ namespace Business.Services.Entities
 
             Validate(dto);
 
-            var entity = _mapper.Map<FineCalculationDetail>(dto);
+            var valueSmldv = await _valueSmldvRepository.GetByIdAsync(dto.valueSmldvId)
+                ?? throw new InvalidOperationException("No existe el valor de SMLDV seleccionado.");
 
+            // ✅ recalcular al actualizar
+            dto.totalCalculation = dto.numer_smldv * (decimal)valueSmldv.value_smldv;
+
+            var entity = _mapper.Map<FineCalculationDetail>(dto);
             await _repository.UpdateAsync(entity);
 
             return entity;
@@ -86,7 +77,6 @@ namespace Business.Services.Entities
             return await _repository.DeleteAsync(id);
         }
 
-        // 🔎 Validaciones personalizadas
         protected void Validate(FineCalculationDetailDto dto)
         {
             if (dto == null)
@@ -95,8 +85,8 @@ namespace Business.Services.Entities
             if (string.IsNullOrWhiteSpace(dto.formula))
                 throw new ArgumentException("La fórmula es obligatoria.");
 
-            if (dto.percentaje < 0 || dto.percentaje > 100)
-                throw new ArgumentException("El porcentaje debe estar entre 0 y 100.");
+            if (dto.numer_smldv <= 0)
+                throw new ArgumentException("El número de SMLDV debe ser mayor que cero.");
 
             if (dto.valueSmldvId <= 0)
                 throw new ArgumentException("Debe asociarse un valor de SMLDV válido.");
@@ -106,7 +96,3 @@ namespace Business.Services.Entities
         }
     }
 }
-
-
-    
-

@@ -24,11 +24,15 @@ using Data.Services.Entities;
 using Data.Services.Security;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.Domain.Models.Implements.Recaptcha;
+using Microsoft.AspNetCore.Authentication; // 👈 para ISystemClock
 using Microsoft.AspNetCore.Identity;
 using Utilities.Custom;
 using Web.AutoMapper;
+using Web.Configurations;
 using Web.Infrastructure;
 using ServiceEmail = Business.Mensajeria.Email.implements;
+using Web.WebBackgroundService;
+using ServiceEmail = Business.Mensajeria.Email.implements.ServiceEmail;
 
 namespace Web.Service
 {
@@ -42,11 +46,6 @@ namespace Web.Service
             services.AddSingleton<Utilities.Custom.EncriptePassword>();
             services.AddSingleton<EncriptePassword>();
             services.AddMemoryCache();
-
-            // 2) Persistencia genérica
-            services.AddScoped(typeof(IData<>), typeof(DataGeneric<>));
-            // Auditoría / logging
-            //services.AddScoped<IAuditService, AuditService>();
 
             // Persistencia genérica
             services.AddScoped(typeof(IData<>), typeof(DataGeneric<>));
@@ -81,9 +80,6 @@ namespace Web.Service
             services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
             services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
 
-            // 4) Servicios — PARAMETERS
-            // 🔐 Repositorio de refresh tokens (FALTABA)
-
             // Servicios — PARAMETERS
             services.AddScoped<IdepartmentServices, departmentServices>();
             services.AddScoped<ImunicipalityServices, municipalityServices>();
@@ -102,6 +98,11 @@ namespace Web.Service
             services.AddScoped<IFormModuleService, FormModuleService>();
             services.AddScoped<IRolFormPermissionService, RolFormPermissionService>();
 
+            // 🔐 Sesiones
+            services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();
+            services.AddScoped<IAuthSessionService, AuthSessionService>();
+            services.AddSingleton<ISystemClock, SystemClock>();
+
             // Servicios — ENTITIES
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
@@ -115,11 +116,8 @@ namespace Web.Service
             // Recaptcha
             services.Configure<RecaptchaOptions>(configuration.GetSection("Recaptcha"));
             services.AddHttpClient<IRecaptchaVerifier, RecaptchaVerifier>();
-            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
-            services.AddScoped<IValueSmldvService, ValueSmldvService>();
-            services.AddScoped<IUserNotificationService, UserNotificationService>();
-            services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
 
+            // Identity y Tokens
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IToken, TokenBusiness>();
             services.AddScoped<IAuthService, AuthService>();
@@ -132,6 +130,14 @@ namespace Web.Service
 
             services.AddScoped<EmailBackgroundQueue>();
 
+
+            //backGround services
+            // Configuración de intereses (appsettings.json -> PaymentAgreementInterestOptions)
+            services.Configure<PaymentAgreementInterestOptions>(
+            configuration.GetSection("PaymentAgreementInterestOptions"));
+
+            // Background job de intereses/coactivo
+            services.AddHostedService<PaymentAgreementBackgroundService>();
 
             return services;
         }

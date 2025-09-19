@@ -8,18 +8,19 @@ namespace ControlDeComparendo.Tests
         [Fact]
         public void Can_Create_TypePayment_With_Relationship()
         {
+            var agreement = new PaymentAgreement { id = 2, address = "Calle 123" };
+
             var typePayment = new TypePayment
             {
                 id = 1,
                 name = "Pago en efectivo",
-                paymentAgreementId = 2,
-                PaymentAgreement = new PaymentAgreement { id = 2, address = "Calle 123" }
+                PaymentAgreements = new List<PaymentAgreement> { agreement }
             };
 
             Assert.Equal(1, typePayment.id);
             Assert.Equal("Pago en efectivo", typePayment.name);
-            Assert.Equal(2, typePayment.paymentAgreementId);
-            Assert.NotNull(typePayment.PaymentAgreement);
+            Assert.Single(typePayment.PaymentAgreements);
         }
+
     }
 }

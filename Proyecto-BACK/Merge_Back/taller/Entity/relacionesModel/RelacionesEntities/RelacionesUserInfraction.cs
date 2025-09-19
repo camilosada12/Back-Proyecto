@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Entity.ConfigurationsBase;
+using Entity.Domain.Enums;
+using Entity.Domain.Models.Implements.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Entity.Domain.Models.Implements.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using Entity.ConfigurationsBase;
 
 namespace Entity.relacionesModel.RelacionesEntities
 {
@@ -17,7 +18,6 @@ namespace Entity.relacionesModel.RelacionesEntities
         {
             builder.ToTable("userInfraction", schema: "Entities");
             builder.ConfigureBaseModel();
-
         }
     }
 }

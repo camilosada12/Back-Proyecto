@@ -20,7 +20,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                      is_deleted = false,
                      PersonId = 1,
                      documentTypeId = 1,
-                     documentNumber = "123456789",
+                     documentNumber = "1234567890",
                      created_date = seedDate,
 
                      // Nuevos campos de verificación

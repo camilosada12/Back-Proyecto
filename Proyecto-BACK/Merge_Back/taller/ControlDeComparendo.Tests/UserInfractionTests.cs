@@ -1,4 +1,5 @@
-﻿using Entity.Domain.Models.Implements.Entities;
+﻿using Entity.Domain.Enums;
+using Entity.Domain.Models.Implements.Entities;
 using Xunit;
 
 namespace ControlDeComparendo.Tests
@@ -12,7 +13,7 @@ namespace ControlDeComparendo.Tests
             {
                 id = 1,
                 dateInfraction = DateTime.UtcNow,
-                stateInfraction = true,
+                stateInfraction = EstadoMulta.Pendiente, // 👈 enum en vez de bool
                 observations = "Exceso de velocidad",
                 UserId = 10,
                 typeInfractionId = 5,
@@ -22,7 +23,7 @@ namespace ControlDeComparendo.Tests
             };
 
             Assert.Equal(1, infraction.id);
-            Assert.True(infraction.stateInfraction);
+            Assert.Equal(EstadoMulta.Pendiente, infraction.stateInfraction); // 👈 comparación enum
             Assert.Equal("Exceso de velocidad", infraction.observations);
             Assert.NotNull(infraction.UserNotification);
             Assert.NotNull(infraction.typeInfraction);
@@ -31,4 +32,3 @@ namespace ControlDeComparendo.Tests
         }
     }
 }
-

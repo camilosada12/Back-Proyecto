@@ -22,6 +22,9 @@ namespace Entity.relacionesModel.RelacionesEntities
 
             builder.Property(x => x.minimunWage).HasPrecision(18, 2);
 
+            builder.Property(x => x.value_smldv) // 👈 aquí lo defines como decimal con precisión
+                   .HasPrecision(18, 2);
+
             // Relación: ValueSmldv -> FineCalculationDetail (uno a muchos)
             builder.HasMany(vs => vs.fineCalculationDetail)
                    .WithOne(fcd => fcd.valueSmldv)

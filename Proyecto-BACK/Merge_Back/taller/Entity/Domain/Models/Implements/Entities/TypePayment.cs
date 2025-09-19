@@ -13,6 +13,6 @@ namespace Entity.Domain.Models.Implements.Entities
         public int paymentAgreementId { get; set; }
 
         //relaciones
-        public PaymentAgreement PaymentAgreement { get; set; }
+        public ICollection<PaymentAgreement> PaymentAgreements { get; set; } = new List<PaymentAgreement>();
     }
 }

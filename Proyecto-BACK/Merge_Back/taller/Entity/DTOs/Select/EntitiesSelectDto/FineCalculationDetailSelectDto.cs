@@ -4,7 +4,8 @@
     {
         public int id { get; set; }
         public string formula { get; set; }
-        public decimal porcentaje { get; set; }
+        public int numer_smldv { get; set; }
+        //public decimal porcentaje { get; set; }
         public decimal totalCalculation { get; set; }
 
         public int valueSmldvId { get; set; }

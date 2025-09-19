@@ -5,7 +5,6 @@ namespace Entity.Domain.Models.Implements.Entities
     public class TypeInfraction : BaseModel
     {
         public string type_Infraction { get; set; }
-        public int numer_smldv { get; set; }
         public string description { get; set; }
         
         //relaciones

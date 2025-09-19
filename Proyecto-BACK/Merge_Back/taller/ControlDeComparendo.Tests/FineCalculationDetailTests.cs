@@ -12,7 +12,7 @@ namespace ControlDeComparendo.Tests
             {
                 id = 1,
                 formula = "SMLDV * 2",
-                porcentaje = 0.2m,
+                //porcentaje = 0.2m,
                 totalCalculation = 300000,
                 valueSmldvId = 10,
                 typeInfractionId = 5,

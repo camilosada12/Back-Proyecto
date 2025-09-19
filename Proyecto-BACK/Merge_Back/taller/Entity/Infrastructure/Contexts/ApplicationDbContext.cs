@@ -75,13 +75,14 @@ namespace Entity.Infrastructure.Contexts
         public DbSet<PaymentAgreement> paymentAgreement { get; set; }
 
 
+        //parametros
         public DbSet<AuthSession> AuthSessions { get; set; } = null!;
         public DbSet<RefreshToken> refreshTokens { get; set; }
 
-
-
-
-
+        public DbSet<documentType> documentTypes { get; set; }
+        public DbSet<department> Departments { get; set; }
+        public DbSet<municipality> Municipality { get; set; }
+        public DbSet<PaymentFrequency> paymentFrequency { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -11,14 +11,14 @@ public class AuthSessionRepository : IAuthSessionRepository
 
     public async Task CreateAsync(AuthSession s)
     {
-        _ctx.Set<AuthSession>().Add(s);        // OK ahora
+        _ctx.Set<AuthSession>().Add(s);
         await _ctx.SaveChangesAsync();
     }
 
-    public Task<AuthSession?> GetAsync(int id) =>
+    public Task<AuthSession?> GetAsync(Guid id) =>
         _ctx.Set<AuthSession>().FirstOrDefaultAsync(x => x.SessionId == id);
 
-    public async Task TouchAsync(int id, DateTime now)
+    public async Task TouchAsync(Guid id, DateTime now)
     {
         var s = await GetAsync(id);
         if (s is null) return;
@@ -26,7 +26,7 @@ public class AuthSessionRepository : IAuthSessionRepository
         await _ctx.SaveChangesAsync();
     }
 
-    public async Task RevokeAsync(int id)
+    public async Task RevokeAsync(Guid id)
     {
         var s = await GetAsync(id);
         if (s is null) return;

@@ -19,7 +19,6 @@ namespace Entity.DataInit.EntitiesDataInit
                  {
                      id = 1,
                      type_Infraction = "infraccion de tipo uno",
-                     numer_smldv = 2,
                      description = "lanzar basura en un lugar publico",
                      active = true,
                      is_deleted = false,
@@ -29,7 +28,6 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 2,
                     type_Infraction = "infraccion de tipo dos",
-                    numer_smldv = 4,
                     description = "hacer mucho ruido en un sitio publico",
                     active = true,
                     is_deleted = false,
@@ -39,7 +37,6 @@ namespace Entity.DataInit.EntitiesDataInit
                  {
                      id = 3,
                      type_Infraction = "infraccion de tipo Tres",
-                     numer_smldv = 8,
                      description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
                      active = true,
                      is_deleted = false,
@@ -49,7 +46,6 @@ namespace Entity.DataInit.EntitiesDataInit
                   {
                       id = 4,
                       type_Infraction = "infraccion de tipo Cuatro",
-                      numer_smldv = 16,
                       description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía. ",
                       active = true,
                       is_deleted = false,
