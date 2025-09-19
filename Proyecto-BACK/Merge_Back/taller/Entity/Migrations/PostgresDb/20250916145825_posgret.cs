@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Entity.Migrations.PostgresDb
 {
     /// <inheritdoc />
-    public partial class postgres : Migration
+    public partial class posgret : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -486,6 +486,7 @@ namespace Entity.Migrations.PostgresDb
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     typeInfractionId = table.Column<int>(type: "integer", nullable: false),
                     UserNotificationId = table.Column<int>(type: "integer", nullable: false),
+                    amountToPay = table.Column<decimal>(type: "numeric", nullable: false),
                     active = table.Column<bool>(type: "boolean", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -814,11 +815,11 @@ namespace Entity.Migrations.PostgresDb
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "userInfraction",
-                columns: new[] { "id", "UserId", "UserNotificationId", "active", "created_date", "dateInfraction", "is_deleted", "observations", "stateInfraction", "typeInfractionId" },
+                columns: new[] { "id", "UserId", "UserNotificationId", "active", "amountToPay", "created_date", "dateInfraction", "is_deleted", "observations", "stateInfraction", "typeInfractionId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona no opuso resistencia a la infraccion", false, 1 },
-                    { 2, 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona se encontraba en estado de embriagues", false, 2 }
+                    { 1, 1, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona no opuso resistencia a la infraccion", false, 1 },
+                    { 2, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona se encontraba en estado de embriagues", false, 2 }
                 });
 
             migrationBuilder.InsertData(

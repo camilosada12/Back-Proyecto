@@ -1,14 +1,21 @@
 ﻿using AutoMapper;
 using Business.Interfaces.IBusinessImplements.Entities;
+using Business.Interfaces.PDF;
+using Business.Mensajeria.Email.implements;
+using Business.Mensajeria.Email.@interface;
 using Business.Repository;
 using Business.Strategy.StrategyGet.Implement;
 using Data.Interfaces.IDataImplement.Entities;   // <- IUserInfractionRepository
 using Data.Interfaces.IDataImplement.Security;   // <- IUserRepository
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.DTOs.Default.EntitiesDto;
 using Helpers.Business.Business.Helpers.Validation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Playwright;
+using SendGrid.Helpers.Errors.Model;
 using Utilities.Exceptions;
 
 public class UserInfractionServices
@@ -18,7 +25,11 @@ public class UserInfractionServices
     private readonly IUserInfractionRepository _repo;       // CRUD principal
     private readonly IUserRepository _users;                 // FK -> User
     private readonly ITypeInfractionRepository _types;      // FK -> TypeInfraction
-    private readonly IUserNotificationRepository _notifs;   // FK -> UserNotification
+    private readonly IUserNotificationRepository _notifs;
+    private readonly EmailBackgroundQueue _emailQueue;
+    private readonly IServiceScopeFactory _scopeFactory;
+
+    // FK -> UserNotification
 
     public UserInfractionServices(
         IUserInfractionRepository repo,
@@ -27,6 +38,8 @@ public class UserInfractionServices
         IUserNotificationRepository notifs,
         IMapper mapper,
         ILogger<UserInfractionServices> logger,
+        EmailBackgroundQueue emailQueue,
+        IServiceScopeFactory scopeFactory,   // 👈 se inyecta aquí
         Entity.Infrastructure.Contexts.ApplicationDbContext db
     ) : base(repo, mapper, db)
     {
@@ -35,6 +48,10 @@ public class UserInfractionServices
         _types = types;
         _notifs = notifs;
         _logger = logger;
+        _emailQueue = emailQueue;
+        _scopeFactory = scopeFactory;
+
+
     }
 
     // -------- Helpers FK --------
@@ -64,13 +81,13 @@ public class UserInfractionServices
         return _mapper.Map<UserInfractionSelectDto>(entity);
     }
 
-    public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
-    {
-        BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
-        await EnsureFkAsync(dto);
+    //public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
+    //{
+    //    BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
+    //    await EnsureFkAsync(dto);
 
-        return await base.CreateAsync(dto);
-    }
+    //    return await base.CreateAsync(dto);
+    //}
 
     public override async Task<bool> UpdateAsync(UserInfractionDto dto)
     {
@@ -118,6 +135,82 @@ public class UserInfractionServices
         var entities = await _repo.GetByDocumentAsync(documentTypeId, documentNumber);
         return _mapper.Map<IReadOnlyList<UserInfractionSelectDto>>(entities);
     }
+
+    public async Task<UserInfractionSelectDto> GetByIdAsyncPdf(int id)
+    {
+        try
+        {
+            var entity = await Data.GetByIdAsync(id);
+            if (entity == null)
+            {
+                throw new NotFoundException($"InspectoraReport con ID {id} no encontrado.");
+            }
+            return _mapper.Map<UserInfractionSelectDto>(entity);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error al obtener InspectoraReport con ID {id}.");
+            throw new BusinessException($"Error al obtener InspectoraReport con ID {id}.", ex);
+        }
+    }
+
+    //   public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
+    //   {
+    //       var result = await base.CreateAsync(dto);
+
+    //       await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
+    //       {
+    //           using var scope = _scopeFactory.CreateScope();
+    //           var emailService = scope.ServiceProvider.GetRequiredService<IServiceEmail>();
+    //           var pdfService = scope.ServiceProvider.GetRequiredService<IPdfGeneratorService>();
+
+    //           var user = await _users.GetByIdAsync(dto.userId);
+    //           var pdfBytes = await pdfService.GeneratePdfAsync(await GetByIdAsync(result.id));
+
+    //           var builder = new InfraccionEmailBuilder(await GetByIdAsync(result.id), pdfBytes);
+
+    //           await emailService.SendEmailAsync(
+    //    user!.email,
+    //    builder.GetSubject(),
+    //    builder.GetBody()
+    //);
+
+    //       });
+
+    //       return result;
+    //   }
+
+    public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
+    {
+        var result = await base.CreateAsync(dto);
+
+        await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var emailService = scope.ServiceProvider.GetRequiredService<IServiceEmail>();
+            var pdfService = scope.ServiceProvider.GetRequiredService<IPdfGeneratorService>();
+
+            var user = await _users.GetByIdAsync(dto.userId);
+
+            // Generamos el PDF con los datos de la infracción recién creada
+            var pdfBytes = await pdfService.GeneratePdfAsync(await GetByIdAsync(result.id));
+
+            var builder = new InfraccionEmailBuilder(
+                await GetByIdAsync(result.id),
+                pdfBytes
+            );
+
+            await emailService.SendEmailAsync(
+                user!.email,
+                builder.GetSubject(),
+                builder.GetBody()
+            );
+        });
+
+        return result;
+    }
+
+
 }
- 
+
 

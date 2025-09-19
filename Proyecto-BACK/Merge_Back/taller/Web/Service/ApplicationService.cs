@@ -5,9 +5,14 @@ using Business.Interfaces.IBusinessImplements.Entities;
 using Business.Interfaces.IBusinessImplements.parameters;
 using Business.Interfaces.IBusinessImplements.Security;
 using Business.Interfaces.IJWT;
+using Business.Interfaces.PDF;
+using Business.Mensajeria.Email.implements;
 using Business.Mensajeria.Email.@interface;
+using Business.Mensajeria.Implements;
+using Business.Services;
 using Business.Services.Entities;
 using Business.Services.parameters;
+using Business.Services.PDF;
 using Business.Services.Security;
 using Data.Interfaces.DataBasic;
 using Data.Interfaces.IDataImplement.Entities;
@@ -23,7 +28,7 @@ using Microsoft.AspNetCore.Identity;
 using Utilities.Custom;
 using Web.AutoMapper;
 using Web.Infrastructure;
-using ServiceEmail = Business.Mensajeria.Email.implements.ServiceEmail;
+using ServiceEmail = Business.Mensajeria.Email.implements;
 
 namespace Web.Service
 {
@@ -60,6 +65,16 @@ namespace Web.Service
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
             services.AddScoped<IPaymentAgreementRepository, PaymentAgreementRepository>();
             services.AddScoped<IInspectoraReportRepository, InspectoraReportRepository>();
+
+            services.AddScoped<IPdfGeneratorService, PdfService>();
+
+
+            
+            services.AddHostedService<InfractionDiscountBackgroundService>();
+            services.AddScoped<DiscountService>();
+
+
+
             services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
             services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
             services.AddScoped<ITypeInfractionRepository, TypeInfractionRepository>();
@@ -108,11 +123,15 @@ namespace Web.Service
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IToken, TokenBusiness>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IServiceEmail, ServiceEmail>();
             services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IUserMeRepository, MeRepository>();
             services.AddScoped<IAuthCookieFactory, AuthCookieFactory>();
+
+            services.AddScoped<IServiceEmail, ServiceEmails>();
+
+            services.AddScoped<EmailBackgroundQueue>();
+
 
             return services;
         }

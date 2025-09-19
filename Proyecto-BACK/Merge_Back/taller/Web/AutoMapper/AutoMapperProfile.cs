@@ -4,6 +4,7 @@ using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.Domain.Models.Implements.parameters;
 using Entity.DTOs.Default.Auth;
+using Entity.DTOs.Default.EntitiesDto;
 using Entity.DTOs.Default.Me;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Default.parameters;
@@ -93,6 +94,9 @@ namespace Web.AutoMapper
             CreateMap<InspectoraReport, InspectoraReportDto>().ReverseMap();
             CreateMap<InspectoraReport, InspectoraReportSelectDto>().ReverseMap();
 
+            CreateMap<InspectoraReport, InspectoraPdfDto>().ReverseMap();
+
+
             CreateMap<FineCalculationDetail, FineCalculationDetailDto>().ReverseMap();
             CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
                 .ForMember(d => d.valueSmldvValue,
@@ -128,8 +132,12 @@ namespace Web.AutoMapper
                   .ForMember(d => d.firstName,
                  o => o.MapFrom(s => s.User != null ? s.User.Person.firstName : null))
                  .ForMember(d => d.lastName,
-                     o => o.MapFrom(s => s.User != null ? s.User.Person.lastName : null));
+                     o => o.MapFrom(s => s.User != null ? s.User.Person.lastName : null))
+              .ForMember(d => d.documentNumber,
+                     o => o.MapFrom(s => s.User != null ? s.User.documentNumber : null));
+
             CreateMap<UserInfraction, UserInfractionDto>().ReverseMap();
+
                 
 
 
@@ -157,7 +165,15 @@ namespace Web.AutoMapper
                 .ForMember(d => d.fullName, o => o.MapFrom(s => s.Person.firstName + " " + s.Person.lastName))
                 .ForMember(d => d.roles, o => o.MapFrom(s => s.rolUsers.Select(r => r.Rol.name)))
                 .ForMember(d => d.permissions, o => o.Ignore()) 
-                .ForMember(d => d.Menu, o => o.Ignore());        
+                .ForMember(d => d.Menu, o => o.Ignore());
+
+            CreateMap<Module, MenuModuleDto>()
+                .ForMember(dest => dest.forms,
+                           opt => opt.MapFrom(src => src.FormModules.Select(fm => fm.form)));
+
+            CreateMap<Form, FormMeDto>();
+
+
 
             // Registro
             CreateMap<RegisterDto, User>()
@@ -168,11 +184,8 @@ namespace Web.AutoMapper
 
             CreateMap<RegisterDto, Person>()
                 .ForMember(d => d.firstName, o => o.MapFrom(s => s.firstName))
-                .ForMember(d => d.lastName, o => o.MapFrom(s => s.lastName))
-                .ForMember(d => d.address, o => o.MapFrom(s => s.address))
-                .ForMember(d => d.phoneNumber, o => o.MapFrom(s => s.phone))
-                //.ForMember(d => d.documentTypeId, o => o.MapFrom(s => s.documentTypeId))
-                .ForMember(d => d.municipalityId, o => o.MapFrom(s => s.municipalityId));
+                .ForMember(d => d.lastName, o => o.MapFrom(s => s.lastName));
+          
 
 
 

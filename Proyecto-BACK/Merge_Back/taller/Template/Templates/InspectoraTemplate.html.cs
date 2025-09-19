@@ -44,10 +44,9 @@ namespace Template.Templates
 </head>
 <body>
   <div class=""header"">
-    <p><strong>@Expediente</strong></p>
+    <p><strong>Expediente N° @Expediente</strong></p>
     <p>PARA: Secretario de Hacienda Municipal</p>
     <p>DE: ADRIANA YINETH FRANCO GARCIA<br>Inspectora de Policía Municipal</p>
-    <p>ASUNTO: @Asunto</p>
     <p>FECHA: @Fecha</p>
   </div>
 
@@ -57,11 +56,7 @@ namespace Template.Templates
     <p>Comedidamente le informo que el día @Fecha, la Policía Nacional adscrita al Municipio de Palermo, 
     impuso orden de comparendo número <strong>@Expediente</strong>, a <strong>@InfractorNombre</strong>, 
     identificado con cédula de ciudadanía N° <strong>@InfractorCedula</strong>, por 
-    <em>@DescripcionInfraccion</em>, establecido en el Artículo <strong>@Articulo</strong>, de la ley 1801 de 2016, 
-    imponiéndose una Multa Tipo <strong>@TipoInfraccion</strong> : <strong>@SalariosMinimos</strong> salarios mínimos 
-    diarios legales vigentes (smdlv), equivalente a <strong>@ValorMultaPesos</strong>.</p>
-
-    <p>@Mensaje</p>
+    <em>@DescripcionInfraccion</em>, imponiéndose una Multa Tipo <strong>@TipoInfraccion</strong>.</p>
   </div>
 
   <div class=""footer"">
@@ -74,4 +69,3 @@ namespace Template.Templates
 </html>";
     }
 }
-

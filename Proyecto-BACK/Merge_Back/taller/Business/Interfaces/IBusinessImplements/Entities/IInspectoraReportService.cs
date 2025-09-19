@@ -6,6 +6,5 @@ namespace Business.Interfaces.IBusinessImplements.Entities
 {
     public interface IInspectoraReportService : IBusiness<InspectoraReportDto, InspectoraReportSelectDto>
     {
-        Task<InspectoraPdfDto> GetByIdAsyncPdf(int id);
     }
 }

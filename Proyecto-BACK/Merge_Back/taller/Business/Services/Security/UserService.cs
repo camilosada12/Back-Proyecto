@@ -88,8 +88,12 @@ namespace Business.Services.Security
                 {
                     try
                     {
-                        var html = EmailTemplates.CodigoVerificacion(personCreated.firstName ?? "Usuario", code);
-                        await _email.EnviarHtmlAsync(dto.email, "Código de verificación", html);
+                        var builder = new VerificacionEmailBuilder(
+                            personCreated.firstName ?? "Usuario",
+                            code
+                        );
+
+                        await _email.SendEmailAsyncVerificacion(dto.email, builder);
                     }
                     catch (Exception ex)
                     {

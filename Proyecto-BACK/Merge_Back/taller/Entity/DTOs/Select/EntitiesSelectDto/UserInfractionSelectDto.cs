@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entity.Domain.Interfaces;
-using Entity.Domain.Models.Base;
-using Entity.Domain.Models.Implements.ModelSecurity;
-using Entity.DTOs.Interface.Entities;
+﻿using Entity.DTOs.Interface.Entities;
 
 namespace Entity.Domain.Models.Implements.Entities
 {
@@ -21,6 +13,10 @@ namespace Entity.Domain.Models.Implements.Entities
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string typeInfractionName { get; set; }
+        public string? documentNumber { get; set; }
+
         public string observations { get; set; }
+
+        public decimal amountToPay { get; set; }
     }
 }

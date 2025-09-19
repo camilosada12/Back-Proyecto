@@ -12,7 +12,7 @@ namespace Business.validaciones.Entities.FineCalculationDetail
     {
         public FineCalculationDetailValidator()
         {
-            RuleFor(x => x.forumula)
+            RuleFor(x => x.formula)
                 .NotEmpty().WithMessage("La fórmula es obligatoria.")
                 .MaximumLength(200).WithMessage("La fórmula no debe exceder los 200 caracteres.");
 

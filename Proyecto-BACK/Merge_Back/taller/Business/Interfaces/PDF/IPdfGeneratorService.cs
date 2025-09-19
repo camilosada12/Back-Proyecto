@@ -10,6 +10,6 @@ namespace Business.Interfaces.PDF
 {
     public interface IPdfGeneratorService
     {
-         Task<byte[]> GeneratePdfAsync(InspectoraPdfDto dto);
+         Task<byte[]> GeneratePdfAsync(UserInfractionSelectDto dto);
     }
 }

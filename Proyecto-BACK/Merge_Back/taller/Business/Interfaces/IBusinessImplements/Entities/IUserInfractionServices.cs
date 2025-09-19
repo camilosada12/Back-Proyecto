@@ -7,5 +7,7 @@ namespace Business.Interfaces.IBusinessImplements.Entities
     public interface IUserInfractionServices : IBusiness<UserInfractionDto, UserInfractionSelectDto>
     {
         Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber);
+        Task<UserInfractionSelectDto> GetByIdAsyncPdf(int id);
+
     }
 }

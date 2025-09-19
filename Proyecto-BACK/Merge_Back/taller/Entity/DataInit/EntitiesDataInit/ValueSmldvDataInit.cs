@@ -38,4 +38,4 @@ namespace Entity.DataInit.EntitiesDataInit
                 );
         }
     }
-}
+}   

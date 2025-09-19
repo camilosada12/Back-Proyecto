@@ -350,6 +350,9 @@ namespace Entity.Migrations
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("amountToPay")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
@@ -386,6 +389,7 @@ namespace Entity.Migrations
                             UserId = 1,
                             UserNotificationId = 1,
                             active = true,
+                            amountToPay = 0m,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
@@ -399,6 +403,7 @@ namespace Entity.Migrations
                             UserId = 2,
                             UserNotificationId = 2,
                             active = true,
+                            amountToPay = 0m,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,

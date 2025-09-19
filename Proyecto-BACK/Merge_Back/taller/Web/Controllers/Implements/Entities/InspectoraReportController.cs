@@ -6,15 +6,7 @@ using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Web.Controllers.ControllersBase.Web.Controllers.BaseController;
 
-
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Web.Controllers.Implements.Entities
 {
@@ -25,16 +17,13 @@ namespace Web.Controllers.Implements.Entities
     public class InspectoraReportController : ControllerBase
     {
         private readonly IInspectoraReportService _service;
-        private readonly IPdfGeneratorService _pdfService;
         private readonly ILogger<InspectoraReportController> _logger;
 
         public InspectoraReportController(
             IInspectoraReportService service,
-            IPdfGeneratorService pdf,
             ILogger<InspectoraReportController> logger)
         {
             _service = service;
-            _pdfService = pdf;
             _logger = logger;
         }
 
@@ -90,20 +79,5 @@ namespace Web.Controllers.Implements.Entities
             return Ok();
         }
 
-        // GET: api/InspectoraReport/5/pdf
-        [HttpGet("{id}/pdf")]
-        public async Task<IActionResult> DownloadContractPdf(int id)
-        {
-            var contract = await _service.GetByIdAsyncPdf(id);
-            if (contract == null)
-            {
-                _logger.LogWarning("Contrato con ID {Id} no encontrado.", id);
-                return NotFound(new { message = $"No se encontró un contrato con ID {id}" });
-            }
-
-            var pdfBytes = await _pdfService.GeneratePdfAsync(contract);
-
-            return File(pdfBytes, "application/pdf", $"Contrato_{contract.Asunto}.pdf");
-        }
     }
 }

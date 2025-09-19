@@ -13,10 +13,6 @@ namespace Entity.DTOs.Default.Auth
         public string password { get; set; } = null!;
         public string firstName { get; set; } = null!;
         public string lastName { get; set; } = null!;
-        public string phone { get; set; } = null!;
-        public string address { get; set; } = null!;
-
-        public int municipalityId { get; set; }
-        public int documentTypeId { get; set; }
+  
     }
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entity.Domain.Interfaces;
-using Entity.Domain.Models.Base;
-using Entity.Domain.Models.Implements.ModelSecurity;
+﻿using Entity.Domain.Interfaces;
 using Entity.DTOs.Interface.Entities;
 
 namespace Entity.Domain.Models.Implements.Entities
@@ -19,5 +12,9 @@ namespace Entity.Domain.Models.Implements.Entities
         public int userId { get; set; }
         public int typeInfractionId {get; set; }
         public int UserNotificationId { get; set; }
+
+        public string? documentNumber { get; set; }
+
+        public decimal amountToPay { get; set; }
     }
 }

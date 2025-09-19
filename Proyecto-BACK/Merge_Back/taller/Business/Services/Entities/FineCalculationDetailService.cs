@@ -92,7 +92,7 @@ namespace Business.Services.Entities
             if (dto == null)
                 throw new ArgumentNullException(nameof(dto), "El cálculo no puede ser nulo.");
 
-            if (string.IsNullOrWhiteSpace(dto.forumula))
+            if (string.IsNullOrWhiteSpace(dto.formula))
                 throw new ArgumentException("La fórmula es obligatoria.");
 
             if (dto.percentaje < 0 || dto.percentaje > 100)

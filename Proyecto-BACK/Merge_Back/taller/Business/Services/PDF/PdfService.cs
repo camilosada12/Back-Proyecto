@@ -1,4 +1,5 @@
 ﻿using Business.Interfaces.PDF;
+using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.EntitiesDto;
 using Microsoft.Playwright;
 using System.Web;
@@ -23,7 +24,8 @@ namespace Business.Services.PDF
                 });
         }
 
-        public async Task<byte[]> GeneratePdfAsync(InspectoraPdfDto dto)
+
+        public async Task<byte[]> GeneratePdfAsync(UserInfractionSelectDto dto)
         {
             var html = BuildHtml(dto);
 
@@ -59,22 +61,17 @@ namespace Business.Services.PDF
             }
         }
 
-        private static string BuildHtml(InspectoraPdfDto dto)
+        private static string BuildHtml(UserInfractionSelectDto dto)
         {
             var template = InspectoraTemplate.Html; // 👈 CORREGIDO
 
             return template
-                .Replace("@Expediente", HttpUtility.HtmlEncode(dto.Expediente))
-                .Replace("@Fecha", dto.Fecha.ToString("dd 'de' MMMM 'de' yyyy"))
-                .Replace("@InfractorNombre", HttpUtility.HtmlEncode(dto.InfractorNombre))
-                .Replace("@InfractorCedula", HttpUtility.HtmlEncode(dto.InfractorCedula))
-                .Replace("@TipoInfraccion", HttpUtility.HtmlEncode(dto.TipoInfraccion))
-                .Replace("@DescripcionInfraccion", HttpUtility.HtmlEncode(dto.DescripcionInfraccion))
-                .Replace("@Articulo", HttpUtility.HtmlEncode(dto.Articulo))
-                .Replace("@SalariosMinimos", dto.SalariosMinimos.ToString())
-                .Replace("@ValorMultaPesos", dto.ValorMultaPesos.ToString("C"))
-                .Replace("@Asunto", HttpUtility.HtmlEncode(dto.Asunto))
-                .Replace("@Mensaje", HttpUtility.HtmlEncode(dto.Mensaje));
+         .Replace("@Expediente", HttpUtility.HtmlEncode(dto.id.ToString()))
+        .Replace("@Fecha", dto.dateInfraction.ToString("dd 'de' MMMM 'de' yyyy"))
+        .Replace("@InfractorNombre", HttpUtility.HtmlEncode($"{dto.firstName} {dto.lastName}"))
+        .Replace("@InfractorCedula", HttpUtility.HtmlEncode(dto.documentNumber ?? ""))
+        .Replace("@TipoInfraccion", HttpUtility.HtmlEncode(dto.typeInfractionName))
+        .Replace("@DescripcionInfraccion", HttpUtility.HtmlEncode(dto.observations));
         }
     }
 }
