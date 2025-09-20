@@ -14,6 +14,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
 using Web.Controllers.ControllersBase.Web.Controllers.BaseController;
+using Business.Services.Security;
+using Entity.DTOs.Default.Email;
 
 namespace Web.Controllers.Implements.Entities
 {

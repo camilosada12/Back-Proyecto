@@ -17,7 +17,6 @@ using FluentValidation;
 
 // 👇 alias para evitar ambigüedad
 using FVValidationException = FluentValidation.ValidationException;
-using UValidationException = Utilities.Exceptions.ValidationException;
 
 namespace Business.Services.Entities
 {
@@ -299,6 +298,9 @@ namespace Business.Services.Entities
             return (baseAmount, installments, monthlyFee);
         }
 
-
+        public Task<PaymentAgreementSelectDto> GetByIdAsyncPdf(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

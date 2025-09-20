@@ -15,5 +15,8 @@ namespace Business.Mensajeria.Email.@interface
 
         Task SendEmailAsyncVerificacion(string to, IEmailContentBuilder builder);
 
+       // Task SendEmailAsync(string to, IEmailContentBuilder builder);
+
+
     }
 }

@@ -16,5 +16,8 @@ namespace Business.Interfaces.IBusinessImplements.Entities
         Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId);
 
         new Task<PaymentAgreementSelectDto?> CreateAsync(PaymentAgreementDto dto);
+
+        Task<PaymentAgreementSelectDto> GetByIdAsyncPdf(int id);
+
     }
 }

@@ -25,7 +25,10 @@ namespace Business.Mensajeria.Email.implements
             {
                 try
                 {
+                    // Crea un scope de DI (bueno si dentro del workItem necesitas servicios Scoped como DbContext)
                     using var scope = _serviceProvider.CreateScope();
+
+                    // Ejecuta la tarea
                     await workItem();
                 }
                 catch (Exception ex)
@@ -35,4 +38,6 @@ namespace Business.Mensajeria.Email.implements
             }
         }
     }
+
 }
+
