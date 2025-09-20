@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Entity.Migrations.PostgresDb
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20250919022832_posgrets")]
-    partial class posgrets
+    [Migration("20250920012026_posgret")]
+    partial class posgret
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

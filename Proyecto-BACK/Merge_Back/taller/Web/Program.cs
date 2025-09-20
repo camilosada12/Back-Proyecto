@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Web.Service;
 using Web.Infrastructure;
+using Business.Mensajeria.Email.implements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,9 @@ builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Autorización
 builder.Services.AddAuthorization();
+
+builder.Services.AddMemoryCache();
+
 
 // CORS
 builder.Services.AddCustomCors(builder.Configuration);

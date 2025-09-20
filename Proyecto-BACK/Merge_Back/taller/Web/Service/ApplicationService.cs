@@ -20,6 +20,7 @@ using Data.Interfaces.IDataImplement.parameters;
 using Data.Interfaces.IDataImplement.Security;
 using Data.Interfaces.Security;
 using Data.Repositoy;
+using Data.Services;
 using Data.Services.Entities;
 using Data.Services.Security;
 using Entity.Domain.Models.Implements.ModelSecurity;
@@ -30,7 +31,6 @@ using Utilities.Custom;
 using Web.AutoMapper;
 using Web.Configurations;
 using Web.Infrastructure;
-using ServiceEmail = Business.Mensajeria.Email.implements;
 using Web.WebBackgroundService;
 
 namespace Web.Service
@@ -67,7 +67,7 @@ namespace Web.Service
             services.AddScoped<IPdfGeneratorService, PdfService>();
 
 
-            
+
             //services.AddHostedService<InfractionDiscountBackgroundService>();
             //services.AddScoped<DiscountService>();
 
@@ -125,9 +125,21 @@ namespace Web.Service
             services.AddScoped<IUserMeRepository, MeRepository>();
             services.AddScoped<IAuthCookieFactory, AuthCookieFactory>();
 
-            services.AddScoped<IServiceEmail, ServiceEmails>();
+            //services.AddScoped<IServiceEmail, ServiceEmails>();
 
-            services.AddScoped<EmailBackgroundQueue>();
+            //services.AddScoped<EmailBackgroundQueue>();
+
+            services.AddScoped<IVerificationService, VerificationService>();
+
+            services.AddScoped<VerificationCache>();
+
+            services.AddSingleton<EmailBackgroundQueue>();
+            services.AddHostedService<EmailBackgroundService>();
+
+
+
+            services.AddHostedService<EmailBackgroundService>();
+            services.AddScoped<IServiceEmail, ServiceEmails>();
 
 
             //backGround services

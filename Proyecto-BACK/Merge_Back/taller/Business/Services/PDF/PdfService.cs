@@ -1,6 +1,7 @@
 ﻿using Business.Interfaces.PDF;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.EntitiesDto;
+using Entity.DTOs.Select.Entities;
 using Microsoft.Playwright;
 using System.Web;
 using Template.Templates;
@@ -61,6 +62,42 @@ namespace Business.Services.PDF
             }
         }
 
+        public async Task<byte[]> GeneratePaymentAgreementPdfAsync(PaymentAgreementSelectDto dto)
+        {
+            var html = BuildPaymentAgreementHtml(dto);
+
+            await EnsureBrowserAsync();
+
+            var context = await _browser!.NewContextAsync(new() { ViewportSize = null });
+            try
+            {
+                var page = await context.NewPageAsync();
+                await page.EmulateMediaAsync(new() { Media = Media.Print });
+                await page.SetContentAsync(html, new PageSetContentOptions
+                {
+                    WaitUntil = WaitUntilState.NetworkIdle,
+                    Timeout = 10_000
+                });
+
+                return await page.PdfAsync(new PagePdfOptions
+                {
+                    Format = "A4",
+                    PrintBackground = true,
+                    Margin = new()
+                    {
+                        Top = "40px",
+                        Bottom = "40px",
+                        Left = "40px",
+                        Right = "40px"
+                    }
+                });
+            }
+            finally
+            {
+                await context.CloseAsync();
+            }
+        }
+
         private static string BuildHtml(UserInfractionSelectDto dto)
         {
             var template = InspectoraTemplate.Html; // 👈 CORREGIDO
@@ -73,5 +110,25 @@ namespace Business.Services.PDF
         .Replace("@TipoInfraccion", HttpUtility.HtmlEncode(dto.typeInfractionName))
         .Replace("@DescripcionInfraccion", HttpUtility.HtmlEncode(dto.observations));
         }
+
+        private static string BuildPaymentAgreementHtml(PaymentAgreementSelectDto dto)
+        {
+            return PaymentAgreementTemplate.Html
+                .Replace("@Direccion", HttpUtility.HtmlEncode(dto.address))
+                .Replace("@Telefono", HttpUtility.HtmlEncode(dto.PhoneNumber ?? "-"))
+                .Replace("@Correo", HttpUtility.HtmlEncode(dto.Email ?? "-"))
+                .Replace("@FechaInicio", dto.AgreementStart.ToString("dd/MM/yyyy"))
+                .Replace("@FechaFin", dto.AgreementEnd.ToString("dd/MM/yyyy"))
+                .Replace("@MontoBase", dto.BaseAmount.ToString("C"))
+                .Replace("@Intereses", dto.AccruedInterest.ToString("C"))
+                .Replace("@SaldoPendiente", dto.OutstandingAmount.ToString("C"))
+                .Replace("@Cuotas", dto.Installments?.ToString() ?? "-")
+                .Replace("@ValorCuota", dto.MonthlyFee?.ToString("C") ?? "-")
+                .Replace("@Estado", dto.IsPaid ? "✅ Pagado" : "⏳ Pendiente")
+                .Replace("@Coactivo", dto.IsCoactive
+                    ? $"<p><span class='label'>Proceso coactivo desde:</span> {dto.CoactiveActivatedOn:dd/MM/yyyy}</p>"
+                    : "");
+        }
+
     }
 }

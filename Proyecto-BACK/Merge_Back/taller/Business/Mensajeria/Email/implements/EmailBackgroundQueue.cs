@@ -11,12 +11,15 @@ namespace Business.Mensajeria.Email.implements
     {
         private readonly Channel<Func<Task>> _queue = Channel.CreateUnbounded<Func<Task>>();
 
+        // Se encola un "trabajo" (delegado async)
         public async Task QueueBackgroundWorkItemAsync(Func<Task> workItem)
         {
             await _queue.Writer.WriteAsync(workItem);
         }
 
+        // El worker lo consume uno a uno
         public IAsyncEnumerable<Func<Task>> DequeueAsync(CancellationToken token)
             => _queue.Reader.ReadAllAsync(token);
     }
+
 }

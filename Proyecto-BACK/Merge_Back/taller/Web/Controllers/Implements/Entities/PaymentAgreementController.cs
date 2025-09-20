@@ -1,7 +1,10 @@
 ﻿using Business.Interfaces.IBusinessImplements.Entities;
+using Business.Interfaces.PDF;
+using Business.Services.PDF;
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Select.Entities;
+using Entity.Infrastructure.Contexts;
 using Entity.Init;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -17,12 +20,16 @@ namespace Web.Controllers.Implements.Entities
         : BaseController<PaymentAgreementDto, PaymentAgreementSelectDto, IPaymentAgreementServices>
     {
         private readonly IPaymentAgreementServices _paymentAgreementService;
+        private readonly IPdfGeneratorService _pdfService;
+
 
         public PaymentAgreementController(
             IPaymentAgreementServices services,
+            IPdfGeneratorService pdf,
             ILogger<PaymentAgreementController> logger
         ) : base(services, logger)
         {
+            _pdfService = pdf;
             _paymentAgreementService = services; // ✅ ahora sí se asigna
         }
 
@@ -69,6 +76,22 @@ namespace Web.Controllers.Implements.Entities
                 return StatusCode(500, new { message = "Error interno del servidor." });
             }
         }
+
+ [HttpGet("{id}/pdf")]
+public async Task<IActionResult> DownloadPaymentAgreementPdf(int id)
+{
+    var paymentAgreementDto = await _paymentAgreementService.GetByIdAsync(id);
+    if (paymentAgreementDto == null)
+    {
+        _logger.LogWarning("Acuerdo de pago con ID {Id} no encontrado.", id);
+        return NotFound(new { message = $"No se encontró un acuerdo de pago con ID {id}" });
+    }
+
+    var pdfBytes = await _pdfService.GeneratePaymentAgreementPdfAsync(paymentAgreementDto);
+    return File(pdfBytes, "application/pdf", $"AcuerdoPago_{id}.pdf");
+}
+
+
 
 
 
