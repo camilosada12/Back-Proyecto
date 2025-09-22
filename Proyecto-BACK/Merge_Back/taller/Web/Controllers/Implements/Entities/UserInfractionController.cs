@@ -70,7 +70,6 @@ namespace Web.Controllers.Implements.Entities
             var items = await _service.GetByDocumentAsync(documentTypeId, documentNumber.Trim());
             return Ok(new { isSuccess = true, count = items.Count, data = items });
         }
-
         [HttpPost("create-with-person")]
         [ProducesResponseType(typeof(UserInfractionSelectDto), 200)]
         [ProducesResponseType(400)]
@@ -83,19 +82,35 @@ namespace Web.Controllers.Implements.Entities
             try
             {
                 var result = await _service.CreateWithPersonAsync(dto);
-                return Ok(new { isSuccess = true, message = "Multa registrada exitosamente.", data = result });
+
+                // ✅ Construir URL absoluta al PDF
+                var pdfUrl = Url.Action(
+                    nameof(DownloadContractPdf),     // acción del controlador
+                    "UserInfraction",                // controlador
+                    new { id = result.id },          // parámetro
+                    Request.Scheme                   // http o https
+                );
+
+                return Ok(new
+                {
+                    isSuccess = true,
+                    message = "Multa registrada exitosamente.",
+                    data = result,
+                    pdfUrl // 👈 ahora se envía la ruta del PDF
+                });
             }
             catch (BusinessException ex)
             {
                 _logger.LogWarning(ex, "Error de negocio al crear multa con persona");
                 return BadRequest(new { isSuccess = false, message = ex.Message });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error inesperado al crear multa con persona");
                 return StatusCode(500, new { isSuccess = false, message = "Error interno del servidor." });
             }
         }
+
 
 
         // GET: api/UserInfraction/{id}/pdf

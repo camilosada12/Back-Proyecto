@@ -60,5 +60,16 @@ namespace Business.Mensajeria.Implements
         {
             await SendEmailAsync(to, builder.GetSubject(), builder.GetBody(), builder.GetAttachments());
         }
+
+        public async Task SendEmailAsyncReactivacion(string to, IEmailContentBuilder builder)
+        {
+            await SendEmailAsync(to, builder.GetSubject(), builder.GetBody(), builder.GetAttachments());
+        }
+
+        public async Task SendEmailAsyncBloqueo(string to, IEmailContentBuilder builder)
+        {
+            await SendEmailAsync(to, builder.GetSubject(), builder.GetBody(), builder.GetAttachments());
+        }
+
     }
 }

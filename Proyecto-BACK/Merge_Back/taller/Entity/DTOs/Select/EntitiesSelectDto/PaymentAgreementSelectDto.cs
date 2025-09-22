@@ -13,7 +13,7 @@ namespace Entity.DTOs.Select.Entities
         public string PhoneNumber { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string address { get; set; } = null!;
-
+        public string? Neighborhood { get; set; }
         // Datos de la infracción
         public string Infringement { get; set; } = null!;
         public string TypeFine { get; set; } = null!;

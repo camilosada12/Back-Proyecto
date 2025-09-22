@@ -10,5 +10,7 @@ namespace Entity.DTOs.Default.LoginDto.response.LoginResultDto
     {
         public bool IsSuccess { get; set; }
         public string? Message { get; set; }
+        public string? Token { get; set; }
+        public DateTime? LastVerificationSentAt { get; set; }
     }
 }

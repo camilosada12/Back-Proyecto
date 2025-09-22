@@ -16,9 +16,10 @@ namespace Data.Services
             _cache = cache;
         }
 
-        public void SaveCode(string email, string code)
+        // Guardar código con duración dinámica (24h, 3d, etc.)
+        public void SaveCode(string email, string code, TimeSpan duration)
         {
-            _cache.Set(email, code, TimeSpan.FromMinutes(15)); // Expira en 15 min
+            _cache.Set(email, code, duration);
         }
 
         public bool ValidateCode(string email, string code)

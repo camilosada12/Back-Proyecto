@@ -1,6 +1,7 @@
 ﻿// Business.Mensajeria.Email.implements/MonthlyEmailAppService.cs
 using Business.Mensajeria.Email.@interface;
 using Data.Interfaces.IDataImplement.Security; // IUserRepository
+using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -27,70 +28,45 @@ namespace Business.Mensajeria.Email.implements
         _logger = logger;
     }
 
-    // Se ejecuta el día 4 por el worker
-    public async Task EjecutarEnvioMensualAsync(CancellationToken ct = default)
-    {
-        var now = DateTime.UtcNow;
-
-        var pendientes = await _users.GetUnverifiedUsersAsync(ct);
-        if (pendientes.Count == 0)
+        // Se ejecuta el día 4 por el worker
+        public async Task EjecutarEnvioMensualAsync(CancellationToken ct = default)
         {
-            _logger.LogInformation("No hay usuarios pendientes de verificación.");
-            return;
-        }
+            var now = DateTime.UtcNow;
 
-        // 1) Generar/renovar códigos (si no hay uno vigente)
-        int generados = 0;
-        foreach (var u in pendientes)
-        {
-            // si ya tiene un código Y NO ha vencido, no re-enviamos (antispam)
-            if (u.EmailVerificationExpiresAt.HasValue && u.EmailVerificationExpiresAt.Value > now
-                && !string.IsNullOrWhiteSpace(u.EmailVerificationCode))
+            // ⚡ Buscar usuarios activos
+            var activos = await _db.users
+                .Where(u => u.Status == UserStatus.Active)
+                .ToListAsync(ct);
+
+            foreach (var u in activos)
             {
-                continue;
-            }
+                // Si ya le enviamos este mes, no repetir
+                if (u.LastVerificationSentAt.HasValue && u.LastVerificationSentAt.Value.Month == now.Month)
+                    continue;
 
-            // generar nuevo
-            var code = new Random().Next(100000, 999999).ToString();
-            u.EmailVerificationCode = code;
-            u.EmailVerificationExpiresAt = now.AddHours(24);
-            generados++;
-        }
+                // Generar código nuevo válido 3 días
+                var code = new Random().Next(100000, 999999).ToString();
+                u.EmailVerificationCode = code;
+                u.EmailVerificationExpiresAt = now.AddDays(3);
+                u.LastVerificationSentAt = now;
 
-        if (generados > 0)
-            await _db.SaveChangesAsync(ct);
-
-        _logger.LogInformation("Usuarios pendientes: {Total}. Codigos generados/renovados: {Gen}.",
-                               pendientes.Count, generados);
-
-        // 2) Enviar correos (a todos los pendientes, si tienen código vigente)
-        int enviados = 0, saltados = 0;
-        foreach (var u in pendientes)
-        {
-            if (string.IsNullOrWhiteSpace(u.email)) { saltados++; continue; }
-            if (string.IsNullOrWhiteSpace(u.EmailVerificationCode) ||
-                !(u.EmailVerificationExpiresAt.HasValue && u.EmailVerificationExpiresAt.Value > now))
-            {   // sin código vigente → nada que enviar
-                saltados++; continue;
-            }
-
-            try
-            {
+                try
+                {
                     var builder = new VerificacionEmailBuilder(
-    u.Person?.firstName ?? "Usuario",
-    u.EmailVerificationCode
-);
+                        u.Person?.firstName ?? "Usuario",
+                        code
+                    );
 
                     await _email.SendEmailAsyncVerificacion(u.email!, builder);
-
                 }
                 catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error enviando código a {Email}", u.email);
+                {
+                    _logger.LogError(ex, "Error enviando código mensual a {Email}", u.email);
+                }
             }
+
+            await _db.SaveChangesAsync(ct);
         }
 
-        _logger.LogInformation("Envio mensual verificación: enviados={Enviados}, saltados={Saltados}.", enviados, saltados);
     }
-}
 }

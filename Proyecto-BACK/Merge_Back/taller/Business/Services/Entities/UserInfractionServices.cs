@@ -31,6 +31,7 @@ public class UserInfractionServices
     private readonly IUserNotificationRepository _notifs;   // FK -> Notificaciones de usuario
     private readonly EmailBackgroundQueue _emailQueue;      // Cola para enviar correos en background
     private readonly IServiceScopeFactory _scopeFactory;    // Permite crear servicios scoped en tareas background
+    private readonly IPdfGeneratorService _pdfservices;     // Servicio para generar PDFs
 
     public UserInfractionServices(
         IUserInfractionRepository repo,
@@ -41,7 +42,8 @@ public class UserInfractionServices
         ILogger<UserInfractionServices> logger,
         EmailBackgroundQueue emailQueue,
         IServiceScopeFactory scopeFactory,
-        Entity.Infrastructure.Contexts.ApplicationDbContext db
+        Entity.Infrastructure.Contexts.ApplicationDbContext db,
+        IPdfGeneratorService pdfService
     ) : base(repo, mapper, db)
     {
         _repo = repo;
@@ -51,6 +53,7 @@ public class UserInfractionServices
         _logger = logger;
         _emailQueue = emailQueue;
         _scopeFactory = scopeFactory;
+        _pdfservices = pdfService;
     }
 
     // -------- Helpers FK --------
@@ -248,7 +251,7 @@ public class UserInfractionServices
         await _context.userNotification.AddAsync(notification);
         await _context.SaveChangesAsync();
 
-        // 6. Crear UserInfraction (la multa) enlazando la notificación
+        // 6. Crear UserInfraction
         var infraction = new UserInfraction
         {
             UserId = user.id,
@@ -257,12 +260,34 @@ public class UserInfractionServices
             stateInfraction = EstadoMulta.Pendiente,
             observations = typeInfraction.description,
             amountToPay = amount,
-            UserNotificationId = notification.id // 👈 se enlaza a la notificación recién creada
+            UserNotificationId = notification.id
         };
 
         await _repo.CreateAsync(infraction);
 
-        return _mapper.Map<UserInfractionSelectDto>(infraction);
+        // 🔄 Mapear a DTO completo (con los datos cargados)
+        var infractionDto = _mapper.Map<UserInfractionSelectDto>(infraction);
+
+        // 📄 Generar PDF
+        var pdfBytes = await _pdfservices.GeneratePdfAsync(infractionDto);
+
+        // 📨 Enviar correo en background con PDF adjunto
+        await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var emailService = scope.ServiceProvider.GetRequiredService<IServiceEmail>();
+
+            var builder = new InfraccionEmailBuilder(infractionDto, pdfBytes);
+
+            await emailService.SendEmailAsync(
+                user.email,
+                builder.GetSubject(),
+                builder.GetBody(),
+                builder.GetAttachments()?.ToList()
+            );
+        });
+
+        return infractionDto;
     }
 
 

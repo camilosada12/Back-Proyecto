@@ -1,4 +1,5 @@
 ﻿// Entity.relacionesModel.RelacionesModelSecurity.RelacionUser
+using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,22 +13,19 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
             builder.ToTable("user", schema: "ModelSecurity");
 
             // ----- Campos básicos -----
-
             builder.Property(p => p.PasswordHash)
                    .IsRequired()
                    .HasMaxLength(100)
                    .IsUnicode(false);
 
-            // Email opcional (nullable en BD)
             builder.Property(e => e.email)
-                   .IsRequired(false)          
+                   .IsRequired(false)
                    .HasMaxLength(150)
                    .IsUnicode(false);
 
-            // ----- Campos de verificación de email -----
-
+            // ----- Campos de verificación -----
             builder.Property(u => u.EmailVerified)
-                   .HasDefaultValue(false);    
+                   .HasDefaultValue(false);
 
             builder.Property(u => u.EmailVerificationCode)
                    .HasMaxLength(6)
@@ -36,9 +34,15 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
             builder.Property(u => u.EmailVerificationExpiresAt);
             builder.Property(u => u.EmailVerifiedAt);
 
-            // ----- Relaciones -----
+            // 🔹 Estado del usuario
+            builder.Property(u => u.Status)
+                   .HasDefaultValue(UserStatus.Pending);
 
-            // 1:1 opcional User <-> Person (sin cascada)
+            // 🔹 Control de re-verificación mensual
+            builder.Property(u => u.LastVerificationSentAt);
+            builder.Property(u => u.LastReverificationAt);
+
+            // ----- Relaciones -----
             builder.HasOne(u => u.Person)
                    .WithOne(p => p.User)
                    .HasForeignKey<User>(u => u.PersonId)
@@ -46,7 +50,6 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
                    .OnDelete(DeleteBehavior.Restrict)
                    .HasConstraintName("FK_User_Person");
 
-            // FK opcional: documentType
             builder.HasOne(p => p.documentType)
                    .WithMany(dt => dt.person)
                    .HasForeignKey(p => p.documentTypeId)

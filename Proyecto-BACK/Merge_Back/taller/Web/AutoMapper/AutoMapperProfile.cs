@@ -83,39 +83,37 @@ namespace Web.AutoMapper
                 .ForMember(dest => dest.MonthlyFee, opt => opt.MapFrom(src => src.MonthlyFee));
 
             CreateMap<PaymentAgreement, PaymentAgreementSelectDto>()
-                .ForMember(d => d.PersonName,
-                    o => o.MapFrom(s => s.userInfraction.User.Person != null
-                        ? $"{s.userInfraction.User.Person.firstName} {s.userInfraction.User.Person.lastName}"
-                        : string.Empty))
-                .ForMember(d => d.DocumentNumber,
-                    o => o.MapFrom(s => s.userInfraction.User.documentNumber ?? string.Empty))
-                .ForMember(d => d.DocumentType,
-                    o => o.MapFrom(s => s.userInfraction.User.documentType != null
-                        ? s.userInfraction.User.documentType.name
-                        : string.Empty))
-                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.userInfraction.User.email ?? string.Empty))
-                .ForMember(d => d.address, o => o.MapFrom(s => s.address))
-                .ForMember(d => d.Infringement, o => o.MapFrom(s => s.userInfraction.observations))
-                .ForMember(d => d.TypeFine, o => o.MapFrom(s => s.userInfraction.typeInfraction.type_Infraction))
-                .ForMember(d => d.ValorSMDLV,
-                    o => o.MapFrom(s =>
-                        s.userInfraction.typeInfraction.fineCalculationDetail != null
-                            ? s.userInfraction.typeInfraction.fineCalculationDetail
-                                .OrderByDescending(f => f.valueSmldv.Current_Year)   // 👈 traer el más reciente
-                                .Select(f => (decimal)f.valueSmldv.value_smldv)
-                                .FirstOrDefault()
-                            : 0
-                    ))
-                .ForMember(d => d.PaymentMethod,
-                    o => o.MapFrom(s => s.TypePayment != null ? s.TypePayment.name : string.Empty))
-                .ForMember(d => d.FrequencyPayment,
-                    o => o.MapFrom(s => s.paymentFrequency.intervalPage))
-                // 🔹 nuevos campos
-                .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
-                .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee));
-
-
+            .ForMember(d => d.PersonName,
+                o => o.MapFrom(s => s.userInfraction.User.Person != null
+                    ? $"{s.userInfraction.User.Person.firstName} {s.userInfraction.User.Person.lastName}"
+                    : string.Empty))
+            .ForMember(d => d.DocumentNumber,
+                o => o.MapFrom(s => s.userInfraction.User.documentNumber ?? string.Empty))
+            .ForMember(d => d.DocumentType,
+                o => o.MapFrom(s => s.userInfraction.User.documentType != null
+                    ? s.userInfraction.User.documentType.name
+                    : string.Empty))
+            .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
+            .ForMember(d => d.Email, o => o.MapFrom(s => s.userInfraction.User.email ?? string.Empty))
+            .ForMember(d => d.address, o => o.MapFrom(s => s.address))
+            .ForMember(d => d.Neighborhood, o => o.MapFrom(s => s.neighborhood)) // 👈 agregado
+            .ForMember(d => d.Infringement, o => o.MapFrom(s => s.userInfraction.typeInfraction.description))
+            .ForMember(d => d.TypeFine, o => o.MapFrom(s => s.userInfraction.typeInfraction.type_Infraction))
+            .ForMember(d => d.ValorSMDLV,
+                o => o.MapFrom(s =>
+                    s.userInfraction.typeInfraction.fineCalculationDetail != null
+                        ? s.userInfraction.typeInfraction.fineCalculationDetail
+                            .OrderByDescending(f => f.valueSmldv.Current_Year)
+                            .Select(f => (decimal)f.valueSmldv.value_smldv)
+                            .FirstOrDefault()
+                        : 0
+                ))
+            .ForMember(d => d.PaymentMethod,
+                o => o.MapFrom(s => s.TypePayment != null ? s.TypePayment.name : string.Empty))
+            .ForMember(d => d.FrequencyPayment,
+                o => o.MapFrom(s => s.paymentFrequency.intervalPage))
+            .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
+            .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee));
 
 
 
@@ -221,11 +219,6 @@ namespace Web.AutoMapper
                 .ForMember(d => d.firstName, o => o.MapFrom(s => s.firstName))
                 .ForMember(d => d.lastName, o => o.MapFrom(s => s.lastName));
           
-
-
-
-
-
         }
 
     }

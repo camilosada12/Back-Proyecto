@@ -17,102 +17,114 @@ namespace Template.Templates
     body {
       font-family: Arial, sans-serif;
       font-size: 12pt;
-      line-height: 1.5;
       color: #000;
       margin: 40px;
     }
-
     h1 {
       text-align: center;
       color: #2c3e50;
-      border-bottom: 2px solid #4CAF50;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
-
+    h2 {
+      margin-top: 25px;
+      color: #2c3e50;
+    }
     .section {
-      margin-top: 20px;
+      margin-top: 15px;
     }
-
-    .label {
-      font-weight: bold;
-      color: #555;
+    .info p {
+      margin: 3px 0;
     }
-
-    .value {
-      margin-left: 5px;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
     }
-
     table, th, td {
-      border: 1px solid #ccc;
+      border: 1px solid #333;
     }
-
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
-
     th {
-      background-color: #f4f4f4;
+      background-color: #f2f2f2;
     }
-
+    th, td {
+      padding: 6px;
+      text-align: center;
+    }
     .footer {
       margin-top: 40px;
       text-align: center;
       font-style: italic;
+      font-size: 10pt;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <h1>📑 Acuerdo de Pago</h1>
+  <h1>📄 Acuerdo de Pago </h1>
+  <p style=""text-align:center; font-size:10pt; color:#666;"">
+    Generado por el Sistema de Gestión de Multas
+  </p>
 
   <div class=""section"">
-    <span class=""label"">Dirección:</span> <span class=""value"">@Direccion</span><br/>
-    <span class=""label"">Barrio:</span> <span class=""value"">@Barrio</span><br/>
-    <span class=""label"">Teléfono:</span> <span class=""value"">@Telefono</span><br/>
-    <span class=""label"">Correo:</span> <span class=""value"">@Correo</span><br/>
+    <p><strong>Nombre:</strong> @Nombre</p>
+    <p><strong>Documento:</strong> @Documento (@TipoDocumento)</p>
+    <p><strong>Dirección:</strong> @Direccion</p>
+    <p><strong>Barrio:</strong> @Barrio</p>
+    <p><strong>Teléfono:</strong> @Telefono</p>
+    <p><strong>Correo:</strong> @Correo</p>
   </div>
 
   <div class=""section"">
-    <span class=""label"">Inicio del acuerdo:</span> <span class=""value"">@FechaInicio</span><br/>
-    <span class=""label"">Fin del acuerdo:</span> <span class=""value"">@FechaFin</span><br/>
-    <span class=""label"">Descripción:</span> <span class=""value"">@Descripcion</span>
+    <p><strong>Inicio del acuerdo:</strong> @FechaInicio</p>
+    <p><strong>Fin del acuerdo:</strong> @FechaFin</p>
+    <p><strong>Fecha expedición cédula:</strong> @ExpedicionCedula</p>
+    <p><strong>Método de pago:</strong> @MetodoPago</p>
+    <p><strong>Frecuencia de pago:</strong> @FrecuenciaPago</p>
+    <p><strong>Cuotas pactadas:</strong> @Cuotas</p>
+  </div>
+
+  <div class=""section"">
+    <p><strong>Tipo de infracción:</strong> @TipoInfraccion</p>
+    <p><strong>Detalle de infracción:</strong> @Infraccion</p>
+    <p><strong>Valor SMDLV:</strong> @ValorSMDLV</p>
   </div>
 
   <h2>💰 Información financiera</h2>
   <table>
-    <tr>
-      <th>Monto Base</th>
-      <th>Intereses</th>
-      <th>Saldo Pendiente</th>
-      <th>Cuotas</th>
-      <th>Valor Cuota</th>
-    </tr>
-    <tr>
-      <td>@MontoBase</td>
-      <td>@Intereses</td>
-      <td>@SaldoPendiente</td>
-      <td>@Cuotas</td>
-      <td>@ValorCuota</td>
-    </tr>
+    <thead>
+      <tr>
+        <th>Monto Base</th>
+        <th>Intereses</th>
+        <th>Saldo Pendiente</th>
+        <th>Cuotas</th>
+        <th>Valor Cuota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>@MontoBase</td>
+        <td>@Intereses</td>
+        <td>@SaldoPendiente</td>
+        <td>@Cuotas</td>
+        <td>@ValorCuota</td>
+      </tr>
+    </tbody>
   </table>
 
   <div class=""section"">
-    <p><span class=""label"">Estado:</span> @Estado</p>
+    <p><strong>Estado:</strong> @Estado</p>
     @Coactivo
+    @UltimoInteres
   </div>
 
   <div class=""footer"">
-    <p>Sistema de Gestión de Multas</p>
+    <p>Este acuerdo de pago se rige por la normatividad vigente en Colombia 
+    (Ley 769 de 2002 y demás normas concordantes).</p>
+    <p><em>Sistema de Gestión de Multas</em></p>
   </div>
 </body>
 </html>";
+
     }
 }
 

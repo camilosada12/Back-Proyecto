@@ -15,7 +15,14 @@ namespace Business.Mensajeria.Email.@interface
 
         Task SendEmailAsyncVerificacion(string to, IEmailContentBuilder builder);
 
-       // Task SendEmailAsync(string to, IEmailContentBuilder builder);
+        // Nuevo: correo de reactivación de cuenta
+        Task SendEmailAsyncReactivacion(string to, IEmailContentBuilder builder);
+
+        // Opcional: correo de bloqueo notificado al usuario
+        Task SendEmailAsyncBloqueo(string to, IEmailContentBuilder builder);
+
+        // Task SendEmailAsync(string to, IEmailContentBuilder builder);
+
 
 
     }

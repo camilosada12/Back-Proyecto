@@ -212,6 +212,12 @@ namespace Business.Services.Security
 
 
         public void InvalidateUserCache(int userId) => _cache.Remove(MeKey(userId));
+
+        public async Task<User?> FindByEmailAsync(string email)
+        {
+            return await _userRepository.FindEmail(email);
+        }
+
     }
 }
 

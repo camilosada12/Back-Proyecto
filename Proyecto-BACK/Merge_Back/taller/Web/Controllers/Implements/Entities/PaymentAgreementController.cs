@@ -22,7 +22,6 @@ namespace Web.Controllers.Implements.Entities
         private readonly IPaymentAgreementServices _paymentAgreementService;
         private readonly IPdfGeneratorService _pdfService;
 
-
         public PaymentAgreementController(
             IPaymentAgreementServices services,
             IPdfGeneratorService pdf,
@@ -57,13 +56,29 @@ namespace Web.Controllers.Implements.Entities
         {
             try
             {
-                // 🚀 Crear y devolver el objeto completo
+                // 🚀 Crear el acuerdo
                 var created = await _paymentAgreementService.CreateAsync(dto);
 
                 if (created == null)
                     return BadRequest(new { message = "No se pudo crear el acuerdo de pago." });
 
-                return Ok(created); // 👉 aquí regresas el objeto, incluyendo el ID
+                // 🔹 Generar URL del PDF
+                var pdfUrl = Url.Action(
+                     nameof(DownloadPaymentAgreementPdf),
+                     "PaymentAgreement",
+                     new { id = created.Id },
+                     Request.Scheme,
+                     Request.Host.ToString()
+                );
+
+
+
+                // 👉 Devolver el acuerdo y el link del PDF
+                return Ok(new
+                {
+                    agreement = created,
+                    pdfUrl
+                });
             }
             catch (ValidationException ex)
             {
@@ -77,23 +92,20 @@ namespace Web.Controllers.Implements.Entities
             }
         }
 
- [HttpGet("{id}/pdf")]
-public async Task<IActionResult> DownloadPaymentAgreementPdf(int id)
-{
-    var paymentAgreementDto = await _paymentAgreementService.GetByIdAsync(id);
-    if (paymentAgreementDto == null)
-    {
-        _logger.LogWarning("Acuerdo de pago con ID {Id} no encontrado.", id);
-        return NotFound(new { message = $"No se encontró un acuerdo de pago con ID {id}" });
-    }
 
-    var pdfBytes = await _pdfService.GeneratePaymentAgreementPdfAsync(paymentAgreementDto);
-    return File(pdfBytes, "application/pdf", $"AcuerdoPago_{id}.pdf");
-}
+        [HttpGet("{id}/pdf")]
+        public async Task<IActionResult> DownloadPaymentAgreementPdf(int id)
+        {
+            var paymentAgreementDto = await _paymentAgreementService.GetByIdAsync(id);
+            if (paymentAgreementDto == null)
+            {
+                _logger.LogWarning("Acuerdo de pago con ID {Id} no encontrado.", id);
+                return NotFound(new { message = $"No se encontró un acuerdo de pago con ID {id}" });
+            }
 
-
-
-
+            var pdfBytes = await _pdfService.GeneratePaymentAgreementPdfAsync(paymentAgreementDto);
+            return File(pdfBytes, "application/pdf", $"AcuerdoPago_{id}.pdf");
+        }
 
         protected override Task<IEnumerable<PaymentAgreementSelectDto>> GetAllAsync(GetAllType getAllType)
             => _service.GetAllAsync(getAllType);

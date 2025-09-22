@@ -1,11 +1,11 @@
 ﻿using Business.Mensajeria.Email.@interface;
 using Data.Services;
+using Entity.Domain.Enums; // Aquí defines UserStatus
+using Entity.Infrastructure.Contexts;
 using Helpers.CodigoVerification;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Mensajeria.Email.implements
@@ -26,36 +26,157 @@ namespace Business.Mensajeria.Email.implements
             _cache = cache;
         }
 
+        // Registro inicial
         public async Task SendVerificationAsync(string nombre, string email)
         {
             var code = CodeGenerator.GenerateNumericCode();
 
-            // Guardar en cache
-            _cache.SaveCode(email, code);
+            // Guardar en caché con duración de 24h
+            _cache.SaveCode(email, code, TimeSpan.FromHours(24));
 
-            // Mandar correo en segundo plano
+            // Actualizar en BD
+            using var scope = _scopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var user = db.users.FirstOrDefault(u => u.email == email);
+
+            if (user != null)
+            {
+                user.Status = UserStatus.Pending;
+                user.EmailVerificationCode = code;
+                user.EmailVerificationExpiresAt = DateTime.UtcNow.AddHours(24);
+                await db.SaveChangesAsync();
+            }
+
+            // Envío en segundo plano
             await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
             {
-                using var scope = _scopeFactory.CreateScope();
-                var emailService = scope.ServiceProvider.GetRequiredService<IVerificationService>();
-
                 var builder = new VerificacionEmailBuilder(nombre, code);
-                await emailService.SendEmailAsync(email, builder);
+                using var innerScope = _scopeFactory.CreateScope();
+                var emailSender = innerScope.ServiceProvider.GetRequiredService<IServiceEmail>();
+                await emailSender.SendEmailAsync(email, builder.GetSubject(), builder.GetBody());
             });
         }
 
+        // Validar código
         public bool ValidateCode(string email, string code)
         {
-            return _cache.ValidateCode(email, code);
+            // 1) Validar con caché
+            if (_cache.ValidateCode(email, code))
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var user = db.users.FirstOrDefault(u => u.email == email);
+
+                if (user != null)
+                {
+                    user.Status = UserStatus.Active;
+                    user.EmailVerified = true;
+                    user.EmailVerifiedAt = DateTime.UtcNow;
+                    db.SaveChanges();
+                }
+
+                return true;
+            }
+
+            // 2) Validar con BD
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var user = db.users.FirstOrDefault(u => u.email == email);
+
+                if (user != null &&
+                    user.EmailVerificationCode == code &&
+                    user.EmailVerificationExpiresAt > DateTime.UtcNow)
+                {
+                    user.Status = UserStatus.Active;
+                    user.EmailVerified = true;
+                    user.EmailVerifiedAt = DateTime.UtcNow;
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        // 👉 este método lo pide el IVerificationService
         public async Task SendEmailAsync(string email, VerificacionEmailBuilder builder)
         {
-            // Aquí usas tu servicio de envío real
-            // Ejemplo:
             var emailSender = _scopeFactory.GetRequiredService<IServiceEmail>();
             await emailSender.SendEmailAsync(email, builder.GetSubject(), builder.GetBody());
+        }
+
+        // Reactivar cuenta bloqueada
+        public async Task<bool> ReactivateAccountAsync(string email, string code)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var user = db.users.FirstOrDefault(u => u.email == email);
+
+            if (user != null &&
+                user.Status == UserStatus.Blocked &&
+                user.EmailVerificationCode == code &&
+                user.EmailVerificationExpiresAt > DateTime.UtcNow)
+            {
+                user.Status = UserStatus.Active;
+                user.EmailVerifiedAt = DateTime.UtcNow;
+                await db.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        // Enviar código de reactivación
+        public async Task SendReactivationCodeAsync(string email)
+        {
+            var code = CodeGenerator.GenerateNumericCode();
+            _cache.SaveCode(email, code, TimeSpan.FromHours(24));
+
+            using var scope = _scopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var user = db.users.FirstOrDefault(u => u.email == email);
+
+            if (user != null && user.Status == UserStatus.Blocked)
+            {
+                user.EmailVerificationCode = code;
+                user.EmailVerificationExpiresAt = DateTime.UtcNow.AddHours(24);
+                await db.SaveChangesAsync();
+
+                await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
+                {
+                    var builder = new VerificacionEmailBuilder(user.Person?.firstName ?? "Usuario", code);
+                    using var innerScope = _scopeFactory.CreateScope();
+                    var emailSender = innerScope.ServiceProvider.GetRequiredService<IServiceEmail>();
+                    await emailSender.SendEmailAsync(email, builder.GetSubject(), builder.GetBody());
+                });
+            }
+        }
+
+        // Re-verificación mensual
+        public async Task SendMonthlyReverificationAsync(string email, string nombre)
+        {
+            var code = CodeGenerator.GenerateNumericCode();
+            _cache.SaveCode(email, code, TimeSpan.FromDays(3));
+
+            using var scope = _scopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var user = db.users.FirstOrDefault(u => u.email == email);
+
+            if (user != null && user.Status == UserStatus.Active)
+            {
+                user.EmailVerificationCode = code;
+                user.EmailVerificationExpiresAt = DateTime.UtcNow.AddDays(3);
+                user.LastVerificationSentAt = DateTime.UtcNow;
+                await db.SaveChangesAsync();
+
+                await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
+                {
+                    var builder = new VerificacionEmailBuilder(nombre, code);
+                    using var innerScope = _scopeFactory.CreateScope();
+                    var emailSender = innerScope.ServiceProvider.GetRequiredService<IServiceEmail>();
+                    await emailSender.SendEmailAsync(email, builder.GetSubject(), builder.GetBody());
+                });
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Web.Infrastructure;
 using Business.Interfaces.IBusinessImplements.Security;
 using System.IdentityModel.Tokens.Jwt;
+using Entity.DTOs.Default.LoginDto.response.LoginResultDto;
 
 namespace Web.Controllers
 {
@@ -60,6 +61,17 @@ namespace Web.Controllers
         {
             var (access, refresh, csrf) = await _tokenService.GenerateTokensAsync(dto);
 
+            // 🔹 Buscar el usuario para extraer la fecha
+            var user = await _authService.FindByEmailAsync(dto.email);
+            if (user == null)
+            {
+                return Unauthorized(new LoginResultDto
+                {
+                    IsSuccess = false,
+                    Message = "Credenciales inválidas"
+                });
+            }
+
             var now = DateTime.UtcNow;
 
             Response.Cookies.Append(
@@ -77,7 +89,12 @@ namespace Web.Controllers
                 csrf,
                 _cookieFactory.CsrfCookieOptions(now.AddDays(_jwt.RefreshTokenExpirationDays)));
 
-            return Ok(new { isSuccess = true, message = "Login exitoso" });
+            return Ok(new LoginResultDto
+            {
+                IsSuccess = true,
+                Message = "Login exitoso",
+                LastVerificationSentAt = user.LastVerificationSentAt 
+            });
         }
 
         /// <summary>Renueva tokens (usa refresh cookie + comprobación CSRF double-submit).</summary>

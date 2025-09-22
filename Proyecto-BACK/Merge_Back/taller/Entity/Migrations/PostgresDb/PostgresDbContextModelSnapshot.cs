@@ -947,6 +947,12 @@ namespace Entity.Migrations.PostgresDb
                     b.Property<DateTime?>("EmailVerifiedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("LastReverificationAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastVerificationSentAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -955,6 +961,11 @@ namespace Entity.Migrations.PostgresDb
 
                     b.Property<int?>("PersonId")
                         .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("active")
                         .HasColumnType("boolean");
@@ -991,8 +1002,11 @@ namespace Entity.Migrations.PostgresDb
                             id = 1,
                             EmailVerified = true,
                             EmailVerifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastReverificationAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastVerificationSentAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PasswordHash = "admin123",
                             PersonId = 1,
+                            Status = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentNumber = "1234567890",
@@ -1005,8 +1019,11 @@ namespace Entity.Migrations.PostgresDb
                             id = 2,
                             EmailVerified = true,
                             EmailVerifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastReverificationAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastVerificationSentAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PasswordHash = "sara12312",
                             PersonId = 2,
+                            Status = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentNumber = "0123432121",

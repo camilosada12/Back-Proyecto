@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/20250919035913_sqlserver.Designer.cs
-    [Migration("20250919035913_sqlserver")]
+    [Migration("20250922005410_sqlserver")]
     partial class sqlserver
-========
-    [Migration("20250920012005_Initial")]
-    partial class Initial
->>>>>>>> origin/rama-ingrid:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/20250920012005_Initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1007,6 +1002,12 @@ namespace Entity.Migrations
                     b.Property<DateTime?>("EmailVerifiedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("LastReverificationAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastVerificationSentAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -1015,6 +1016,11 @@ namespace Entity.Migrations
 
                     b.Property<int?>("PersonId")
                         .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("active")
                         .HasColumnType("bit");
@@ -1052,8 +1058,11 @@ namespace Entity.Migrations
                             id = 1,
                             EmailVerified = true,
                             EmailVerifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastReverificationAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastVerificationSentAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PasswordHash = "admin123",
                             PersonId = 1,
+                            Status = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentNumber = "1234567890",
@@ -1066,8 +1075,11 @@ namespace Entity.Migrations
                             id = 2,
                             EmailVerified = true,
                             EmailVerifiedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastReverificationAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastVerificationSentAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             PasswordHash = "sara12312",
                             PersonId = 2,
+                            Status = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             documentNumber = "0123432121",
