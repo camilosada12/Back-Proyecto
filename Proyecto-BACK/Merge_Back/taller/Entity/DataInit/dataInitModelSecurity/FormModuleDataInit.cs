@@ -27,7 +27,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                 {
                     id = 1,
                     formid = 1,    
-                    moduleid = 1, 
+                    moduleid = 5, 
                     is_deleted = false,
                     created_date = seedDate,
                 },
@@ -38,7 +38,152 @@ namespace Entity.DataInit.dataInitModelSecurity
                     moduleid = 2,
                     is_deleted = false,
                     created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 3,
+                    formid = 3,
+                    moduleid = 2,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 4,
+                    formid = 4,
+                    moduleid = 2,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 5,
+                    formid = 5,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 6,
+                    formid = 6,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 7,
+                    formid = 7,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 8,
+                    formid = 8,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 9,
+                    formid = 9,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 10,
+                    formid = 10,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 11,
+                    formid = 11,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 12,
+                    formid = 12,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 13,
+                    formid = 13,
+                    moduleid = 3,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 14,
+                    formid = 14,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 15,
+                    formid = 15,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 16,
+                    formid = 16,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 17,
+                    formid = 17,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 18,
+                    formid = 18,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 19,
+                    formid = 19,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                new FormModule
+                {
+                    id = 20,
+                    formid = 20,
+                    moduleid = 4,
+                    is_deleted = false,
+                    created_date = seedDate,
                 }
+
             );
         }
     }

@@ -15,21 +15,72 @@ namespace Entity.DataInit.dataInitModelSecurity
         public static void SeedRolFormPermission(this ModelBuilder modelBuilder)
         {
             var seedDate = new DateTime(2025, 01, 01, 0, 0, 0, DateTimeKind.Utc);
-            modelBuilder.Entity<RolFormPermission>().HasData(
-                // permisos para el rol usuario (RolId = 2)
-                new RolFormPermission { id = 1, RolId = 2, FormId = 1, PermissionId = 1, is_deleted = false , created_date = seedDate, }, // leer
-                new RolFormPermission { id = 2, RolId = 2, FormId = 1, PermissionId = 2, is_deleted = false , created_date = seedDate, }, // crear
-                new RolFormPermission { id = 3, RolId = 2, FormId = 1, PermissionId = 3, is_deleted = false , created_date = seedDate, }, // editar
-                new RolFormPermission { id = 4, RolId = 2, FormId = 1, PermissionId = 4, is_deleted = false , created_date = seedDate, }, // eliminar lógico
 
-                // permisos para el rol admin (RolId = 1)
-                new RolFormPermission { id = 5, RolId = 1, FormId = 1, PermissionId = 1, is_deleted = false , created_date = seedDate, },
-                new RolFormPermission { id = 6, RolId = 1, FormId = 1, PermissionId = 2, is_deleted = false , created_date = seedDate, },
-                new RolFormPermission { id = 7, RolId = 1, FormId = 1, PermissionId = 3, is_deleted = false , created_date = seedDate, },
-                new RolFormPermission { id = 8, RolId = 1, FormId = 1, PermissionId = 4, is_deleted = false , created_date = seedDate, },
-                new RolFormPermission { id = 9, RolId = 1, FormId = 1, PermissionId = 5, is_deleted = false , created_date = seedDate, }, // ver eliminados
-                new RolFormPermission { id = 10, RolId = 1, FormId = 1, PermissionId = 6, is_deleted = false , created_date = seedDate, } // recuperar
-            );
+            var rolFormPermissions = new List<RolFormPermission>();
+            int id = 1;
+
+            // ===========================
+            // Permisos para Administrador
+            // ===========================
+            for (int formId = 1; formId <= 20; formId++) // todos los formularios
+            {
+                for (int permissionId = 1; permissionId <= 6; permissionId++) // todos los permisos
+                {
+                    rolFormPermissions.Add(new RolFormPermission
+                    {
+                        id = id++,
+                        RolId = 1, // Administrador
+                        FormId = formId,
+                        PermissionId = permissionId,
+                        is_deleted = false,
+                        created_date = seedDate
+                    });
+                }
+            }
+
+            // ===========================
+            // Permisos para Finanzas
+            // Solo leer Notificación de multas (4) y Perfil (18)
+            // ===========================
+            rolFormPermissions.Add(new RolFormPermission
+            {
+                id = id++,
+                RolId = 2, 
+                FormId = 4, 
+                PermissionId = 1,
+                is_deleted = false,
+                created_date = seedDate
+            });
+
+            rolFormPermissions.Add(new RolFormPermission
+            {
+                id = id++,
+                RolId = 2, 
+                FormId = 18,
+                PermissionId = 1, 
+                is_deleted = false,
+                created_date = seedDate
+            });         
+            rolFormPermissions.Add(new RolFormPermission
+            {
+                id = id++,
+                RolId = 2, 
+                FormId = 19,
+                PermissionId = 1, 
+                is_deleted = false,
+                created_date = seedDate
+            });
+            rolFormPermissions.Add(new RolFormPermission
+            {
+                id = id++,
+                RolId = 2,
+                FormId = 20,
+                PermissionId = 1,
+                is_deleted = false,
+                created_date = seedDate
+            });
+
+            modelBuilder.Entity<RolFormPermission>().HasData(rolFormPermissions);
         }
     }
 }

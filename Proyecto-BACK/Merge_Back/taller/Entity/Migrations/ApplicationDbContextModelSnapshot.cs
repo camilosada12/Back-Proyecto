@@ -562,6 +562,14 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("Icon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Route")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
@@ -592,6 +600,8 @@ namespace Entity.Migrations
                         new
                         {
                             id = 1,
+                            Icon = "pi pi-fw pi-home",
+                            Route = "acuerdoPago",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario de creacion de acuerdo de pago",
@@ -601,11 +611,211 @@ namespace Entity.Migrations
                         new
                         {
                             id = 2,
+                            Icon = "pi pi-fw pi-homeing",
+                            Route = "CreacionMulta",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario para agregar nuevas multas",
                             is_deleted = false,
                             name = "Formulario de creacion de multas"
+                        },
+                        new
+                        {
+                            id = 3,
+                            Icon = "pi pi-fw pi-id-card",
+                            Route = "tipos-multas",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Formulario tipo de  multas",
+                            is_deleted = false,
+                            name = "Formulario tipo de  multas"
+                        },
+                        new
+                        {
+                            id = 4,
+                            Icon = "pi pi-fw pi-check-square",
+                            Route = "notificaciones",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Formulario Notificacion de multas",
+                            is_deleted = false,
+                            name = "Formulario Notificacion de multas"
+                        },
+                        new
+                        {
+                            id = 5,
+                            Icon = "pi pi-fw pi-file",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Formularios",
+                            is_deleted = false,
+                            name = "Formularios"
+                        },
+                        new
+                        {
+                            id = 6,
+                            Icon = "pi pi-fw pi-clone",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Form modules",
+                            is_deleted = false,
+                            name = "Form modules"
+                        },
+                        new
+                        {
+                            id = 7,
+                            Icon = "pi pi-fw pi-th-large",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Modulos",
+                            is_deleted = false,
+                            name = "Modulos"
+                        },
+                        new
+                        {
+                            id = 8,
+                            Icon = "pi pi-fw pi-users",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "personas",
+                            is_deleted = false,
+                            name = "personas"
+                        },
+                        new
+                        {
+                            id = 9,
+                            Icon = "pi pi-fw pi-lock-open",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "permisos",
+                            is_deleted = false,
+                            name = "permisos"
+                        },
+                        new
+                        {
+                            id = 10,
+                            Icon = "pi pi-fw pi-key",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Rol Form Permission",
+                            is_deleted = false,
+                            name = "Rol Form Permission"
+                        },
+                        new
+                        {
+                            id = 11,
+                            Icon = "pi pi-fw pi-users",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Roles",
+                            is_deleted = false,
+                            name = "Roles"
+                        },
+                        new
+                        {
+                            id = 12,
+                            Icon = "pi pi-fw pi-user",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Usuarios",
+                            is_deleted = false,
+                            name = "Usuarios"
+                        },
+                        new
+                        {
+                            id = 13,
+                            Icon = "pi pi-fw pi-user-plus",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Rol Usuario",
+                            is_deleted = false,
+                            name = "Rol Usuario"
+                        },
+                        new
+                        {
+                            id = 14,
+                            Icon = "pi pi-fw pi-briefcase",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "departamento",
+                            is_deleted = false,
+                            name = "departamento"
+                        },
+                        new
+                        {
+                            id = 15,
+                            Icon = "pi pi-fw pi-briefcase",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Tipo de Documento",
+                            is_deleted = false,
+                            name = "Tipo de Documento"
+                        },
+                        new
+                        {
+                            id = 16,
+                            Icon = "pi pi-fw pi-briefcase",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Municipio",
+                            is_deleted = false,
+                            name = "Municipio"
+                        },
+                        new
+                        {
+                            id = 17,
+                            Icon = "pi pi-fw pi-briefcase",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Frecuencia de pago",
+                            is_deleted = false,
+                            name = "Frecuencia de pago "
+                        },
+                        new
+                        {
+                            id = 18,
+                            Icon = "pi pi-fw pi-briefcase",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Perfil",
+                            is_deleted = false,
+                            name = "Perfil"
+                        },
+                        new
+                        {
+                            id = 19,
+                            Icon = "pi pi-fw pi-briefcase",
+                            Route = "dashboard",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Notificacion de acuerdo ",
+                            is_deleted = false,
+                            name = "Notificacion de acuerdo"
+                        },
+                        new
+                        {
+                            id = 20,
+                            Icon = "pi pi-fw pi-home",
+                            Route = "consultar-ingresar",
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "inicio ",
+                            is_deleted = false,
+                            name = "inicio"
                         });
                 });
 
@@ -650,7 +860,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 1,
                             is_deleted = false,
-                            moduleid = 1
+                            moduleid = 5
                         },
                         new
                         {
@@ -660,6 +870,168 @@ namespace Entity.Migrations
                             formid = 2,
                             is_deleted = false,
                             moduleid = 2
+                        },
+                        new
+                        {
+                            id = 3,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 3,
+                            is_deleted = false,
+                            moduleid = 2
+                        },
+                        new
+                        {
+                            id = 4,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 4,
+                            is_deleted = false,
+                            moduleid = 2
+                        },
+                        new
+                        {
+                            id = 5,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 5,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 6,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 6,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 7,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 7,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 8,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 8,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 9,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 9,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 10,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 10,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 11,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 11,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 12,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 12,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 13,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 13,
+                            is_deleted = false,
+                            moduleid = 3
+                        },
+                        new
+                        {
+                            id = 14,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 14,
+                            is_deleted = false,
+                            moduleid = 4
+                        },
+                        new
+                        {
+                            id = 15,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 15,
+                            is_deleted = false,
+                            moduleid = 4
+                        },
+                        new
+                        {
+                            id = 16,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 16,
+                            is_deleted = false,
+                            moduleid = 4
+                        },
+                        new
+                        {
+                            id = 17,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 17,
+                            is_deleted = false,
+                            moduleid = 4
+                        },
+                        new
+                        {
+                            id = 18,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 18,
+                            is_deleted = false,
+                            moduleid = 4
+                        },
+                        new
+                        {
+                            id = 19,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 19,
+                            is_deleted = false,
+                            moduleid = 4
+                        },
+                        new
+                        {
+                            id = 20,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 20,
+                            is_deleted = false,
+                            moduleid = 4
                         });
                 });
 
@@ -703,27 +1075,45 @@ namespace Entity.Migrations
                             id = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Módulo para administración general",
+                            description = "Inicio",
                             is_deleted = false,
-                            name = "Módulo de hacienda"
+                            name = "Inicio"
                         },
                         new
                         {
                             id = 2,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Módulo encargado de crear nuevas multas",
+                            description = "Contenido",
                             is_deleted = false,
-                            name = "Módulo de inspectora"
+                            name = "Contenido"
                         },
                         new
                         {
                             id = 3,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "modulo encargado para visualizar las multas inspuestas",
+                            description = "Gestion Avanzada",
                             is_deleted = false,
-                            name = "Modulo de usuario"
+                            name = "Gestion Avanzada"
+                        },
+                        new
+                        {
+                            id = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "perfil",
+                            is_deleted = false,
+                            name = "perfil"
+                        },
+                        new
+                        {
+                            id = 5,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "modulo de parametro",
+                            is_deleted = false,
+                            name = "modulo de parametro"
                         });
                 });
 
@@ -969,9 +1359,9 @@ namespace Entity.Migrations
                             id = 2,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Rol estándar para usuarios normales",
+                            description = "Rol con permisos limitados",
                             is_deleted = false,
-                            name = "Usuario"
+                            name = "Finanza"
                         });
                 });
 
@@ -1708,7 +2098,7 @@ namespace Entity.Migrations
                             id = 1,
                             FormId = 1,
                             PermissionId = 1,
-                            RolId = 2,
+                            RolId = 1,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
@@ -1718,7 +2108,7 @@ namespace Entity.Migrations
                             id = 2,
                             FormId = 1,
                             PermissionId = 2,
-                            RolId = 2,
+                            RolId = 1,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
@@ -1728,7 +2118,7 @@ namespace Entity.Migrations
                             id = 3,
                             FormId = 1,
                             PermissionId = 3,
-                            RolId = 2,
+                            RolId = 1,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
@@ -1738,7 +2128,7 @@ namespace Entity.Migrations
                             id = 4,
                             FormId = 1,
                             PermissionId = 4,
-                            RolId = 2,
+                            RolId = 1,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false
@@ -1746,46 +2136,6 @@ namespace Entity.Migrations
                         new
                         {
                             id = 5,
-                            FormId = 1,
-                            PermissionId = 1,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 6,
-                            FormId = 1,
-                            PermissionId = 2,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 7,
-                            FormId = 1,
-                            PermissionId = 3,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 8,
-                            FormId = 1,
-                            PermissionId = 4,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 9,
                             FormId = 1,
                             PermissionId = 5,
                             RolId = 1,
@@ -1795,10 +2145,1190 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 10,
+                            id = 6,
                             FormId = 1,
                             PermissionId = 6,
                             RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 7,
+                            FormId = 2,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 8,
+                            FormId = 2,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 9,
+                            FormId = 2,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 10,
+                            FormId = 2,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 11,
+                            FormId = 2,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 12,
+                            FormId = 2,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 13,
+                            FormId = 3,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 14,
+                            FormId = 3,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 15,
+                            FormId = 3,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 16,
+                            FormId = 3,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 17,
+                            FormId = 3,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 18,
+                            FormId = 3,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 19,
+                            FormId = 4,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 20,
+                            FormId = 4,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 21,
+                            FormId = 4,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 22,
+                            FormId = 4,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 23,
+                            FormId = 4,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 24,
+                            FormId = 4,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 25,
+                            FormId = 5,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 26,
+                            FormId = 5,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 27,
+                            FormId = 5,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 28,
+                            FormId = 5,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 29,
+                            FormId = 5,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 30,
+                            FormId = 5,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 31,
+                            FormId = 6,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 32,
+                            FormId = 6,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 33,
+                            FormId = 6,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 34,
+                            FormId = 6,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 35,
+                            FormId = 6,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 36,
+                            FormId = 6,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 37,
+                            FormId = 7,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 38,
+                            FormId = 7,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 39,
+                            FormId = 7,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 40,
+                            FormId = 7,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 41,
+                            FormId = 7,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 42,
+                            FormId = 7,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 43,
+                            FormId = 8,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 44,
+                            FormId = 8,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 45,
+                            FormId = 8,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 46,
+                            FormId = 8,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 47,
+                            FormId = 8,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 48,
+                            FormId = 8,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 49,
+                            FormId = 9,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 50,
+                            FormId = 9,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 51,
+                            FormId = 9,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 52,
+                            FormId = 9,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 53,
+                            FormId = 9,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 54,
+                            FormId = 9,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 55,
+                            FormId = 10,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 56,
+                            FormId = 10,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 57,
+                            FormId = 10,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 58,
+                            FormId = 10,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 59,
+                            FormId = 10,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 60,
+                            FormId = 10,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 61,
+                            FormId = 11,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 62,
+                            FormId = 11,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 63,
+                            FormId = 11,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 64,
+                            FormId = 11,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 65,
+                            FormId = 11,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 66,
+                            FormId = 11,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 67,
+                            FormId = 12,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 68,
+                            FormId = 12,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 69,
+                            FormId = 12,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 70,
+                            FormId = 12,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 71,
+                            FormId = 12,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 72,
+                            FormId = 12,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 73,
+                            FormId = 13,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 74,
+                            FormId = 13,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 75,
+                            FormId = 13,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 76,
+                            FormId = 13,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 77,
+                            FormId = 13,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 78,
+                            FormId = 13,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 79,
+                            FormId = 14,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 80,
+                            FormId = 14,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 81,
+                            FormId = 14,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 82,
+                            FormId = 14,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 83,
+                            FormId = 14,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 84,
+                            FormId = 14,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 85,
+                            FormId = 15,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 86,
+                            FormId = 15,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 87,
+                            FormId = 15,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 88,
+                            FormId = 15,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 89,
+                            FormId = 15,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 90,
+                            FormId = 15,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 91,
+                            FormId = 16,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 92,
+                            FormId = 16,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 93,
+                            FormId = 16,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 94,
+                            FormId = 16,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 95,
+                            FormId = 16,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 96,
+                            FormId = 16,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 97,
+                            FormId = 17,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 98,
+                            FormId = 17,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 99,
+                            FormId = 17,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 100,
+                            FormId = 17,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 101,
+                            FormId = 17,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 102,
+                            FormId = 17,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 103,
+                            FormId = 18,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 104,
+                            FormId = 18,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 105,
+                            FormId = 18,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 106,
+                            FormId = 18,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 107,
+                            FormId = 18,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 108,
+                            FormId = 18,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 109,
+                            FormId = 19,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 110,
+                            FormId = 19,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 111,
+                            FormId = 19,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 112,
+                            FormId = 19,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 113,
+                            FormId = 19,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 114,
+                            FormId = 19,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 115,
+                            FormId = 20,
+                            PermissionId = 1,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 116,
+                            FormId = 20,
+                            PermissionId = 2,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 117,
+                            FormId = 20,
+                            PermissionId = 3,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 118,
+                            FormId = 20,
+                            PermissionId = 4,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 119,
+                            FormId = 20,
+                            PermissionId = 5,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 120,
+                            FormId = 20,
+                            PermissionId = 6,
+                            RolId = 1,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 121,
+                            FormId = 4,
+                            PermissionId = 1,
+                            RolId = 2,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 122,
+                            FormId = 18,
+                            PermissionId = 1,
+                            RolId = 2,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 123,
+                            FormId = 19,
+                            PermissionId = 1,
+                            RolId = 2,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 124,
+                            FormId = 20,
+                            PermissionId = 1,
+                            RolId = 2,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false

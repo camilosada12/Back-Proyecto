@@ -25,8 +25,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                 new RolUser
                 {
                     id = 2,
-                    RolId = 2,   
-                    UserId = 2,   
+                    RolId = 2,
+                    UserId = 2,
                     is_deleted = false,
                     created_date = seedDate
                 }

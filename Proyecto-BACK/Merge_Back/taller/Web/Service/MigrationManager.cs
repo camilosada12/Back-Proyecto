@@ -28,7 +28,7 @@ namespace Web.Service
                                 var ctx = sp.GetService<ApplicationDbContext>();
                                 if (ctx == null) { log.LogWarning("SQL Server no configurado: se omite."); break; }
                                 log.LogInformation("➡️ Migrando SQL Server...");
-                                ctx.Database.Migrate();
+                                 ctx.Database.Migrate();
                                 log.LogInformation("✅ Migración completada para SqlServer");
                                 break;
                             }

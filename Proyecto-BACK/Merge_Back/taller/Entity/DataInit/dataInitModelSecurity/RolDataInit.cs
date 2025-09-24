@@ -33,8 +33,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                 new Rol
                 {
                     id = 2,
-                    name = "Usuario",
-                    description = "Rol estándar para usuarios normales",
+                    name = "Finanza",
+                    description = "Rol con permisos limitados",
                     active = true,
                     is_deleted = false,
                     created_date = seedDate,

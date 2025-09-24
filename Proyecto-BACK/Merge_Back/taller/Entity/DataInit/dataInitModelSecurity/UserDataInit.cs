@@ -49,6 +49,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                      EmailVerificationExpiresAt = null,
                   
                  }
+
+                    
             );
         }
     }

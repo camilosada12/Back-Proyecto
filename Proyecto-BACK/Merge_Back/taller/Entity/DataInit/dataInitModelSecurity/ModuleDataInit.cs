@@ -24,8 +24,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                 new Module
                 {
                     id = 1,
-                    name = "Módulo de hacienda",
-                    description = "Módulo para administración general",
+                    name = "Inicio",
+                    description = "Inicio",
                     active = true,
                     is_deleted = false,
                     created_date = seedDate,
@@ -33,8 +33,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                 new Module
                 {
                     id = 2,
-                    name = "Módulo de inspectora",
-                    description = "Módulo encargado de crear nuevas multas",
+                    name = "Contenido",
+                    description = "Contenido",
                     active = true,
                     is_deleted = false,
                     created_date = seedDate,
@@ -42,12 +42,30 @@ namespace Entity.DataInit.dataInitModelSecurity
                 new Module
                 {
                     id = 3 ,
-                    name = "Modulo de usuario",
-                    description =  "modulo encargado para visualizar las multas inspuestas",
+                    name = "Gestion Avanzada",
+                    description = "Gestion Avanzada",
                     active = true,
                     is_deleted = false,
                     created_date = seedDate,
-                }
+                },
+                 new Module
+                {
+                    id = 4 ,
+                    name = "perfil",
+                    description = "perfil",
+                    active = true,
+                    is_deleted = false,
+                    created_date = seedDate,
+                },
+                 new Module
+                 {
+                     id = 5,
+                     name = "modulo de parametro",
+                     description = "modulo de parametro",
+                     active = true,
+                     is_deleted = false,
+                     created_date = seedDate,
+                 }
             );
         }
     }
