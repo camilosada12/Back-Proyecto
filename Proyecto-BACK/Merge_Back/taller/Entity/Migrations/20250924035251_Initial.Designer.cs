@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/20250924032133_Initial.Designer.cs
-    [Migration("20250924032133_Initial")]
+    [Migration("20250924035251_Initial")]
     partial class Initial
-========
-    [Migration("20250919035913_sqlserver")]
-    partial class sqlserver
->>>>>>>> agregarMulta:Proyecto-BACK/Merge_Back/taller/Entity/Migrations/20250919035913_sqlserver.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

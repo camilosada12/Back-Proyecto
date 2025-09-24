@@ -16,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 // --------------------
 builder.Services.AddControllers();
 
+builder.Services.AddSignalR();
+
+
 // Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();   // ✅ necesario para que funcione Swagger
@@ -51,6 +54,9 @@ builder.Services.AddMemoryCache();
 builder.Services.AddCustomCors(builder.Configuration);
 
 var app = builder.Build();
+
+app.MapHub<Web.Hubs.InfractionHub>("/infractionHub");
+
 
 // --------------------
 // Middleware

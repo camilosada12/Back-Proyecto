@@ -68,8 +68,8 @@ namespace Web.Service
 
 
 
-            //services.AddHostedService<InfractionDiscountBackgroundService>();
-            //services.AddScoped<DiscountService>();
+            services.AddHostedService<InfractionDiscountBackgroundService>();
+            services.AddScoped<DiscountService>();
 
 
 

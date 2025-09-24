@@ -15,29 +15,23 @@ namespace Business.Services
         /// <param name="typeInfractionName">Nombre real del tipo de infracción</param>
         /// <returns>DTO con detalle del cálculo</returns>
         public FineCalculationDetailDto Calculate(
-            UserInfractionDto infraction,
-            decimal baseAmount,
-            int smldvId,
-            string smldvName,
-            string typeInfractionName)
+          UserInfractionDto infraction,
+          decimal baseAmount,
+          int smldvId,
+          string smldvName,
+          string typeInfractionName)
         {
             int daysPassed = (DateTime.Now.Date - infraction.dateInfraction.Date).Days;
 
-            decimal porcentaje = daysPassed switch
-            {
-                0 => 0.5m,
-                1 => 0.4m,
-                2 => 0.3m,
-                3 => 0.2m,
-                4 => 0.1m,
-                _ => 0m
-            };
+            // Regla: 50% solo durante los primeros 5 días
+            decimal porcentaje = daysPassed <= 5 ? 0.5m : 0m;
 
-            decimal totalCalculation = baseAmount - (baseAmount * porcentaje);
+            decimal discount = baseAmount * porcentaje;
+            decimal totalCalculation = baseAmount - discount;
 
             return new FineCalculationDetailDto
             {
-                formula = $"Base {baseAmount:C} - {porcentaje * 100}% de descuento ({baseAmount * porcentaje:C})",
+                formula = $"Base {baseAmount:C} - {porcentaje * 100}% de descuento ({discount:C})",
                 percentaje = porcentaje,
                 totalCalculation = totalCalculation,
                 typeInfractionId = infraction.typeInfractionId,
@@ -46,5 +40,6 @@ namespace Business.Services
                 valueSmldvName = smldvName
             };
         }
+
     }
 }
