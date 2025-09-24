@@ -66,7 +66,11 @@ namespace Data.Services.Security
             //     .FirstOrDefaultAsync(u => u.documentTypeId == documentTypeId && u.documentNumber == docNum);
 
             return await _dbSet
-                .FirstOrDefaultAsync(u => u.documentTypeId == documentTypeId);
+             .Include(u => u.Person) // Incluye la persona para tener más datos disponibles
+             .FirstOrDefaultAsync(u =>
+                 u.documentTypeId == documentTypeId &&
+                 u.documentNumber == docNum &&
+                 !u.is_deleted);
         }
 
         public Task<bool> VerifyPasswordAsync(User user, string plainPassword)
@@ -119,6 +123,8 @@ namespace Data.Services.Security
         }
 
 
+
+
         //public async Task<User> ValidateUserAsync(LoginDto loginDto)
         //{
         //    // Detecta modo de forma estricta (evita basura de Swagger)
@@ -167,8 +173,8 @@ namespace Data.Services.Security
         //    return user;
         //}
         public Task<User?> GetByEmailAsync(string email) => FindEmail(email);
-public Task<bool> ExistsByEmailAsync(string email)
-    => _dbSet.AnyAsync(u => u.email == email);
+        public Task<bool> ExistsByEmailAsync(string email)
+        => _dbSet.AnyAsync(u => u.email == email);
 
     }
 }

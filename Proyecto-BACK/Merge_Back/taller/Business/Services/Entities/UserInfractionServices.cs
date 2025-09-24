@@ -5,10 +5,13 @@ using Business.Mensajeria.Email.implements;
 using Business.Mensajeria.Email.@interface;
 using Business.Repository;
 using Business.Strategy.StrategyGet.Implement;
+using Business.Validaciones.Entities.UserInfraction;
 using Data.Interfaces.IDataImplement.Entities;   // <- IUserInfractionRepository
 using Data.Interfaces.IDataImplement.Security;   // <- IUserRepository
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.Domain.Models.Implements.ModelSecurity;
+using Entity.DTOs.Default.AnexarMulta;           // <- DTO especial para anexar multas con persona
 using Entity.DTOs.Default.EntitiesDto;
 using Helpers.Business.Business.Helpers.Validation;
 using Microsoft.EntityFrameworkCore;
@@ -22,14 +25,12 @@ public class UserInfractionServices
     : BusinessBasic<UserInfractionDto, UserInfractionSelectDto, UserInfraction>, IUserInfractionServices
 {
     private readonly ILogger<UserInfractionServices> _logger;
-    private readonly IUserInfractionRepository _repo;       // CRUD principal
+    private readonly IUserInfractionRepository _repo;       // CRUD principal de infracciones
     private readonly IUserRepository _users;                 // FK -> User
-    private readonly ITypeInfractionRepository _types;      // FK -> TypeInfraction
-    private readonly IUserNotificationRepository _notifs;
-    private readonly EmailBackgroundQueue _emailQueue;
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    // FK -> UserNotification
+    private readonly ITypeInfractionRepository _types;      // FK -> Tipo de infracción
+    private readonly IUserNotificationRepository _notifs;   // FK -> Notificaciones de usuario
+    private readonly EmailBackgroundQueue _emailQueue;      // Cola para enviar correos en background
+    private readonly IServiceScopeFactory _scopeFactory;    // Permite crear servicios scoped en tareas background
 
     public UserInfractionServices(
         IUserInfractionRepository repo,
@@ -39,7 +40,7 @@ public class UserInfractionServices
         IMapper mapper,
         ILogger<UserInfractionServices> logger,
         EmailBackgroundQueue emailQueue,
-        IServiceScopeFactory scopeFactory,   // 👈 se inyecta aquí
+        IServiceScopeFactory scopeFactory,
         Entity.Infrastructure.Contexts.ApplicationDbContext db
     ) : base(repo, mapper, db)
     {
@@ -50,26 +51,25 @@ public class UserInfractionServices
         _logger = logger;
         _emailQueue = emailQueue;
         _scopeFactory = scopeFactory;
-
-
     }
 
     // -------- Helpers FK --------
     private async Task EnsureFkAsync(UserInfractionDto dto)
     {
-        // FK: userId
+        // Validar FK: userId
         if (await _users.GetByIdAsync(dto.userId) is null)
             throw new BusinessException($"El usuario con ID {dto.userId} no existe.");
 
-        // FK: typeInfractionId
+        // Validar FK: typeInfractionId
         if (await _types.GetByIdAsync(dto.typeInfractionId) is null)
             throw new BusinessException($"El tipo de infracción con ID {dto.typeInfractionId} no existe.");
 
-        // FK: UserNotificationId
+        // Validar FK: UserNotificationId
         if (await _notifs.GetByIdAsync(dto.UserNotificationId) is null)
             throw new BusinessException($"La notificación de usuario con ID {dto.UserNotificationId} no existe.");
     }
 
+    // 🔎 Obtener infracción por ID
     public override async Task<UserInfractionSelectDto?> GetByIdAsync(int id)
     {
         BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
@@ -81,14 +81,7 @@ public class UserInfractionServices
         return _mapper.Map<UserInfractionSelectDto>(entity);
     }
 
-    //public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
-    //{
-    //    BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
-    //    await EnsureFkAsync(dto);
-
-    //    return await base.CreateAsync(dto);
-    //}
-
+    // ✏️ Actualizar infracción existente
     public override async Task<bool> UpdateAsync(UserInfractionDto dto)
     {
         BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
@@ -101,6 +94,7 @@ public class UserInfractionServices
         return await base.UpdateAsync(dto);
     }
 
+    // ❌ Eliminar infracción
     public override async Task<bool> DeleteAsync(int id)
     {
         BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
@@ -111,6 +105,7 @@ public class UserInfractionServices
         return await base.DeleteAsync(id);
     }
 
+    // 🔄 Restaurar lógicamente una infracción eliminada
     public override async Task<bool> RestoreLogical(int id)
     {
         BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
@@ -121,6 +116,7 @@ public class UserInfractionServices
         return await base.RestoreLogical(id);
     }
 
+    // 📋 Obtener todas las infracciones con estrategia GetAllType (All, Active, Deleted)
     public override async Task<IEnumerable<UserInfractionSelectDto>> GetAllAsync(GetAllType getAllType)
     {
         var strategy = GetStrategyFactory.GetStrategyGet(_repo, getAllType);
@@ -128,14 +124,14 @@ public class UserInfractionServices
         return _mapper.Map<IEnumerable<UserInfractionSelectDto>>(entities);
     }
 
+    // 🔎 Consultar infracciones por documento
     public async Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber)
     {
-
-
         var entities = await _repo.GetByDocumentAsync(documentTypeId, documentNumber);
         return _mapper.Map<IReadOnlyList<UserInfractionSelectDto>>(entities);
     }
 
+    // 🔎 Obtener infracción con datos completos para PDF
     public async Task<UserInfractionSelectDto> GetByIdAsyncPdf(int id)
     {
         try
@@ -154,36 +150,12 @@ public class UserInfractionServices
         }
     }
 
-    //   public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
-    //   {
-    //       var result = await base.CreateAsync(dto);
-
-    //       await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
-    //       {
-    //           using var scope = _scopeFactory.CreateScope();
-    //           var emailService = scope.ServiceProvider.GetRequiredService<IServiceEmail>();
-    //           var pdfService = scope.ServiceProvider.GetRequiredService<IPdfGeneratorService>();
-
-    //           var user = await _users.GetByIdAsync(dto.userId);
-    //           var pdfBytes = await pdfService.GeneratePdfAsync(await GetByIdAsync(result.id));
-
-    //           var builder = new InfraccionEmailBuilder(await GetByIdAsync(result.id), pdfBytes);
-
-    //           await emailService.SendEmailAsync(
-    //    user!.email,
-    //    builder.GetSubject(),
-    //    builder.GetBody()
-    //);
-
-    //       });
-
-    //       return result;
-    //   }
-
+    // ➕ Crear infracción normal (con userId conocido) + enviar correo con PDF
     public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
     {
         var result = await base.CreateAsync(dto);
 
+        // 📨 Enviar correo con PDF de la multa
         await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
         {
             using var scope = _scopeFactory.CreateScope();
@@ -210,7 +182,88 @@ public class UserInfractionServices
         return result;
     }
 
+    // 🚨 Nuevo método: Crear multa con datos de persona (cuando no hay User todavía)
+    public async Task<UserInfractionSelectDto> CreateWithPersonAsync(CreateInfractionRequestDto dto)
+    {
+        // Validar el DTO
+        var validator = new CreateInfractionRequestValidator();
+        var validationResult = validator.Validate(dto);
+
+        if (!validationResult.IsValid)
+            throw new BusinessException(
+                string.Join(" | ", validationResult.Errors.Select(e => e.ErrorMessage))
+            );
+
+        // 1. Buscar si ya existe el usuario por documento
+        var user = await _users.FindByDocumentAsync(dto.DocumentTypeId, dto.DocumentNumber);
+
+        if (user == null)
+        {
+            // Crear Persona
+            var person = new Person
+            {
+                firstName = dto.FirstName,
+                lastName = dto.LastName,
+                municipalityId = null,
+                phoneNumber = null,
+                address = null,
+                tipoUsuario = TipoUsuario.PersonaNormal
+            };
+            await _context.persons.AddAsync(person);
+            await _context.SaveChangesAsync();
+
+            // Crear Usuario asociado a la persona
+            user = new User
+            {
+                PersonId = person.id,
+                documentTypeId = dto.DocumentTypeId,
+                documentNumber = dto.DocumentNumber,
+                PasswordHash = "DOC_LOGIN" // marcador para login por documento
+            };
+            await _users.CreateAsync(user);
+        }
+
+        // 2. Validar tipo de infracción
+        var typeInfraction = await _types.GetByIdAsync(dto.TypeInfractionId)
+            ?? throw new BusinessException("Tipo de infracción inválido.");
+
+        // 3. Buscar el último SMLDV vigente
+        var smldv = await _context.valueSmldv
+            .OrderByDescending(v => v.created_date)
+            .FirstOrDefaultAsync()
+            ?? throw new BusinessException("No hay SMLDV registrado.");
+
+        // 4. Calcular monto a pagar directamente
+        var amount = dto.SmldvCount * smldv.value_smldv;
+
+        // 5. Crear notificación asociada
+        var notification = new UserNotification
+        {
+            message = $"Nueva infracción registrada: {typeInfraction.description}. Monto a pagar: {amount:C}",
+            shippingDate = DateTime.UtcNow,
+            active = true,
+            is_deleted = false,
+            created_date = DateTime.UtcNow
+        };
+        await _context.userNotification.AddAsync(notification);
+        await _context.SaveChangesAsync();
+
+        // 6. Crear UserInfraction (la multa) enlazando la notificación
+        var infraction = new UserInfraction
+        {
+            UserId = user.id,
+            typeInfractionId = dto.TypeInfractionId,
+            dateInfraction = DateTime.UtcNow,
+            stateInfraction = EstadoMulta.Pendiente,
+            observations = typeInfraction.description,
+            amountToPay = amount,
+            UserNotificationId = notification.id // 👈 se enlaza a la notificación recién creada
+        };
+
+        await _repo.CreateAsync(infraction);
+
+        return _mapper.Map<UserInfractionSelectDto>(infraction);
+    }
+
 
 }
-
-

@@ -11,35 +11,28 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
         {
             builder.ToTable("user", schema: "ModelSecurity");
 
-            // Campos básicos
+            // ----- Campos básicos -----
+
             builder.Property(p => p.PasswordHash)
                    .IsRequired()
                    .HasMaxLength(100)
                    .IsUnicode(false);
 
-            // Si en tu modelo email es opcional, puedes dejarlo Required(false).
-            // Como vas a verificar por email, normalmente es Requerido.
+            // Email opcional (nullable en BD)
             builder.Property(e => e.email)
-                   .IsRequired()
+                   .IsRequired(false)          
                    .HasMaxLength(150)
                    .IsUnicode(false);
 
-            // Índice único en email
-            builder.HasIndex(u => u.email)
-                   .IsUnique();
-
             // ----- Campos de verificación de email -----
 
-            // true/false con valor por defecto = false
             builder.Property(u => u.EmailVerified)
-                   .HasDefaultValue(false);
+                   .HasDefaultValue(false);    
 
-            // Código (6 dígitos); no requerido (solo mientras esté pendiente de verificación)
             builder.Property(u => u.EmailVerificationCode)
                    .HasMaxLength(6)
                    .IsUnicode(false);
 
-            // Fechas de expiración y verificado: nullables
             builder.Property(u => u.EmailVerificationExpiresAt);
             builder.Property(u => u.EmailVerifiedAt);
 
