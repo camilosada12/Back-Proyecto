@@ -1,6 +1,7 @@
 ﻿using Data.Interfaces.IDataImplement.Entities;
 using Data.Repositoy;
 using Entity.Domain.Models.Implements.Entities;
+using Entity.DTOs.filter;
 using Entity.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -58,5 +59,36 @@ namespace Data.Services.Entities
                             u.User.documentNumber == documentNumber)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<UserInfraction>> FilterAsync(UserInfractionFilterDto filter)
+        {
+            var query = _dbSet
+                .Include(u => u.typeInfraction)
+                .Include(u => u.User).ThenInclude(ui => ui.Person)
+                .Where(u => !u.is_deleted)
+                .AsQueryable();
+
+            if (filter.UserId.HasValue)
+                query = query.Where(u => u.UserId == filter.UserId.Value);
+
+
+
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                var term = $"%{filter.SearchTerm.ToLower()}%";
+
+                query = query.Where(u =>
+                    EF.Functions.Like((u.typeInfraction.type_Infraction ?? "").ToLower(), term) ||
+                    EF.Functions.Like((u.observations ?? "").ToLower(), term) ||
+                    EF.Functions.Like((u.User.Person.firstName ?? "").ToLower(), term) ||
+                    EF.Functions.Like((u.User.Person.lastName ?? "").ToLower(), term) ||
+                    EF.Functions.Like((u.User.documentNumber ?? ""), term)
+                );
+            }
+            return await query.ToListAsync();
+        }
+
+
     }
 }

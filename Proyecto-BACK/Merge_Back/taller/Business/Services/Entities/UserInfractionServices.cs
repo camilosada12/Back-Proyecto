@@ -13,6 +13,7 @@ using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.AnexarMulta;           // <- DTO especial para anexar multas con persona
 using Entity.DTOs.Default.EntitiesDto;
+using Entity.DTOs.filter;
 using Helpers.Business.Business.Helpers.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -290,5 +291,10 @@ public class UserInfractionServices
         return infractionDto;
     }
 
+    public async Task<IEnumerable<UserInfractionSelectDto>> FilterAsync(UserInfractionFilterDto filter)
+    {
+        var entities = await _repo.FilterAsync(filter);
+        return _mapper.Map<IEnumerable<UserInfractionSelectDto>>(entities);
+    }
 
 }

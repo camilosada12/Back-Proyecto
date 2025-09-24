@@ -4,9 +4,12 @@ using Business.Interfaces.PDF;
 using Business.Mensajeria.Email.implements;
 using Business.Mensajeria.Email.@interface;
 using Business.Services.Security;
+using Business.Services.Security;
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.AnexarMulta;
+using Entity.DTOs.Default.Email;
+using Entity.DTOs.filter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -14,8 +17,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Exceptions;
 using Web.Controllers.ControllersBase.Web.Controllers.BaseController;
-using Business.Services.Security;
-using Entity.DTOs.Default.Email;
 
 namespace Web.Controllers.Implements.Entities
 {
@@ -127,6 +128,17 @@ namespace Web.Controllers.Implements.Entities
             var pdfBytes = await _pdfService.GeneratePdfAsync(userInfractionSelectDto);
             return File(pdfBytes, "application/pdf", $"Contrato_{userInfractionSelectDto.firstName}.pdf");
         }
+
+        [HttpPost("filter")]
+        public async Task<IActionResult> Filter([FromBody] UserInfractionFilterDto filter)
+        {
+            if (filter == null)
+                return BadRequest(new { message = "Filtro inválido." });
+
+            var result = await _service.FilterAsync(filter);
+            return Ok(new { count = result.Count(), data = result });
+        }
+
 
         //[HttpPost("test-send-email")]
         //public async Task<IActionResult> TestSendEmail([FromBody] UserInfractionDto dto)
