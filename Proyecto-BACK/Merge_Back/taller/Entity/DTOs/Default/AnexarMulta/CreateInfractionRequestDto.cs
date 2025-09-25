@@ -13,6 +13,7 @@ namespace Entity.DTOs.Default.AnexarMulta
         public string LastName { get; set; }
         public int DocumentTypeId { get; set; }
         public string DocumentNumber { get; set; }
+        public string Email { get; set; }
 
         // Multa
         public int TypeInfractionId { get; set; }

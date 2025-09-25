@@ -81,14 +81,29 @@ namespace Web.Controllers.Implements.Entities
             try
             {
                 var result = await _service.CreateWithPersonAsync(dto);
-                return Ok(new { isSuccess = true, message = "Multa registrada exitosamente.", data = result });
+
+                // ✅ Construir URL absoluta al PDF
+                var pdfUrl = Url.Action(
+                    nameof(DownloadContractPdf),     // acción del controlador
+                    "UserInfraction",                // controlador
+                    new { id = result.id },          // parámetro
+                    Request.Scheme                   // http o https
+                );
+
+                return Ok(new
+                {
+                    isSuccess = true,
+                    message = "Multa registrada exitosamente.",
+                    data = result,
+                    pdfUrl // 👈 ahora se envía la ruta del PDF
+                });
             }
             catch (BusinessException ex)
             {
                 _logger.LogWarning(ex, "Error de negocio al crear multa con persona");
                 return BadRequest(new { isSuccess = false, message = ex.Message });
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error inesperado al crear multa con persona");
                 return StatusCode(500, new { isSuccess = false, message = "Error interno del servidor." });

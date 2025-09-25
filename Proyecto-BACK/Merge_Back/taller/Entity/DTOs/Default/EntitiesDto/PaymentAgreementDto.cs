@@ -9,7 +9,7 @@ using Entity.DTOs.Interface.Entities;
 
 namespace Entity.Domain.Models.Implements.Entities
 {
-    public class PaymentAgreementDto : IHasId , IPaymentAgreement
+    public class PaymentAgreementDto : IHasId, IPaymentAgreement
     {
         public int id { get; set; }
         public string address { get; set; }

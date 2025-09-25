@@ -1,6 +1,7 @@
 ﻿
 using Data.Interfaces.IDataImplement.Security;
 using Data.Repositoy;
+using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.Auth;
 using Entity.Infrastructure.Contexts;
@@ -120,6 +121,13 @@ namespace Data.Services.Security
             return _dbSet.FirstOrDefaultAsync(
                 u => u.EmailVerificationCode == code && !u.is_deleted,
                 ct);
+        }
+
+        public async Task<User?> GetByIdWithPersonAsync(int id)
+        {
+            return await _context.users
+                .Include(u => u.Person)
+                .FirstOrDefaultAsync(u => u.id == id && !u.is_deleted);
         }
 
 

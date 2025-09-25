@@ -1,20 +1,23 @@
 ﻿using AutoMapper;
 using Business.Interfaces.IBusinessImplements.Entities;
+using Business.Interfaces.PDF;
+using Business.Mensajeria.Email.implements;
+using Business.Mensajeria.Email.@interface;
 using Business.Repository;
 using Business.Strategy.StrategyGet.Implement;
+using Business.validaciones.Entities.PaymentAgreement;
 using Data.Interfaces.IDataImplement.Entities;
 using Entity.Domain.Enums;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Select.Entities;
 using Entity.Infrastructure.Contexts;
 using Entity.Init;
+using FluentValidation;
 using Helpers.Business.Business.Helpers.Validation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
-using Business.validaciones.Entities.PaymentAgreement;
-using FluentValidation;
-
 // 👇 alias para evitar ambigüedad
 using FVValidationException = FluentValidation.ValidationException;
 
@@ -26,18 +29,25 @@ namespace Business.Services.Entities
         private readonly ILogger<PaymentAgreementServices> _logger;
         private readonly IPaymentAgreementRepository _paymentAgreementRepository;
         private readonly ApplicationDbContext _context;
+        private readonly EmailBackgroundQueue _emailQueue;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         public PaymentAgreementServices(
             IPaymentAgreementRepository paymentAgreementRepository,
             IMapper mapper,
             ILogger<PaymentAgreementServices> logger,
-            ApplicationDbContext context
+            ApplicationDbContext context,
+            EmailBackgroundQueue emailQueue,
+            IServiceScopeFactory scopeFactory
         ) : base(paymentAgreementRepository, mapper, context)
         {
             _paymentAgreementRepository = paymentAgreementRepository;
             _logger = logger;
             _context = context;
+            _emailQueue = emailQueue;
+            _scopeFactory = scopeFactory;
         }
+
 
         public override async Task<IEnumerable<PaymentAgreementSelectDto>> GetAllAsync(GetAllType getAllType)
         {
@@ -71,76 +81,133 @@ namespace Business.Services.Entities
             }
         }
 
-        public new async Task<PaymentAgreementSelectDto?> CreateAsync(PaymentAgreementDto dto)
+        public new async Task<PaymentAgreementSelectDto> CreateAsync(PaymentAgreementDto dto)
         {
-            try
+            // 1️⃣ Crear el acuerdo de pago en la base (internamente maneja validaciones, montos, estado de infracción, etc.)
+            var entity = await CreatePaymentAgreementInternalAsync(dto);
+
+            // 2️⃣ Mapear la entidad a DTO seguro
+            var resultDto = _mapper.Map<PaymentAgreementSelectDto>(entity);
+
+            // 3️⃣ Enviar correo en background usando la cola
+            await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
             {
-                BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
+                try
+                {
+                    // Crear un scope para servicios Scoped como DbContext o repositorios
+                    using var scope = _scopeFactory.CreateScope();
 
-                var createValidator = new PaymentAgreementDtoValidator<PaymentAgreementDto>();
-                var validationResult = createValidator.Validate(dto);
-                if (!validationResult.IsValid)
-                    throw new FVValidationException(validationResult.Errors);
+                    var emailService = scope.ServiceProvider.GetRequiredService<IServiceEmail>();
+                    var pdfService = scope.ServiceProvider.GetRequiredService<IPdfGeneratorService>();
+                    var userInfractionRepo = scope.ServiceProvider.GetRequiredService<IUserInfractionRepository>();
 
-                // 🔹 Consultar infracción desde Data con todos sus detalles
-                var userInfraction = await _paymentAgreementRepository.GetUserInfractionWithDetailsAsync(dto.userInfractionId);
-                if (userInfraction == null)
-                    throw new BusinessException($"La infracción con ID {dto.userInfractionId} no existe.");
+                    // 3a️⃣ Traer la infracción completa asociada al acuerdo
+                    var infraction = await userInfractionRepo.GetByIdAsync(entity.userInfractionId);
+                    if (infraction == null || infraction.User == null || string.IsNullOrWhiteSpace(infraction.User.email))
+                        return; // Si no hay email válido, no hacemos nada
 
-                if (userInfraction.stateInfraction != EstadoMulta.Pendiente)
-                    throw new BusinessException(
-                        $"La infracción con ID {dto.userInfractionId} no permite acuerdos de pago porque está en estado {userInfraction.stateInfraction}."
+                    // 3b️⃣ Mapear DTO seguro para generar PDF
+                    var dtoForPdf = _mapper.Map<PaymentAgreementSelectDto>(entity);
+
+                    // 3c️⃣ Generar PDF del acuerdo
+                    var pdfBytes = await pdfService.GeneratePaymentAgreementPdfAsync(dtoForPdf);
+
+                    // 3d️⃣ Construir email con builder específico
+                    var builder = new PaymentAgreementEmailBuilder(dtoForPdf, pdfBytes);
+
+                    // 3e️⃣ Enviar correo
+                    await emailService.SendEmailAsync(
+                        infraction.User.email,
+                        builder.GetSubject(),
+                        builder.GetBody(),
+                        builder.GetAttachments()
                     );
 
-                // 🔹 Validar frecuencia y tipo de pago
-                var frequency = await _paymentAgreementRepository.GetPaymentFrequencyAsync(dto.paymentFrequencyId)
-                    ?? throw new BusinessException($"La frecuencia de pago con ID {dto.paymentFrequencyId} no existe.");
-
-                var typePayment = await _paymentAgreementRepository.GetTypePaymentAsync(dto.typePaymentId)
-                    ?? throw new BusinessException($"El método de pago con ID {dto.typePaymentId} no existe.");
-
-                // 🔹 Obtener montos desde FineCalculationDetail (ya precalculado)
-                var (baseAmount, installments, monthlyFee) = CalcularMontos(userInfraction, dto);
-
-                // 🔹 Crear entidad PaymentAgreement
-                var agreement = new PaymentAgreement
+                    // 3f️⃣ Log de éxito
+                    _logger.LogInformation(
+                        "Correo enviado correctamente a {Email} para el acuerdo de pago {Id}",
+                        infraction.User.email,
+                        entity.id
+                    );
+                }
+                catch (Exception ex)
                 {
-                    AgreementStart = dto.AgreementStart,
-                    AgreementEnd = dto.AgreementEnd,
-                    expeditionCedula = dto.expeditionCedula,
-                    userInfractionId = dto.userInfractionId,
-                    paymentFrequencyId = dto.paymentFrequencyId,
-                    typePaymentId = dto.typePaymentId,
-                    address = dto.address,
-                    neighborhood = dto.neighborhood,
-                    PhoneNumber = dto.PhoneNumber,
-                    Email = dto.Email,
-                    AgreementDescription = dto.AgreementDescription
-                        ?? $"Acuerdo para {userInfraction.User.Person?.firstName} {userInfraction.User.Person?.lastName} - Infracción: {userInfraction.typeInfraction.description}",
-                    BaseAmount = baseAmount,
-                    AccruedInterest = 0m,
-                    OutstandingAmount = baseAmount,
-                    IsPaid = false,
-                    IsCoactive = false,
-                    Installments = installments,
-                    MonthlyFee = monthlyFee
-                };
+                    // Log de error en el envío, pero no afecta la creación del acuerdo
+                    _logger.LogError(ex, "Error enviando correo para el acuerdo de pago {Id}", resultDto.Id);
+                }
+            });
 
-                // 🔹 Cambiar estado de la infracción
-                userInfraction.stateInfraction = EstadoMulta.ConAcuerdoPago;
-                _context.userInfraction.Update(userInfraction);
-
-                var created = await _paymentAgreementRepository.CreateAsync(agreement);
-                await _context.SaveChangesAsync();
-
-                return _mapper.Map<PaymentAgreementSelectDto>(created);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al crear acuerdo de pago");
-                throw new BusinessException("Error al crear el acuerdo de pago.", ex);
-            }
+            // 4️⃣ Retornar DTO seguro
+            return resultDto;
         }
+
+
+
+        // Método interno para la creación de PaymentAgreement
+        private async Task<PaymentAgreement> CreatePaymentAgreementInternalAsync(PaymentAgreementDto dto)
+        {
+            BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
+
+            // Validación DTO
+            var createValidator = new PaymentAgreementDtoValidator<PaymentAgreementDto>();
+            var validationResult = createValidator.Validate(dto);
+            if (!validationResult.IsValid)
+                throw new FVValidationException(validationResult.Errors);
+
+            // Traer la infracción con detalles
+            var userInfraction = await _paymentAgreementRepository.GetUserInfractionWithDetailsAsync(dto.userInfractionId);
+            if (userInfraction == null)
+                throw new BusinessException($"La infracción con ID {dto.userInfractionId} no existe.");
+
+            if (userInfraction.stateInfraction != EstadoMulta.Pendiente)
+                throw new BusinessException(
+                    $"La infracción con ID {dto.userInfractionId} no permite acuerdos de pago porque está en estado {userInfraction.stateInfraction}."
+                );
+
+            // Validar frecuencia y tipo de pago
+            var frequency = await _paymentAgreementRepository.GetPaymentFrequencyAsync(dto.paymentFrequencyId)
+                ?? throw new BusinessException($"La frecuencia de pago con ID {dto.paymentFrequencyId} no existe.");
+
+            var typePayment = await _paymentAgreementRepository.GetTypePaymentAsync(dto.typePaymentId)
+                ?? throw new BusinessException($"El método de pago con ID {dto.typePaymentId} no existe.");
+
+            // Calcular montos
+            var (baseAmount, installments, monthlyFee) = CalcularMontos(userInfraction, dto);
+
+            // Crear entidad
+            var agreement = new PaymentAgreement
+            {
+                AgreementStart = dto.AgreementStart,
+                AgreementEnd = dto.AgreementEnd,
+                expeditionCedula = dto.expeditionCedula,
+                userInfractionId = dto.userInfractionId,
+                paymentFrequencyId = dto.paymentFrequencyId,
+                typePaymentId = dto.typePaymentId,
+                address = dto.address,
+                neighborhood = dto.neighborhood,
+                PhoneNumber = dto.PhoneNumber,
+                Email = dto.Email,
+                AgreementDescription = dto.AgreementDescription
+                    ?? $"Acuerdo para {userInfraction.User.Person?.firstName} {userInfraction.User.Person?.lastName} - Infracción: {userInfraction.typeInfraction.description}",
+                BaseAmount = baseAmount,
+                AccruedInterest = 0m,
+                OutstandingAmount = baseAmount,
+                IsPaid = false,
+                IsCoactive = false,
+                Installments = installments,
+                MonthlyFee = monthlyFee
+            };
+
+            // Cambiar estado de la infracción
+            userInfraction.stateInfraction = EstadoMulta.ConAcuerdoPago;
+            _context.userInfraction.Update(userInfraction);
+
+            var created = await _paymentAgreementRepository.CreateAsync(agreement);
+            await _context.SaveChangesAsync();
+
+            return created;
+        }
+
 
         public override async Task<bool> UpdateAsync(PaymentAgreementDto dto)
         {

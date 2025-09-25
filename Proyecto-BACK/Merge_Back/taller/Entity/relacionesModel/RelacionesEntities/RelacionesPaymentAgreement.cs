@@ -47,7 +47,7 @@ namespace Entity.relacionesModel.RelacionesEntities
                    .IsRequired();
 
             builder.Property(p => p.BaseAmount)
-               .HasColumnType("decimal(18,2)") 
+               .HasColumnType("decimal(18,2)")
                .IsRequired();
 
             builder.Property(p => p.AccruedInterest)

@@ -78,42 +78,42 @@ namespace Web.AutoMapper
             CreateMap<PaymentAgreement, PaymentAgreementDto>().ReverseMap();
 
             CreateMap<PaymentAgreement, PaymentAgreementDto>()
-                .ReverseMap()
-                .ForMember(dest => dest.Installments, opt => opt.MapFrom(src => src.Installments))
-                .ForMember(dest => dest.MonthlyFee, opt => opt.MapFrom(src => src.MonthlyFee));
+                  .ReverseMap()
+                  .ForMember(dest => dest.Installments, opt => opt.MapFrom(src => src.Installments))
+                  .ForMember(dest => dest.MonthlyFee, opt => opt.MapFrom(src => src.MonthlyFee));
 
             CreateMap<PaymentAgreement, PaymentAgreementSelectDto>()
-                .ForMember(d => d.PersonName,
-                    o => o.MapFrom(s => s.userInfraction.User.Person != null
-                        ? $"{s.userInfraction.User.Person.firstName} {s.userInfraction.User.Person.lastName}"
-                        : string.Empty))
-                .ForMember(d => d.DocumentNumber,
-                    o => o.MapFrom(s => s.userInfraction.User.documentNumber ?? string.Empty))
-                .ForMember(d => d.DocumentType,
-                    o => o.MapFrom(s => s.userInfraction.User.documentType != null
-                        ? s.userInfraction.User.documentType.name
-                        : string.Empty))
-                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.userInfraction.User.email ?? string.Empty))
-                .ForMember(d => d.address, o => o.MapFrom(s => s.address))
-                .ForMember(d => d.Infringement, o => o.MapFrom(s => s.userInfraction.observations))
-                .ForMember(d => d.TypeFine, o => o.MapFrom(s => s.userInfraction.typeInfraction.type_Infraction))
-                .ForMember(d => d.ValorSMDLV,
-                    o => o.MapFrom(s =>
-                        s.userInfraction.typeInfraction.fineCalculationDetail != null
-                            ? s.userInfraction.typeInfraction.fineCalculationDetail
-                                .OrderByDescending(f => f.valueSmldv.Current_Year)   // 👈 traer el más reciente
-                                .Select(f => (decimal)f.valueSmldv.value_smldv)
-                                .FirstOrDefault()
-                            : 0
-                    ))
-                .ForMember(d => d.PaymentMethod,
-                    o => o.MapFrom(s => s.TypePayment != null ? s.TypePayment.name : string.Empty))
-                .ForMember(d => d.FrequencyPayment,
-                    o => o.MapFrom(s => s.paymentFrequency.intervalPage))
-                // 🔹 nuevos campos
-                .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
-                .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee));
+            .ForMember(d => d.PersonName,
+                o => o.MapFrom(s => s.userInfraction.User.Person != null
+                    ? $"{s.userInfraction.User.Person.firstName} {s.userInfraction.User.Person.lastName}"
+                    : string.Empty))
+            .ForMember(d => d.DocumentNumber,
+                o => o.MapFrom(s => s.userInfraction.User.documentNumber ?? string.Empty))
+            .ForMember(d => d.DocumentType,
+                o => o.MapFrom(s => s.userInfraction.User.documentType != null
+                    ? s.userInfraction.User.documentType.name
+                    : string.Empty))
+            .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.PhoneNumber))
+            .ForMember(d => d.Email, o => o.MapFrom(s => s.userInfraction.User.email ?? string.Empty))
+            .ForMember(d => d.address, o => o.MapFrom(s => s.address))
+            .ForMember(d => d.Neighborhood, o => o.MapFrom(s => s.neighborhood)) // 👈 agregado
+            .ForMember(d => d.Infringement, o => o.MapFrom(s => s.userInfraction.typeInfraction.description))
+            .ForMember(d => d.TypeFine, o => o.MapFrom(s => s.userInfraction.typeInfraction.type_Infraction))
+            .ForMember(d => d.ValorSMDLV,
+                o => o.MapFrom(s =>
+                    s.userInfraction.typeInfraction.fineCalculationDetail != null
+                        ? s.userInfraction.typeInfraction.fineCalculationDetail
+                            .OrderByDescending(f => f.valueSmldv.Current_Year)
+                            .Select(f => (decimal)f.valueSmldv.value_smldv)
+                            .FirstOrDefault()
+                        : 0
+                ))
+            .ForMember(d => d.PaymentMethod,
+                o => o.MapFrom(s => s.TypePayment != null ? s.TypePayment.name : string.Empty))
+            .ForMember(d => d.FrequencyPayment,
+                o => o.MapFrom(s => s.paymentFrequency.intervalPage))
+            .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
+            .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee));
 
 
 
@@ -161,19 +161,37 @@ namespace Web.AutoMapper
             CreateMap<ValueSmldv, ValueSmldvSelectDto>();
             CreateMap<ValueSmldv, ValueSmldvDto>().ReverseMap();
 
+            // Mapear UserInfraction → UserInfractionDto (PDF, email, creación)
+            CreateMap<UserInfraction, UserInfractionDto>()
+          .ForMember(d => d.userId, o => o.MapFrom(s => s.UserId))
+          .ForMember(d => d.userEmail, o => o.MapFrom(s => s.User != null && s.User.email != null ? s.User.email : string.Empty))
+          .ForMember(d => d.documentNumber, o => o.MapFrom(s => s.User != null && s.User.documentNumber != null ? s.User.documentNumber : string.Empty))
+          .ForMember(d => d.typeInfractionId, o => o.MapFrom(s => s.typeInfractionId))
+          .ForMember(d => d.stateInfraction, o => o.MapFrom(s => s.stateInfraction))
+          .ForMember(d => d.dateInfraction, o => o.MapFrom(s => s.dateInfraction))
+          .ForMember(d => d.observations, o => o.MapFrom(s => s.observations ?? string.Empty))
+          .ForMember(d => d.amountToPay, o => o.MapFrom(s => s.amountToPay))
+          .ForMember(d => d.UserNotificationId, o => o.MapFrom(s => s.UserNotificationId))
+          .ReverseMap(); // permite crear/actualizar
+
             CreateMap<UserInfraction, UserInfractionSelectDto>()
-                .ForMember(p => p.typeInfractionName,
-                o => o.MapFrom(S => S.typeInfraction != null ? S.typeInfraction.type_Infraction : null))
-                  .ForMember(d => d.firstName,
-                 o => o.MapFrom(s => s.User != null ? s.User.Person.firstName : null))
-                 .ForMember(d => d.lastName,
-                     o => o.MapFrom(s => s.User != null ? s.User.Person.lastName : null))
-              .ForMember(d => d.documentNumber,
-                     o => o.MapFrom(s => s.User != null ? s.User.documentNumber : null));
+     .ForMember(d => d.userId, o => o.MapFrom(s => s.UserId))
+     .ForMember(d => d.userEmail, o => o.MapFrom(s => s.User != null ? s.User.email : string.Empty))
+     .ForMember(d => d.firstName, o => o.MapFrom(s => s.User != null && s.User.Person != null ? s.User.Person.firstName : string.Empty))
+     .ForMember(d => d.lastName, o => o.MapFrom(s => s.User != null && s.User.Person != null ? s.User.Person.lastName : string.Empty))
+     .ForMember(d => d.documentNumber, o => o.MapFrom(s => s.User != null ? s.User.documentNumber : string.Empty))
+     .ForMember(d => d.typeInfractionId, o => o.MapFrom(s => s.typeInfractionId))
+     .ForMember(d => d.typeInfractionName, o => o.MapFrom(s => s.typeInfraction != null ? s.typeInfraction.type_Infraction : string.Empty))
+     .ForMember(d => d.stateInfraction, o => o.MapFrom(s => s.stateInfraction))
+     .ForMember(d => d.dateInfraction, o => o.MapFrom(s => s.dateInfraction))
+     .ForMember(d => d.observations, o => o.MapFrom(s => s.observations ?? string.Empty))
+     .ForMember(d => d.amountToPay, o => o.MapFrom(s => s.amountToPay))
+     .ForMember(d => d.UserNotificationId, o => o.MapFrom(s => s.UserNotificationId));
 
-            CreateMap<UserInfraction, UserInfractionDto>().ReverseMap();
 
-                
+
+
+
 
 
             //parameters 

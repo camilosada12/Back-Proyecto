@@ -10,14 +10,17 @@ using System.Threading.Tasks;
 
 namespace Business.Interfaces.IBusinessImplements.Entities
 {
-    public interface IPaymentAgreementServices : IBusiness<PaymentAgreementDto,PaymentAgreementSelectDto>
+    public interface IPaymentAgreementServices : IBusiness<PaymentAgreementDto, PaymentAgreementSelectDto>
     {
         Task<int> ApplyLateFeesAsync(DateTime nowUtc, CancellationToken ct = default);
         Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId);
 
+        // Ya no usamos "new", solo declaramos el método
         new Task<PaymentAgreementSelectDto?> CreateAsync(PaymentAgreementDto dto);
 
         Task<PaymentAgreementSelectDto> GetByIdAsyncPdf(int id);
 
+        // Task<PaymentAgreementSelectDto?> CreatePaymentAgreementInternalAsync(PaymentAgreementDto dto);
     }
+
 }

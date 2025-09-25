@@ -14,7 +14,6 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
             // ----- Campos básicos -----
 
             builder.Property(p => p.PasswordHash)
-                   .IsRequired()
                    .HasMaxLength(100)
                    .IsUnicode(false);
 

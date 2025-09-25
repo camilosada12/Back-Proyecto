@@ -13,7 +13,7 @@ namespace Entity.DTOs.Select.Entities
         public string PhoneNumber { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string address { get; set; } = null!;
-
+        public string? Neighborhood { get; set; }
         // Datos de la infracción
         public string Infringement { get; set; } = null!;
         public string TypeFine { get; set; } = null!;
@@ -22,7 +22,7 @@ namespace Entity.DTOs.Select.Entities
         // Datos del acuerdo
         public DateTime AgreementStart { get; set; }
         public DateTime AgreementEnd { get; set; }
-        public DateTime expeditionCedula { get; set; } 
+        public DateTime expeditionCedula { get; set; }
 
         // Datos de pago
         public string PaymentMethod { get; set; } = null!;

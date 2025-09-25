@@ -1,4 +1,5 @@
 ﻿using Data.Interfaces.DataBasic;
+using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.Auth;
 
@@ -16,6 +17,11 @@ namespace Data.Interfaces.IDataImplement.Security
         Task<bool> ExistsByEmailAsync(string email);
 
         Task<User?> FindByDocumentAsync(int documentTypeId, string documentNumber);
+        Task<User?> GetByIdWithPersonAsync(int id);
+
+
+
+
         //Task<User> ValidateUserAsync(LoginDto loginDto);
         //Task AddAsync(User user);
     }

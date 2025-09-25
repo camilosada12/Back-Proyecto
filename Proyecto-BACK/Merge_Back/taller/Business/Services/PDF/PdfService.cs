@@ -3,6 +3,8 @@ using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.EntitiesDto;
 using Entity.DTOs.Select.Entities;
 using Microsoft.Playwright;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Web;
 using Template.Templates;
 
@@ -113,22 +115,37 @@ namespace Business.Services.PDF
 
         private static string BuildPaymentAgreementHtml(PaymentAgreementSelectDto dto)
         {
+            var culture = new CultureInfo("es-CO");
+
             return PaymentAgreementTemplate.Html
-                .Replace("@Direccion", HttpUtility.HtmlEncode(dto.address))
+                .Replace("@Nombre", HttpUtility.HtmlEncode(dto.PersonName ?? "-"))
+                .Replace("@Documento", HttpUtility.HtmlEncode(dto.DocumentNumber ?? "-"))
+                .Replace("@TipoDocumento", HttpUtility.HtmlEncode(dto.DocumentType ?? "-"))
+                .Replace("@Direccion", HttpUtility.HtmlEncode(dto.address ?? "-"))
+                .Replace("@Barrio", HttpUtility.HtmlEncode(dto.Neighborhood ?? "-"))
                 .Replace("@Telefono", HttpUtility.HtmlEncode(dto.PhoneNumber ?? "-"))
                 .Replace("@Correo", HttpUtility.HtmlEncode(dto.Email ?? "-"))
                 .Replace("@FechaInicio", dto.AgreementStart.ToString("dd/MM/yyyy"))
                 .Replace("@FechaFin", dto.AgreementEnd.ToString("dd/MM/yyyy"))
-                .Replace("@MontoBase", dto.BaseAmount.ToString("C"))
-                .Replace("@Intereses", dto.AccruedInterest.ToString("C"))
-                .Replace("@SaldoPendiente", dto.OutstandingAmount.ToString("C"))
+                .Replace("@ExpedicionCedula", dto.expeditionCedula.ToString("dd/MM/yyyy"))
+                .Replace("@MetodoPago", HttpUtility.HtmlEncode(dto.PaymentMethod ?? "-"))
+                .Replace("@FrecuenciaPago", HttpUtility.HtmlEncode(dto.FrequencyPayment ?? "-"))
+                .Replace("@TipoInfraccion", HttpUtility.HtmlEncode(dto.TypeFine ?? "-"))
+                .Replace("@Infraccion", HttpUtility.HtmlEncode(dto.Infringement ?? "-"))
+                .Replace("@Descripcion", HttpUtility.HtmlEncode(dto.Infringement ?? "-"))
+                .Replace("@ValorSMDLV", "$ " + dto.ValorSMDLV.ToString("N0", culture))
+                .Replace("@MontoBase", "$ " + dto.BaseAmount.ToString("N0", culture))
+                .Replace("@Intereses", "$ " + dto.AccruedInterest.ToString("N0", culture))
+                .Replace("@SaldoPendiente", "$ " + dto.OutstandingAmount.ToString("N0", culture))
                 .Replace("@Cuotas", dto.Installments?.ToString() ?? "-")
-                .Replace("@ValorCuota", dto.MonthlyFee?.ToString("C") ?? "-")
+                .Replace("@ValorCuota", dto.MonthlyFee.HasValue ? "$ " + dto.MonthlyFee.Value.ToString("N0", culture) : "-")
                 .Replace("@Estado", dto.IsPaid ? "✅ Pagado" : "⏳ Pendiente")
                 .Replace("@Coactivo", dto.IsCoactive
-                    ? $"<p><span class='label'>Proceso coactivo desde:</span> {dto.CoactiveActivatedOn:dd/MM/yyyy}</p>"
+                    ? $"<p><strong>Proceso coactivo desde:</strong> {dto.CoactiveActivatedOn:dd/MM/yyyy}</p>"
+                    : "")
+                .Replace("@UltimoInteres", dto.LastInterestAppliedOn.HasValue
+                    ? $"<p><strong>Último cálculo de interés:</strong> {dto.LastInterestAppliedOn:dd/MM/yyyy}</p>"
                     : "");
         }
-
     }
 }
