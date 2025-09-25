@@ -1,4 +1,5 @@
 ﻿using Business.Interfaces.BusinessBasic;
+using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.LoginDto.response.RegisterReponseDto;
 using Entity.DTOs.Default.ModelSecurityDto;
@@ -12,5 +13,7 @@ namespace Business.Interfaces.IBusinessImplements.Security
         Task<RegisterResponseDto> RegisterAsync(RegisterRequestDto dto);
         Task<User> createUserGoogle(string email, string name);
         Task<bool> VerifyCodeAsync(string code);
+
+
     }
 }

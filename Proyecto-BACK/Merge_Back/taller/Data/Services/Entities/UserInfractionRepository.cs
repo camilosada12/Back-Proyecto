@@ -58,5 +58,15 @@ namespace Data.Services.Entities
                             u.User.documentNumber == documentNumber)
                 .ToListAsync();
         }
+
+        public async Task<UserInfraction?> GetUserInfractionWithUserAndPersonAsync(int infractionId)
+        {
+            return await _context.userInfraction
+                .Include(ui => ui.User)
+                    .ThenInclude(u => u.Person)
+                .Include(ui => ui.typeInfraction)
+                .FirstOrDefaultAsync(ui => ui.id == infractionId);
+        }
+
     }
 }

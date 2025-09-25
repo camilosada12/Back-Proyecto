@@ -23,8 +23,11 @@ namespace Entity.Domain.Models.Implements.Entities
         public int typeInfractionId {get; set; }
         public int UserNotificationId { get; set; }
 
-        public string? documentNumber { get; set; }
+        public string documentNumber { get; set; }
 
         public decimal amountToPay { get; set; }
+
+        public string? userEmail { get; set; }
+
     }
 }
