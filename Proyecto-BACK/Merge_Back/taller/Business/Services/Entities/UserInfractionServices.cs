@@ -208,8 +208,6 @@ public class UserInfractionServices
                 firstName = dto.FirstName,
                 lastName = dto.LastName,
                 municipalityId = null,
-                phoneNumber = null,
-                address = null,
                 tipoUsuario = TipoUsuario.PersonaNormal
             };
             await _context.persons.AddAsync(person);

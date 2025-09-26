@@ -14,11 +14,6 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
         [Column(TypeName = "varchar(100)")]
         public string lastName { get; set; } = null!;
 
-        [Column(TypeName = "varchar(20)")]
-        public string? phoneNumber { get; set; }
-
-        [Column(TypeName = "varchar(100)")]
-        public string? address { get; set; }
         public TipoUsuario tipoUsuario { get; set; } = TipoUsuario.PersonaNormal;
 
         public int? municipalityId { get; set; }

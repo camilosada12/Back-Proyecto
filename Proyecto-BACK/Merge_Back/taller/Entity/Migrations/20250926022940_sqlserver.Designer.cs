@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250925074741_sqlserver")]
+    [Migration("20250926022940_sqlserver")]
     partial class sqlserver
     {
         /// <inheritdoc />
@@ -1222,9 +1222,6 @@ namespace Entity.Migrations
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("address")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
@@ -1243,9 +1240,6 @@ namespace Entity.Migrations
 
                     b.Property<int?>("municipalityId")
                         .HasColumnType("int");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("varchar(20)");
 
                     b.Property<int>("tipoUsuario")
                         .HasColumnType("int");

@@ -1167,9 +1167,6 @@ namespace Entity.Migrations.PostgresDb
                     b.Property<bool>("active")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("address")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<DateTime>("created_date")
                         .HasColumnType("timestamp with time zone");
 
@@ -1188,9 +1185,6 @@ namespace Entity.Migrations.PostgresDb
 
                     b.Property<int?>("municipalityId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("varchar(20)");
 
                     b.Property<int>("tipoUsuario")
                         .HasColumnType("integer");

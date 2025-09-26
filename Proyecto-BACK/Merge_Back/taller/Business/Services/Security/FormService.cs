@@ -5,7 +5,9 @@ using Data.Interfaces.DataBasic;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Select.ModelSecuritySelectDto;
+using Helpers.Initialize;
 using Microsoft.Extensions.Logging;
+using System.Runtime.ExceptionServices;
 using Utilities.Exceptions;
 
 namespace Business.Services.Security
@@ -20,6 +22,48 @@ namespace Business.Services.Security
             Data = data;
             _logger = logger;
         }
+
+        public override async Task<bool> UpdateAsync(FormDto dto)
+        {
+            try
+            {
+                if (dto == null)
+                    throw new ValidationException("El DTO no puede ser nulo.");
+
+                // Traer el registro actual de BD
+                var existing = await Data.GetByIdAsync(dto.id);
+                if (existing == null)
+                    throw new EntityNotFoundException($"No se encontró un Form con ID {dto.id}");
+
+                // Chequear cambios reales (ignorar espacios)
+                var newName = dto.name?.Trim();
+                var newDesc = dto.description?.Trim();
+                var oldName = existing.name?.Trim();
+                var oldDesc = existing.description?.Trim();
+
+                if (newName == oldName && newDesc == oldDesc)
+                {
+                    throw new BusinessException("Debe realizar al menos un cambio para actualizar el formulario.");
+                }
+
+                // Mapear sobre la entidad existente en vez de crear una nueva
+                existing.name = newName;
+                existing.description = newDesc;
+                existing.InitializeLogicalState();
+
+                // Guardar cambios
+                return await Data.UpdateAsync(existing);
+            }
+            catch (Exception ex)
+            {
+                if (ex is BusinessException || ex is ValidationException)
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+
+                throw new BusinessException("Error al actualizar el formulario.", ex);
+            }
+        }
+
+
 
 
         //protected override void ValidateDto(FormDto dto)

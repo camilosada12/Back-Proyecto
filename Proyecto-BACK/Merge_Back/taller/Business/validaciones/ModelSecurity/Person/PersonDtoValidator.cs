@@ -18,16 +18,6 @@ namespace Business.Validaciones.ModelSecurity.Person
                 .NotEmpty().WithMessage("El apellido es obligatorio.")
                 .MaximumLength(100).WithMessage("El apellido no puede superar los 100 caracteres.");
 
-            // phoneNumber con formato simple
-            RuleFor(x => x.phoneNumber)
-             .NotEmpty().WithMessage("El número de teléfono es obligatorio.")
-             .Matches(@"^3\d{9}$").WithMessage("El número de teléfono debe iniciar con 3 y tener exactamente 10 dígitos.");
-
-            // address requerida
-            RuleFor(x => x.address)
-                .NotEmpty().WithMessage("La dirección es obligatoria.")
-                .MaximumLength(200).WithMessage("La dirección no puede superar los 200 caracteres.");
-
 
             // municipalityId válido
             RuleFor(x => x.municipalityId)

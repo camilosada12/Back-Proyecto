@@ -14,16 +14,12 @@ namespace ControlDeComparendo.Tests
             {
                 firstName = "Ingrid",
                 lastName = "Medina",
-                phoneNumber = "123456",
-                address = "Calle 123",
                 municipalityId = 2
             };
 
             // Act & Assert
             Assert.Equal("Ingrid", person.firstName);
             Assert.Equal("Medina", person.lastName);
-            Assert.Equal("123456", person.phoneNumber);
-            Assert.Equal("Calle 123", person.address);
             Assert.Equal(2, person.municipalityId);
         }
 

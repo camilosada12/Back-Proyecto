@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Entity.Migrations.PostgresDb
 {
     [DbContext(typeof(PostgresDbContext))]
-    [Migration("20250925074808_posgrets")]
-    partial class posgrets
+    [Migration("20250926022955_posgres")]
+    partial class posgres
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1170,9 +1170,6 @@ namespace Entity.Migrations.PostgresDb
                     b.Property<bool>("active")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("address")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<DateTime>("created_date")
                         .HasColumnType("timestamp with time zone");
 
@@ -1191,9 +1188,6 @@ namespace Entity.Migrations.PostgresDb
 
                     b.Property<int?>("municipalityId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("varchar(20)");
 
                     b.Property<int>("tipoUsuario")
                         .HasColumnType("integer");

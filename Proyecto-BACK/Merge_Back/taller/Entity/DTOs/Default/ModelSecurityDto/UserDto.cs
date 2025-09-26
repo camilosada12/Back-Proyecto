@@ -11,8 +11,6 @@ namespace Entity.DTOs.Default.ModelSecurityDto
         public string password { get; set; }
         public int PersonId { get; set; }
 
-        // ✅ Agregamos la lista de infracciones
-        public List<UserInfractionDto> UserInfractions { get; set; } = new();
     }
 
 }
