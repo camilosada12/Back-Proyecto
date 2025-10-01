@@ -205,7 +205,7 @@ namespace Business.Services.Entities
             var (baseAmount, installments, monthlyFee) = CalcularMontos(userInfraction, dto);
 
             // Fecha de inicio: hoy
-            var startDate = DateTime.UtcNow.Date;
+            var startDate = DateTime.Now.Date;
             var endDate = CalculateEndDateWithInstallments(startDate, frequency.intervalPage, installments);
 
             var agreement = new PaymentAgreement
