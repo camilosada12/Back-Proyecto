@@ -24,7 +24,7 @@ public class RelacionesFineCalculationDetail : IEntityTypeConfiguration<FineCalc
                .IsRequired();
 
         // Relación: FineCalculationDetail -> TypeInfraction (muchos a uno)
-        builder.HasOne(x => x.typeInfraction)
+        builder.HasOne(x => x.Infraction)
                .WithMany(t => t.fineCalculationDetail)
                .HasForeignKey(x => x.typeInfractionId)
                .OnDelete(DeleteBehavior.NoAction)

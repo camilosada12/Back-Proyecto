@@ -13,13 +13,13 @@ namespace Entity.Domain.Models.Implements.Entities
     {
         public DateTime dateInfraction { get; set; }
         public EstadoMulta stateInfraction {  get; set; }
-        public string observations { get; set; }
+        public string? InformationFine { get; set; }
         public int UserId { get; set; }          // FK
         public User User { get; set; } = null!;  // Navegación
         // requerido
 
-        public int typeInfractionId { get; set; }
-        public TypeInfraction typeInfraction { get; set; } = null!;
+        public int InfractionId { get; set; }
+        public Infraction Infraction { get; set; } = null!;
 
         public int UserNotificationId { get; set; }
         public UserNotification UserNotification { get; set; } = null!;

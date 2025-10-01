@@ -7,8 +7,10 @@ namespace Business.Interfaces.IBusinessImplements.Entities
 {
     public interface IUserInfractionServices : IBusiness<UserInfractionDto, UserInfractionSelectDto>
     {
-        Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber);
+        Task<IEnumerable<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber);
         Task<UserInfractionSelectDto> GetByIdAsyncPdf(int id);
         Task<UserInfractionSelectDto> CreateWithPersonAsync(CreateInfractionRequestDto dto);
+        Task<IEnumerable<UserInfractionSelectDto>> GetByTypeInfractionAsync(int typeInfractionId);
+        Task<UserInfractionSelectDto?> GetFirstByDocumentAsync(int documentTypeId, string documentNumber);
     }
 }

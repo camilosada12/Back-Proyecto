@@ -1,42 +1,33 @@
-﻿using System;
-using Entity.Domain.Models.Implements.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Entity.Domain.Models.Implements.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Entity.ConfigurationsBase;
 
 namespace Entity.relacionesModel.RelacionesEntities
 {
-    // 2. TypeInfraction Configuration
     public class RelacionesTypeInfraction : IEntityTypeConfiguration<TypeInfraction>
     {
         public void Configure(EntityTypeBuilder<TypeInfraction> builder)
         {
-            // Nombre de tabla
-            builder.ToTable("typeInfraction", schema: "Entities");
+            // Nombre de la tabla
+            builder.ToTable("TypeInfraction", schema: "Entities");
 
-            // Propiedades base (id, fechas, active, is_deleted, etc.)
+            // Configuración de propiedades base (id, fechas, active, is_deleted, etc.)
             builder.ConfigureBaseModel();
 
-            // 🔹 numer_smldv (nuevo campo en TypeInfraction)
-            builder.Property(ti => ti.numer_smldv)
-                   .IsRequired(); // Cada tipo de infracción debe tener definido su valor en SMLDV
+            // Nombre de tipo de infracción obligatorio y único
+            builder.Property(ti => ti.Name)
+                   .IsRequired()
+                   .HasMaxLength(100);
 
-            // Relación: TypeInfraction -> UserInfraction (uno a muchos)
-            //builder.HasMany(ti => ti.userInfractions)
-            //       .WithOne(ui => ui.typeInfraction)
-            //       .HasForeignKey(ui => ui.typeInfractionId)
-            //       .OnDelete(DeleteBehavior.Restrict)
-            //       .HasConstraintName("FK_TypeInfraction_UserInfraction");
+            builder.HasIndex(ti => ti.Name).IsUnique();
 
-            // Relación: TypeInfraction -> FineCalculationDetail (uno a muchos)
-            builder.HasMany(ti => ti.fineCalculationDetail)
-                   .WithOne(fcd => fcd.typeInfraction)
-                   .HasForeignKey(fcd => fcd.typeInfractionId)
+            // Relación uno-a-muchos: TypeInfraction -> Infractions
+            builder.HasMany(ti => ti.Infractions)
+                   .WithOne(i => i.TypeInfraction)
+                   .HasForeignKey(i => i.TypeInfractionId)
                    .OnDelete(DeleteBehavior.Restrict)
-                   .HasConstraintName("FK_TypeInfraction_FineCalculationDetail");
-
-            // 🔒 Garantiza que no se repitan nombres de infracción
-            builder.HasIndex(ti => ti.type_Infraction).IsUnique();
+                   .HasConstraintName("FK_TypeInfraction_Infraction");
         }
     }
 }

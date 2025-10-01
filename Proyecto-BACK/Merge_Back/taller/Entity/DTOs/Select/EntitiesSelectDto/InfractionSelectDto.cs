@@ -8,10 +8,10 @@ using Entity.Domain.Models.Base;
 
 namespace Entity.Domain.Models.Implements.Entities
 {
-    public class TypeInfractionSelectDto
+    public class InfractionSelectDto
     {
         public int id { get; set; }
-        public string type_Infraction { get; set; }
+        public string TypeInfractionName { get; set; }
         public int numer_smldv { get; set; }
         public string description { get; set; }
         

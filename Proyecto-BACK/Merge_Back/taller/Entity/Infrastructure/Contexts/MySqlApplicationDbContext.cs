@@ -43,7 +43,7 @@ public class MySqlApplicationDbContext : DbContext
     public DbSet<FormModule> form_modules { get; set; }
 
     // ========== DBSet Entities ==========
-    public DbSet<TypeInfraction> typeInfraction { get; set; }
+    public DbSet<Infraction> Infraction { get; set; }
     public DbSet<InspectoraReport> inspectoraReport { get; set; }
     public DbSet<ValueSmldv> valueSmldv { get; set; }
     public DbSet<UserNotification> userNotification { get; set; }
@@ -101,7 +101,8 @@ public class MySqlApplicationDbContext : DbContext
         modelBuilder.SeedFormModule();
         modelBuilder.SeedRolFormPermission();
 
-        modelBuilder.SeddTypeInfraction();
+        modelBuilder.SeddInfraction();
+        modelBuilder.SeedTypeInfraction();
         modelBuilder.SeetInspectoraReportData();
         modelBuilder.SeedValueSmldv();
         modelBuilder.SeedUserNotificacion();

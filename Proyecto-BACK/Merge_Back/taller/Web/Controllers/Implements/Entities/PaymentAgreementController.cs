@@ -35,7 +35,7 @@ namespace Web.Controllers.Implements.Entities
         [HttpGet("init/{userId:int}")]
         public async Task<IActionResult> GetInitData(int userId, [FromQuery] int? infractionId = null)
         {
-            var data = await _paymentAgreementService.GetInitDataAsync(userId);
+            var data = await _paymentAgreementService.GetInitDataAsync(userId, infractionId);
 
             if (data == null || !data.Any())
                 return NotFound("No se encontraron multas para este usuario.");

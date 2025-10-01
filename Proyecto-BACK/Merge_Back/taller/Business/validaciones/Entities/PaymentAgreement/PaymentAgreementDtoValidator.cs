@@ -40,16 +40,6 @@ namespace Business.validaciones.Entities.PaymentAgreement
                 .NotEmpty().WithMessage("El correo electrónico es obligatorio.")
                 .EmailAddress().WithMessage("El correo electrónico no es válido.");
 
-            // Fecha de inicio
-            RuleFor(x => x.AgreementStart)
-                .NotEmpty().WithMessage("La fecha de inicio es obligatoria.")
-                .LessThan(x => x.AgreementEnd).WithMessage("La fecha de inicio debe ser menor a la fecha de fin.");
-
-            // Fecha de fin
-            RuleFor(x => x.AgreementEnd)
-                .NotEmpty().WithMessage("La fecha de fin es obligatoria.")
-                .GreaterThan(x => x.AgreementStart).WithMessage("La fecha de fin debe ser mayor a la fecha de inicio.");
-
             // Monto base
             //RuleFor(x => x.BaseAmount)
             //    .GreaterThan(0).WithMessage("El monto base debe ser mayor que 0.");

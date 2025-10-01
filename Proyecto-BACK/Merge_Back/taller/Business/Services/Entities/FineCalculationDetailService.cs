@@ -12,14 +12,14 @@ namespace Business.Services.Entities
     {
         private readonly IFineCalculationDetailRepository _repository;
         private readonly IValueSmldvRepository _valueSmldvRepository;
-        private readonly ITypeInfractionRepository _typeInfractionRepository;
+        private readonly IInfractionRepository _typeInfractionRepository;
         private readonly IMapper _mapper;
 
         public FineCalculationDetailService(
             IFineCalculationDetailRepository repository,
             IMapper mapper,
             IValueSmldvRepository valueSmldvRepository,
-            ITypeInfractionRepository typeInfractionRepository
+            IInfractionRepository typeInfractionRepository
         ) : base(repository, mapper)
         {
             _repository = repository;

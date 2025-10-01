@@ -64,7 +64,7 @@ namespace Entity.Infrastructure.Contexts
         ///Implementación DBSet Model entities
         ///</summary>
 
-        public DbSet<TypeInfraction> typeInfraction { get; set; }
+        public DbSet<Infraction> Infraction { get; set; }
         public DbSet<InspectoraReport> inspectoraReport { get; set; }
         public DbSet<ValueSmldv> valueSmldv { get; set; }
         public DbSet<UserNotification> userNotification { get; set; }
@@ -147,7 +147,8 @@ namespace Entity.Infrastructure.Contexts
 
             // 3) Entities (dependencias de negocio)
             //    Catálogos/maestros que otros usan:
-            modelBuilder.SeddTypeInfraction();
+            modelBuilder.SeddInfraction();
+            modelBuilder.SeedTypeInfraction();
             modelBuilder.SeetInspectoraReportData();
             modelBuilder.SeedValueSmldv();
             modelBuilder.SeedUserNotificacion();

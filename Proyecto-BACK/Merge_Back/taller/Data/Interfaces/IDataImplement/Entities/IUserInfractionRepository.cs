@@ -10,8 +10,9 @@ namespace Data.Interfaces.IDataImplement.Entities
 {
     public interface IUserInfractionRepository : IData<UserInfraction>
     {
-        Task<IReadOnlyList<UserInfraction>> GetByDocumentAsync(int documentTypeId, string documentNumber);
+        Task<IEnumerable<UserInfraction>> GetByDocumentAsync(int documentTypeId, string documentNumber);
         Task<UserInfraction?> GetUserInfractionWithUserAndPersonAsync(int infractionId);
+        Task<IEnumerable<UserInfraction>> GetByTypeInfractionAsync(int typeInfractionId);
 
     }
 }

@@ -5,7 +5,9 @@ using Entity.Domain.Models.Implements.parameters;
 using Entity.Infrastructure.Contexts;
 using Entity.Init;
 using Microsoft.EntityFrameworkCore;
-using Utilities.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymentAgreementRepository
 {
@@ -18,8 +20,10 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                 .ThenInclude(ui => ui.User)
                     .ThenInclude(u => u.Person)
             .Include(p => p.userInfraction.User.documentType)
-            .Include(p => p.userInfraction.typeInfraction)
-                .ThenInclude(ti => ti.fineCalculationDetail)
+            .Include(p => p.userInfraction.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
+            .Include(p => p.userInfraction.Infraction)
+                .ThenInclude(i => i.fineCalculationDetail)
                     .ThenInclude(fd => fd.valueSmldv)
             .Include(p => p.paymentFrequency)
             .Include(p => p.TypePayment)
@@ -34,12 +38,14 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                 .ThenInclude(ui => ui.User)
                     .ThenInclude(u => u.Person)
             .Include(p => p.userInfraction.User.documentType)
-            .Include(p => p.userInfraction.typeInfraction)
-                .ThenInclude(ti => ti.fineCalculationDetail)
+            .Include(p => p.userInfraction.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
+            .Include(p => p.userInfraction.Infraction)
+                .ThenInclude(i => i.fineCalculationDetail)
                     .ThenInclude(fd => fd.valueSmldv)
             .Include(p => p.paymentFrequency)
             .Include(p => p.TypePayment)
-            .Where(p => p.is_deleted == true)
+            .Where(p => p.is_deleted)
             .ToListAsync();
     }
 
@@ -50,31 +56,36 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                 .ThenInclude(ui => ui.User)
                     .ThenInclude(u => u.Person)
             .Include(p => p.userInfraction.User.documentType)
-            .Include(p => p.userInfraction.typeInfraction)
-                .ThenInclude(ti => ti.fineCalculationDetail)
+            .Include(p => p.userInfraction.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
+            .Include(p => p.userInfraction.Infraction)
+                .ThenInclude(i => i.fineCalculationDetail)
                     .ThenInclude(fd => fd.valueSmldv)
             .Include(p => p.paymentFrequency)
             .Include(p => p.TypePayment)
-            .FirstOrDefaultAsync(p => p.id == id); 
+            .FirstOrDefaultAsync(p => p.id == id);
     }
 
-    public async Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId)
+    public async Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userId, int? infractionId = null)
     {
-        var infractions = await _context.userInfraction
-            .Where(ui => ui.User.id == userInfractionId) // 👈 todas las multas de ese usuario
+        var infractionsQuery = _context.userInfraction
+            .Where(ui => ui.UserId == userId) // ✅ filtramos por userId
             .Include(ui => ui.User)
                 .ThenInclude(u => u.Person)
             .Include(ui => ui.User)
                 .ThenInclude(u => u.documentType)
-            .Include(ui => ui.typeInfraction)
-                .ThenInclude(ti => ti.fineCalculationDetail)
-                    .ThenInclude(fd => fd.valueSmldv)
-            .ToListAsync();
+            .Include(ui => ui.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
+            .Include(ui => ui.Infraction)
+                .ThenInclude(i => i.fineCalculationDetail)
+                    .ThenInclude(fd => fd.valueSmldv);
+
+
+        var infractions = await infractionsQuery.ToListAsync();
 
         return infractions.Select(infraction =>
         {
-            // 👇 Tomamos el detalle de cálculo más reciente
-            var detail = infraction.typeInfraction?.fineCalculationDetail?
+            var detail = infraction.Infraction?.fineCalculationDetail?
                 .OrderByDescending(fd => fd.valueSmldv.Current_Year)
                 .FirstOrDefault();
 
@@ -84,46 +95,37 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                 DocumentNumber = infraction.User?.documentNumber ?? string.Empty,
                 DocumentType = infraction.User?.documentType?.name ?? string.Empty,
                 InfractionId = infraction.id,
-                Infringement = infraction.observations ?? string.Empty,
-                TypeFine = infraction.typeInfraction?.description ?? string.Empty,
-
-                // Valor unitario de SMDLV (por si el front lo necesita mostrar)
+                Infringement = infraction.Infraction?.TypeInfraction?.Name ?? string.Empty,
+                TypeFine = infraction.Infraction?.description ?? string.Empty,
                 ValorSMDLV = (decimal)(detail?.valueSmldv?.value_smldv ?? 0),
-
-                // ✅ Ahora el monto base ya viene precalculado en FineCalculationDetail
                 BaseAmount = detail != null
-                ? (detail.totalCalculation > 0
-                    ? detail.totalCalculation
-                    : (detail.typeInfraction?.numer_smldv ?? 0) * (decimal)(detail.valueSmldv?.value_smldv ?? 0))
-                : 0,
-
-
+                    ? (detail.totalCalculation > 0
+                        ? detail.totalCalculation
+                        : (detail.Infraction?.numer_smldv ?? 0) * (decimal)(detail.valueSmldv?.value_smldv ?? 0))
+                    : 0,
                 UserId = infraction.UserId
             };
         });
     }
+
+
 
     public async Task<UserInfraction?> GetUserInfractionWithDetailsAsync(int userInfractionId)
     {
         return await _context.userInfraction
             .Include(ui => ui.User)
                 .ThenInclude(u => u.Person)
-            .Include(ui => ui.typeInfraction)
-                .ThenInclude(ti => ti.fineCalculationDetail)
+            .Include(ui => ui.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
+            .Include(ui => ui.Infraction)
+                .ThenInclude(i => i.fineCalculationDetail)
                     .ThenInclude(fd => fd.valueSmldv)
             .FirstOrDefaultAsync(ui => ui.id == userInfractionId);
     }
 
     public async Task<PaymentFrequency?> GetPaymentFrequencyAsync(int id)
-    {
-        return await _context.paymentFrequency.FindAsync(id);
-    }
+        => await _context.paymentFrequency.FindAsync(id);
 
     public async Task<TypePayment?> GetTypePaymentAsync(int id)
-    {
-        return await _context.typePayment.FindAsync(id);
-    }
-
-
+        => await _context.typePayment.FindAsync(id);
 }
-
