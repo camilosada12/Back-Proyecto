@@ -76,6 +76,82 @@ namespace Entity.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.Infraction", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("TypeInfractionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("numer_smldv")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("TypeInfractionId");
+
+                    b.ToTable("Infraction");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "lanzar basura en un lugar publico",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 2,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "hacer mucho ruido en un sitio publico",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 3,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 4,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        });
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.InspectoraReport", b =>
                 {
                     b.Property<int>("id")
@@ -139,73 +215,59 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("numer_smldv")
-                        .HasColumnType("int");
-
-                    b.Property<string>("type_Infraction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("id");
 
-                    b.HasIndex("type_Infraction")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("typeInfraction", "Entities");
+                    b.ToTable("TypeInfraction", "Entities");
 
                     b.HasData(
                         new
                         {
                             id = 1,
+                            Name = "Infraccion de tipo uno",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "lanzar basura en un lugar publico",
-                            is_deleted = false,
-                            numer_smldv = 4,
-                            type_Infraction = "infraccion de tipo uno"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 2,
+                            Name = "Infraccion de tipo dos",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "hacer mucho ruido en un sitio publico",
-                            is_deleted = false,
-                            numer_smldv = 8,
-                            type_Infraction = "infraccion de tipo dos"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 3,
+                            Name = "Infraccion de tipo tres",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
-                            is_deleted = false,
-                            numer_smldv = 16,
-                            type_Infraction = "infraccion de tipo Tres"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 4,
+                            Name = "Infraccion de tipo cuatro",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.",
-                            is_deleted = false,
-                            numer_smldv = 32,
-                            type_Infraction = "infraccion de tipo Cuatro"
+                            is_deleted = false
                         });
                 });
 
@@ -296,6 +358,12 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("InformationFine")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InfractionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -317,23 +385,16 @@ namespace Entity.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("observations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("stateInfraction")
-                        .HasColumnType("int");
-
-                    b.Property<int>("typeInfractionId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
+                    b.HasIndex("InfractionId");
+
                     b.HasIndex("UserId");
 
                     b.HasIndex("UserNotificationId");
-
-                    b.HasIndex("typeInfractionId");
 
                     b.ToTable("userInfraction", "Entities");
 
@@ -341,6 +402,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 1,
+                            InfractionId = 1,
                             UserId = 1,
                             UserNotificationId = 1,
                             active = true,
@@ -348,13 +410,12 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "la persona no opuso resistencia a la infracción",
-                            stateInfraction = 0,
-                            typeInfractionId = 1
+                            stateInfraction = 0
                         },
                         new
                         {
                             id = 2,
+                            InfractionId = 3,
                             UserId = 1,
                             UserNotificationId = 2,
                             active = true,
@@ -362,13 +423,12 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "portaba un cuchillo en la vía pública",
-                            stateInfraction = 0,
-                            typeInfractionId = 3
+                            stateInfraction = 0
                         },
                         new
                         {
                             id = 3,
+                            InfractionId = 2,
                             UserId = 2,
                             UserNotificationId = 1,
                             active = true,
@@ -376,13 +436,12 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "la persona se encontraba en estado de embriaguez",
-                            stateInfraction = 0,
-                            typeInfractionId = 2
+                            stateInfraction = 0
                         },
                         new
                         {
                             id = 4,
+                            InfractionId = 4,
                             UserId = 2,
                             UserNotificationId = 2,
                             active = true,
@@ -390,9 +449,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "agredió verbalmente a la autoridad",
-                            stateInfraction = 0,
-                            typeInfractionId = 4
+                            stateInfraction = 0
                         });
                 });
 
@@ -1495,22 +1552,13 @@ namespace Entity.Migrations
                             id = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            dueDayOfMonth = 16,
-                            intervalPage = "UNICA",
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 2,
-                            active = true,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 15,
                             intervalPage = "MENSUAL",
                             is_deleted = false
                         },
                         new
                         {
-                            id = 3,
+                            id = 2,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 1,
@@ -1519,7 +1567,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 4,
+                            id = 3,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 10,
@@ -3405,8 +3453,26 @@ namespace Entity.Migrations
                     b.Navigation("paymentAgreement");
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.Infraction", b =>
+                {
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "TypeInfraction")
+                        .WithMany("Infractions")
+                        .HasForeignKey("TypeInfractionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_TypeInfraction_Infraction");
+
+                    b.Navigation("TypeInfraction");
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfraction", b =>
                 {
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.Infraction", "Infraction")
+                        .WithMany("userInfractions")
+                        .HasForeignKey("InfractionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", "User")
                         .WithMany("UserInfraction")
                         .HasForeignKey("UserId")
@@ -3419,17 +3485,11 @@ namespace Entity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "typeInfraction")
-                        .WithMany("userInfractions")
-                        .HasForeignKey("typeInfractionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Infraction");
 
                     b.Navigation("User");
 
                     b.Navigation("UserNotification");
-
-                    b.Navigation("typeInfraction");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.FormModule", b =>
@@ -3494,7 +3554,7 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("FineCalculationDetail", b =>
                 {
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "typeInfraction")
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.Infraction", "Infraction")
                         .WithMany("fineCalculationDetail")
                         .HasForeignKey("typeInfractionId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -3508,7 +3568,7 @@ namespace Entity.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_ValueSmldv_FineCalculationDetail");
 
-                    b.Navigation("typeInfraction");
+                    b.Navigation("Infraction");
 
                     b.Navigation("valueSmldv");
                 });
@@ -3593,6 +3653,13 @@ namespace Entity.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.Infraction", b =>
+                {
+                    b.Navigation("fineCalculationDetail");
+
+                    b.Navigation("userInfractions");
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.InspectoraReport", b =>
                 {
                     b.Navigation("documentInfraction");
@@ -3600,9 +3667,7 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypeInfraction", b =>
                 {
-                    b.Navigation("fineCalculationDetail");
-
-                    b.Navigation("userInfractions");
+                    b.Navigation("Infractions");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypePayment", b =>

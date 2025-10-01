@@ -13,7 +13,7 @@ namespace Business.Interfaces.IBusinessImplements.Entities
     public interface IPaymentAgreementServices : IBusiness<PaymentAgreementDto, PaymentAgreementSelectDto>
     {
         Task<int> ApplyLateFeesAsync(DateTime nowUtc, CancellationToken ct = default);
-        Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId);
+        Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userId, int? infractionId = null);
 
         // Ya no usamos "new", solo declaramos el método
         new Task<PaymentAgreementSelectDto?> CreateAsync(PaymentAgreementDto dto);

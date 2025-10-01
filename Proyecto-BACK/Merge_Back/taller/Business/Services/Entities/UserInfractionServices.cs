@@ -27,7 +27,7 @@ public class UserInfractionServices
     private readonly ILogger<UserInfractionServices> _logger;
     private readonly IUserInfractionRepository _repo;       // CRUD principal de infracciones
     private readonly IUserRepository _users;                 // FK -> User
-    private readonly ITypeInfractionRepository _types;      // FK -> Tipo de infracción
+    private readonly IInfractionRepository _types;      // FK -> Tipo de infracción
     private readonly IUserNotificationRepository _notifs;   // FK -> Notificaciones de usuario
     private readonly EmailBackgroundQueue _emailQueue;      // Cola para enviar correos en background
     private readonly IServiceScopeFactory _scopeFactory;    // Permite crear servicios scoped en tareas background
@@ -36,7 +36,7 @@ public class UserInfractionServices
     public UserInfractionServices(
         IUserInfractionRepository repo,
         IUserRepository users,
-        ITypeInfractionRepository types,
+        IInfractionRepository types,
         IUserNotificationRepository notifs,
         IMapper mapper,
         ILogger<UserInfractionServices> logger,
@@ -128,7 +128,7 @@ public class UserInfractionServices
     }
 
     // 🔎 Consultar infracciones por documento
-    public async Task<IReadOnlyList<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber)
+    public async Task<IEnumerable<UserInfractionSelectDto>> GetByDocumentAsync(int documentTypeId, string documentNumber)
     {
         var entities = await _repo.GetByDocumentAsync(documentTypeId, documentNumber);
         return _mapper.Map<IReadOnlyList<UserInfractionSelectDto>>(entities);
@@ -256,10 +256,10 @@ public class UserInfractionServices
         var infraction = new UserInfraction
         {
             UserId = user.id,
-            typeInfractionId = dto.TypeInfractionId,
+            InfractionId = dto.TypeInfractionId,
             dateInfraction = DateTime.UtcNow,
             stateInfraction = EstadoMulta.Pendiente,
-            observations = typeInfraction.description,
+            InformationFine = typeInfraction.description,
             amountToPay = amount,
             UserNotificationId = notification.id
         };
@@ -290,6 +290,21 @@ public class UserInfractionServices
 
         return infractionDto;
     }
+
+    public async Task<IEnumerable<UserInfractionSelectDto>> GetByTypeInfractionAsync(int typeInfractionId)
+    {
+        var entities = await _repo.GetByTypeInfractionAsync(typeInfractionId);
+        return _mapper.Map<IEnumerable<UserInfractionSelectDto>>(entities);
+    }
+
+    public async Task<UserInfractionSelectDto?> GetFirstByDocumentAsync(int documentTypeId, string documentNumber)
+    {
+        var entities = await _repo.GetByDocumentAsync(documentTypeId, documentNumber);
+        var first = entities.OrderByDescending(u => u.dateInfraction).FirstOrDefault();
+        return first != null ? _mapper.Map<UserInfractionSelectDto>(first) : null;
+    }
+
+
 
     //public async Task<IEnumerable<UserInfractionSelectDto>> FilterAsync(UserInfractionFilterDto filter)
     //{

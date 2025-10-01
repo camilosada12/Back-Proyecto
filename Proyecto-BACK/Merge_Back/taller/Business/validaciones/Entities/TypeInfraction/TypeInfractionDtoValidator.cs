@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Business.validaciones.Entities.TypeInfraction
 {
-    public class TypeInfractionValidator : AbstractValidator<TypeInfractionDto>
+    public class TypeInfractionValidator : AbstractValidator<InfractionDto>
     {
         public TypeInfractionValidator()
         {

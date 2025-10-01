@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Data.Interfaces.IDataImplement.Entities
 {
-    public interface ITypeInfractionRepository : IData<TypeInfraction>
+    public interface IInfractionRepository : IData<Infraction>
     {
     }
+
 }

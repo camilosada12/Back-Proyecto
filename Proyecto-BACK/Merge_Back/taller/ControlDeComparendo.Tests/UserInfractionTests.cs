@@ -14,19 +14,19 @@ namespace ControlDeComparendo.Tests
                 id = 1,
                 dateInfraction = DateTime.UtcNow,
                 stateInfraction = EstadoMulta.Pendiente, // 👈 enum en vez de bool
-                observations = "Exceso de velocidad",
+                //observations = "Exceso de velocidad",
                 UserId = 10,
-                typeInfractionId = 5,
+                InfractionId = 5,
                 UserNotificationId = 3,
                 UserNotification = new UserNotification { id = 3, message = "Aviso enviado" },
-                typeInfraction = new TypeInfraction { id = 5, description = "Velocidad" }
+                Infraction = new Infraction { id = 5, description = "Velocidad" }
             };
 
             Assert.Equal(1, infraction.id);
             Assert.Equal(EstadoMulta.Pendiente, infraction.stateInfraction); // 👈 comparación enum
-            Assert.Equal("Exceso de velocidad", infraction.observations);
+            //Assert.Equal("Exceso de velocidad", infraction.observations);
             Assert.NotNull(infraction.UserNotification);
-            Assert.NotNull(infraction.typeInfraction);
+            Assert.NotNull(infraction.Infraction);
             Assert.NotNull(infraction.paymentAgreement);
             Assert.Empty(infraction.paymentAgreement);
         }

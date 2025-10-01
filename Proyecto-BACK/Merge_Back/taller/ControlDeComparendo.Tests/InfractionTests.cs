@@ -4,29 +4,29 @@ using Entity.Domain.Models.Implements.Entities;
 
 namespace ControlDeComparendo.Tests.Entities
 {
-    public class TypeInfractionTests
+    public class InfractionTests
     {
         [Fact]
         public void Can_Create_TypeInfraction_With_Properties()
         {
-            var ti = new TypeInfraction
+            var ti = new Infraction
             {
                 id = 1,
-                type_Infraction = "Leve",
+                TypeInfractionId = 1,
                 description = "Infracción leve",
                 numer_smldv = 4 // 🔹 Nuevo campo
             };
 
             Assert.Equal(1, ti.id);
-            Assert.Equal("Leve", ti.type_Infraction);
-            Assert.Equal("Infracción leve", ti.description);
+            Assert.Equal("Leve", ti.TypeInfraction.Name);
+            Assert.Equal("Infracción leve", ti.TypeInfraction.Name);
             Assert.Equal(4, ti.numer_smldv); // 🔹 Validación
         }
 
         [Fact]
         public void Default_Collections_State_Is_Correct()
         {
-            var ti = new TypeInfraction();
+            var ti = new Infraction();
 
             Assert.NotNull(ti.userInfractions);
             Assert.Empty(ti.userInfractions);
@@ -38,7 +38,7 @@ namespace ControlDeComparendo.Tests.Entities
         [Fact]
         public void Can_Assign_FineCalculationDetail_After_Initialization()
         {
-            var ti = new TypeInfraction
+            var ti = new Infraction
             {
                 numer_smldv = 2 // 🔹 requerido
             };

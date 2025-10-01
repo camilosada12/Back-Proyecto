@@ -189,22 +189,20 @@ namespace Entity.Migrations.PostgresDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "typeInfraction",
+                name: "TypeInfraction",
                 schema: "Entities",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    type_Infraction = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    numer_smldv = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     active = table.Column<bool>(type: "boolean", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_typeInfraction", x => x.id);
+                    table.PrimaryKey("PK_TypeInfraction", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -361,35 +359,28 @@ namespace Entity.Migrations.PostgresDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "FineCalculationDetail",
-                schema: "Entities",
+                name: "Infraction",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    formula = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    totalCalculation = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
-                    valueSmldvId = table.Column<int>(type: "integer", nullable: false),
-                    typeInfractionId = table.Column<int>(type: "integer", nullable: false),
+                    TypeInfractionId = table.Column<int>(type: "integer", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    numer_smldv = table.Column<int>(type: "integer", nullable: false),
                     active = table.Column<bool>(type: "boolean", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FineCalculationDetail", x => x.id);
+                    table.PrimaryKey("PK_Infraction", x => x.id);
                     table.ForeignKey(
-                        name: "FK_TypeInfraction_FineCalculationDetail",
-                        column: x => x.typeInfractionId,
+                        name: "FK_TypeInfraction_Infraction",
+                        column: x => x.TypeInfractionId,
                         principalSchema: "Entities",
-                        principalTable: "typeInfraction",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_ValueSmldv_FineCalculationDetail",
-                        column: x => x.valueSmldvId,
-                        principalSchema: "Entities",
-                        principalTable: "valueSmldv",
-                        principalColumn: "id");
+                        principalTable: "TypeInfraction",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -419,6 +410,37 @@ namespace Entity.Migrations.PostgresDb
                         principalTable: "municipality",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FineCalculationDetail",
+                schema: "Entities",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    formula = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    totalCalculation = table.Column<decimal>(type: "numeric(12,2)", nullable: false),
+                    valueSmldvId = table.Column<int>(type: "integer", nullable: false),
+                    typeInfractionId = table.Column<int>(type: "integer", nullable: false),
+                    active = table.Column<bool>(type: "boolean", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    created_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FineCalculationDetail", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_TypeInfraction_FineCalculationDetail",
+                        column: x => x.typeInfractionId,
+                        principalTable: "Infraction",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_ValueSmldv_FineCalculationDetail",
+                        column: x => x.valueSmldvId,
+                        principalSchema: "Entities",
+                        principalTable: "valueSmldv",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -501,9 +523,9 @@ namespace Entity.Migrations.PostgresDb
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     dateInfraction = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     stateInfraction = table.Column<int>(type: "integer", nullable: false),
-                    observations = table.Column<string>(type: "text", nullable: false),
+                    InformationFine = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    typeInfractionId = table.Column<int>(type: "integer", nullable: false),
+                    InfractionId = table.Column<int>(type: "integer", nullable: false),
                     UserNotificationId = table.Column<int>(type: "integer", nullable: false),
                     amountToPay = table.Column<decimal>(type: "numeric", nullable: false),
                     active = table.Column<bool>(type: "boolean", nullable: false),
@@ -514,10 +536,9 @@ namespace Entity.Migrations.PostgresDb
                 {
                     table.PrimaryKey("PK_userInfraction", x => x.id);
                     table.ForeignKey(
-                        name: "FK_userInfraction_typeInfraction_typeInfractionId",
-                        column: x => x.typeInfractionId,
-                        principalSchema: "Entities",
-                        principalTable: "typeInfraction",
+                        name: "FK_userInfraction_Infraction_InfractionId",
+                        column: x => x.InfractionId,
+                        principalTable: "Infraction",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -636,6 +657,18 @@ namespace Entity.Migrations.PostgresDb
                 });
 
             migrationBuilder.InsertData(
+                schema: "Entities",
+                table: "TypeInfraction",
+                columns: new[] { "id", "Name", "active", "created_date", "is_deleted" },
+                values: new object[,]
+                {
+                    { 1, "Infraccion de tipo uno", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 2, "Infraccion de tipo dos", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 3, "Infraccion de tipo tres", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 4, "Infraccion de tipo cuatro", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false }
+                });
+
+            migrationBuilder.InsertData(
                 schema: "Parameters",
                 table: "department",
                 columns: new[] { "id", "active", "created_date", "daneCode", "is_deleted", "name" },
@@ -706,10 +739,9 @@ namespace Entity.Migrations.PostgresDb
                 columns: new[] { "id", "active", "created_date", "dueDayOfMonth", "intervalPage", "is_deleted" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 16, "UNICA", false },
-                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 15, "MENSUAL", false },
-                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, "QUINCENAL", false },
-                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 10, "BIMESTRAL", false }
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 15, "MENSUAL", false },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, "QUINCENAL", false },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 10, "BIMESTRAL", false }
                 });
 
             migrationBuilder.InsertData(
@@ -734,18 +766,6 @@ namespace Entity.Migrations.PostgresDb
                 {
                     { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol con todos los permisos", false, "Administrador" },
                     { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol con permisos limitados", false, "Finanza" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "Entities",
-                table: "typeInfraction",
-                columns: new[] { "id", "active", "created_date", "description", "is_deleted", "numer_smldv", "type_Infraction" },
-                values: new object[,]
-                {
-                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "lanzar basura en un lugar publico", false, 4, "infraccion de tipo uno" },
-                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, 8, "infraccion de tipo dos" },
-                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.", false, 16, "infraccion de tipo Tres" },
-                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.", false, 32, "infraccion de tipo Cuatro" }
                 });
 
             migrationBuilder.InsertData(
@@ -782,15 +802,14 @@ namespace Entity.Migrations.PostgresDb
                 });
 
             migrationBuilder.InsertData(
-                schema: "Entities",
-                table: "FineCalculationDetail",
-                columns: new[] { "id", "active", "created_date", "formula", "is_deleted", "totalCalculation", "typeInfractionId", "valueSmldvId" },
+                table: "Infraction",
+                columns: new[] { "id", "TypeInfractionId", "active", "created_date", "description", "is_deleted", "numer_smldv" },
                 values: new object[,]
                 {
-                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 1, 1 },
-                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 2, 1 },
-                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 3, 1 },
-                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 4, 1 }
+                    { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "lanzar basura en un lugar publico", false, 4 },
+                    { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, 8 },
+                    { 3, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.", false, 16 },
+                    { 4, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.", false, 32 }
                 });
 
             migrationBuilder.InsertData(
@@ -966,6 +985,18 @@ namespace Entity.Migrations.PostgresDb
                 });
 
             migrationBuilder.InsertData(
+                schema: "Entities",
+                table: "FineCalculationDetail",
+                columns: new[] { "id", "active", "created_date", "formula", "is_deleted", "totalCalculation", "typeInfractionId", "valueSmldvId" },
+                values: new object[,]
+                {
+                    { 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 1, 1 },
+                    { 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 2, 1 },
+                    { 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 3, 1 },
+                    { 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "salario minimo * dias = smdlv", false, 0m, 4, 1 }
+                });
+
+            migrationBuilder.InsertData(
                 schema: "ModelSecurity",
                 table: "person",
                 columns: new[] { "id", "active", "address", "created_date", "firstName", "is_deleted", "lastName", "municipalityId", "phoneNumber", "tipoUsuario" },
@@ -998,13 +1029,13 @@ namespace Entity.Migrations.PostgresDb
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "userInfraction",
-                columns: new[] { "id", "UserId", "UserNotificationId", "active", "amountToPay", "created_date", "dateInfraction", "is_deleted", "observations", "stateInfraction", "typeInfractionId" },
+                columns: new[] { "id", "InformationFine", "InfractionId", "UserId", "UserNotificationId", "active", "amountToPay", "created_date", "dateInfraction", "is_deleted", "stateInfraction" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona no opuso resistencia a la infracción", 0, 1 },
-                    { 2, 1, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "portaba un cuchillo en la vía pública", 0, 3 },
-                    { 3, 2, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "la persona se encontraba en estado de embriaguez", 0, 2 },
-                    { 4, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, "agredió verbalmente a la autoridad", 0, 4 }
+                    { 1, null, 1, 1, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
+                    { 2, null, 3, 1, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
+                    { 3, null, 2, 2, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
+                    { 4, null, 4, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -1097,6 +1128,11 @@ namespace Entity.Migrations.PostgresDb
                 schema: "ModelSecurity",
                 table: "formmodule",
                 column: "moduleid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Infraction_TypeInfractionId",
+                table: "Infraction",
+                column: "TypeInfractionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_module_name",
@@ -1201,10 +1237,10 @@ namespace Entity.Migrations.PostgresDb
                 column: "userId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_typeInfraction_type_Infraction",
+                name: "IX_TypeInfraction_Name",
                 schema: "Entities",
-                table: "typeInfraction",
-                column: "type_Infraction",
+                table: "TypeInfraction",
+                column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -1228,10 +1264,10 @@ namespace Entity.Migrations.PostgresDb
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_userInfraction_typeInfractionId",
+                name: "IX_userInfraction_InfractionId",
                 schema: "Entities",
                 table: "userInfraction",
-                column: "typeInfractionId");
+                column: "InfractionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_userInfraction_UserId",
@@ -1320,8 +1356,7 @@ namespace Entity.Migrations.PostgresDb
                 schema: "Parameters");
 
             migrationBuilder.DropTable(
-                name: "typeInfraction",
-                schema: "Entities");
+                name: "Infraction");
 
             migrationBuilder.DropTable(
                 name: "userNotification",
@@ -1330,6 +1365,10 @@ namespace Entity.Migrations.PostgresDb
             migrationBuilder.DropTable(
                 name: "user",
                 schema: "ModelSecurity");
+
+            migrationBuilder.DropTable(
+                name: "TypeInfraction",
+                schema: "Entities");
 
             migrationBuilder.DropTable(
                 name: "person",

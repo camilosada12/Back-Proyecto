@@ -66,8 +66,45 @@ namespace Web.Controllers.Implements.Entities
                 return BadRequest(new { isSuccess = false, message = "Parámetros inválidos." });
 
             var items = await _service.GetByDocumentAsync(documentTypeId, documentNumber.Trim());
-            return Ok(new { isSuccess = true, count = items.Count, data = items });
+            return Ok(new { isSuccess = true, count = items.Count(), data = items });
         }
+
+        // Consulta por tipo de infracción
+        [HttpGet("by-type")]
+        [ProducesResponseType(typeof(object), 200)]
+        public async Task<IActionResult> GetByTypeInfraction([FromQuery] int typeInfractionId)
+        {
+            if (typeInfractionId <= 0)
+                return BadRequest(new { isSuccess = false, message = "Parámetro inválido." });
+
+            var items = await _service.GetByTypeInfractionAsync(typeInfractionId);
+            return Ok(new { isSuccess = true, count = items.Count(), data = items });
+        }
+
+        [HttpGet("person-by-document")]
+        public async Task<IActionResult> GetPersonByDocument([FromQuery] int documentTypeId, [FromQuery] string documentNumber)
+        {
+            if (documentTypeId <= 0 || string.IsNullOrWhiteSpace(documentNumber))
+                return BadRequest(new { isSuccess = false, message = "Parámetros inválidos." });
+
+            var userInfraction = await _service.GetFirstByDocumentAsync(documentTypeId, documentNumber.Trim());
+
+            if (userInfraction == null)
+                return Ok(new { isSuccess = true, hasInfraction = false });
+
+            return Ok(new
+            {
+                isSuccess = true,
+                hasInfraction = true,
+                data = new
+                {
+                    firstName = userInfraction.firstName,
+                    lastName = userInfraction.lastName,
+                    email = userInfraction.userEmail
+                }
+            });
+        }
+
 
         [HttpPost("create-with-person")]
         [ProducesResponseType(typeof(UserInfractionSelectDto), 200)]

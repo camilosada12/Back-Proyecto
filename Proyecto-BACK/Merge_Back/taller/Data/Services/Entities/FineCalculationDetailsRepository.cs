@@ -24,7 +24,8 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                 .Include(f => f.valueSmldv)
-                .Include(f => f.typeInfraction)
+                .Include(f => f.Infraction)
+                    .ThenInclude(i => i.TypeInfraction)
                 .Where(f => !f.is_deleted)
                 .ToListAsync();
         }
@@ -33,7 +34,8 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                 .Include(f => f.valueSmldv)
-                .Include(f => f.typeInfraction)
+                .Include(f => f.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
                 .Where(f => f.is_deleted)
                 .ToListAsync();
         }
@@ -42,7 +44,8 @@ namespace Data.Services.Entities
         {
             return await _dbSet
                 .Include(f => f.valueSmldv)
-                .Include(f => f.typeInfraction)
+                .Include(f => f.Infraction)
+                .ThenInclude(i => i.TypeInfraction)
                 .FirstOrDefaultAsync(f => f.id == id);
         }
     }

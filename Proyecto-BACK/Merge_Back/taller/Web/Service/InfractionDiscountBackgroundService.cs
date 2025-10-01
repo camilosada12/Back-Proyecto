@@ -44,12 +44,13 @@ public class InfractionDiscountBackgroundService : BackgroundService
                     var infractionDto = _mapper.Map<UserInfractionDto>(infraction);
 
                     // Buscar tipo de infracción
-                    var typeInfraction = await dbContext.typeInfraction
-                        .FirstOrDefaultAsync(t => t.id == infraction.typeInfractionId, stoppingToken);
+                    var typeInfraction = await dbContext.Infraction
+                    .Include(i => i.TypeInfraction)  // 🔹 incluir la relación
+                    .FirstOrDefaultAsync(t => t.id == infraction.InfractionId, stoppingToken);
 
                     if (typeInfraction == null)
                     {
-                        _logger.LogWarning("⚠️ No existe TypeInfraction con id {id}", infraction.typeInfractionId);
+                        _logger.LogWarning("⚠️ No existe TypeInfraction con id {id}", infraction.InfractionId);
                         continue;
                     }
 
@@ -73,8 +74,9 @@ public class InfractionDiscountBackgroundService : BackgroundService
                         baseAmount,
                         smldv.id,
                         $"SMLDV {smldv.Current_Year}",
-                        typeInfraction.type_Infraction
+                        typeInfraction.TypeInfraction.Name // 🔹 ahora sí existe
                     );
+
 
                     // 📝 Log para verificar el cálculo
                     int daysPassed = (DateTime.Now.Date - infraction.dateInfraction.Date).Days;

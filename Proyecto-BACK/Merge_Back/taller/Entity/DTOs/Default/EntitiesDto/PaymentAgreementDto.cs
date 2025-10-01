@@ -18,8 +18,6 @@ namespace Entity.Domain.Models.Implements.Entities
         public DateTime expeditionCedula { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public DateTime AgreementStart { get; set; }
-        public DateTime AgreementEnd { get; set; }
         public decimal BaseAmount { get; set; }
         public bool IsPaid { get; set; }
         public int userInfractionId { get; set; }
