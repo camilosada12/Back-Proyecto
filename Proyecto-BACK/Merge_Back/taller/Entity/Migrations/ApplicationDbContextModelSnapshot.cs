@@ -696,7 +696,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario Notificacion de multas",
                             is_deleted = false,
-                            name = "Formulario Notificacion de multas"
+                            name = "Notificacion de multas"
                         },
                         new
                         {
@@ -872,7 +872,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "inicio ",
                             is_deleted = false,
-                            name = "inicio"
+                            name = "Consultar Multas"
                         });
                 });
 
