@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class sqlserver : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -722,24 +722,24 @@ namespace Entity.Migrations
                 values: new object[,]
                 {
                     { 1, "pi pi-fw pi-home", "acuerdoPago", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario de creacion de acuerdo de pago", false, "Formulario de acuerdo de pago" },
-                    { 2, "pi pi-fw pi-homeing", "CreacionMulta", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario para agregar nuevas multas", false, "Formulario de creacion de multas" },
+                    { 2, "pi pi-fw pi-homeing", "anexar-multas/multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario para agregar nuevas multas", false, "Formulario de creacion de multas" },
                     { 3, "pi pi-fw pi-id-card", "tipos-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario tipo de  multas", false, "Formulario tipo de  multas" },
-                    { 4, "pi pi-fw pi-check-square", "notificaciones", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario Notificacion de multas", false, "Formulario Notificacion de multas" },
-                    { 5, "pi pi-fw pi-file", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formularios", false, "Formularios" },
-                    { 6, "pi pi-fw pi-clone", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Form modules", false, "Form modules" },
-                    { 7, "pi pi-fw pi-th-large", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Modulos", false, "Modulos" },
-                    { 8, "pi pi-fw pi-users", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "personas", false, "personas" },
-                    { 9, "pi pi-fw pi-lock-open", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permisos", false, "permisos" },
-                    { 10, "pi pi-fw pi-key", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol Form Permission", false, "Rol Form Permission" },
-                    { 11, "pi pi-fw pi-users", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Roles", false, "Roles" },
-                    { 12, "pi pi-fw pi-user", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Usuarios", false, "Usuarios" },
-                    { 13, "pi pi-fw pi-user-plus", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol Usuario", false, "Rol Usuario" },
-                    { 14, "pi pi-fw pi-briefcase", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "departamento", false, "departamento" },
-                    { 15, "pi pi-fw pi-briefcase", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Tipo de Documento", false, "Tipo de Documento" },
-                    { 16, "pi pi-fw pi-briefcase", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Municipio", false, "Municipio" },
-                    { 17, "pi pi-fw pi-briefcase", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Frecuencia de pago", false, "Frecuencia de pago " },
+                    { 4, "pi pi-fw pi-check-square", "notificaciones/notificacion-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario Notificacion de multas", false, "Formulario Notificacion de multas" },
+                    { 5, "pi pi-fw pi-file", "formularios", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formularios", false, "Formularios" },
+                    { 6, "pi pi-fw pi-clone", "form-modules", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Form modules", false, "Form modules" },
+                    { 7, "pi pi-fw pi-th-large", "modulos", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Modulos", false, "Modulos" },
+                    { 8, "pi pi-fw pi-users", "personas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Personas", false, "personas" },
+                    { 9, "pi pi-fw pi-lock-open", "permisos", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permisos", false, "permisos" },
+                    { 10, "pi pi-fw pi-key", "rol-form-permission", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol Form Permission", false, "Rol Form Permission" },
+                    { 11, "pi pi-fw pi-users", "roles", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Roles", false, "Roles" },
+                    { 12, "pi pi-fw pi-user", "usuarios", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Usuarios", false, "Usuarios" },
+                    { 13, "pi pi-fw pi-user-plus", "rol-user", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol Usuario", false, "Rol Usuario" },
+                    { 14, "pi pi-fw pi-briefcase", "parameters/department", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "departamento", false, "departamento" },
+                    { 15, "pi pi-fw pi-briefcase", "parameters/document-type", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Tipo de Documento", false, "Tipo de Documento" },
+                    { 16, "pi pi-fw pi-briefcase", "parameters/municipality", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Municipio", false, "Municipio" },
+                    { 17, "pi pi-fw pi-briefcase", "parameters/payment-frequency", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Frecuencia de pago", false, "Frecuencia de pago " },
                     { 18, "pi pi-fw pi-briefcase", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Perfil", false, "Perfil" },
-                    { 19, "pi pi-fw pi-briefcase", "dashboard", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Notificacion de acuerdo ", false, "Notificacion de acuerdo" },
+                    { 19, "pi pi-fw pi-briefcase", "notificaciones", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Notificacion de acuerdo ", false, "Notificacion de acuerdo" },
                     { 20, "pi pi-fw pi-home", "consultar-ingresar", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "inicio ", false, "inicio" }
                 });
 
