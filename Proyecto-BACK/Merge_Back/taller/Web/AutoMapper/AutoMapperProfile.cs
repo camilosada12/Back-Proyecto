@@ -73,10 +73,12 @@ namespace Web.AutoMapper
             CreateMap<TypePayment, TypePaymentSelectDto>().ReverseMap();
 
             CreateMap<PaymentAgreement, PaymentAgreementDto>().ReverseMap();
+
             CreateMap<PaymentAgreement, PaymentAgreementDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Installments, opt => opt.MapFrom(src => src.Installments))
                 .ForMember(dest => dest.MonthlyFee, opt => opt.MapFrom(src => src.MonthlyFee));
+
             CreateMap<PaymentAgreement, PaymentAgreementSelectDto>()
                 .ForMember(d => d.PersonName,
                     o => o.MapFrom(s => s.userInfraction.User.Person != null
@@ -107,7 +109,10 @@ namespace Web.AutoMapper
                 .ForMember(d => d.FrequencyPayment,
                     o => o.MapFrom(s => s.paymentFrequency.intervalPage))
                 .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
-                .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee));
+                .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee))
+                // 👇 IGNORAMOS EL CRONOGRAMA porque lo llenamos manualmente
+                .ForMember(d => d.InstallmentSchedule, o => o.Ignore());
+
 
             // Document & Report
             CreateMap<DocumentInfraction, DocumentInfractionDto>().ReverseMap();

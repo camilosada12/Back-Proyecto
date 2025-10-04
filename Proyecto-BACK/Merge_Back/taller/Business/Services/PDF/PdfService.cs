@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces.PDF;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.EntitiesDto;
+using Entity.DTOs.Default.InstallmentSchedule;
 using Entity.DTOs.Select.Entities;
 using Microsoft.Playwright;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using Template.Templates;
@@ -117,12 +119,40 @@ namespace Business.Services.PDF
         {
             var culture = new CultureInfo("es-CO");
 
-            return PaymentAgreementTemplate.Html
+            // Cronograma ya viene en el DTO
+            var schedule = dto.InstallmentSchedule ?? new List<InstallmentScheduleDto>();
+
+            var cuotasHtml = new StringBuilder();
+            if (schedule.Any())
+            {
+                cuotasHtml.Append("<h2>📅 Cronograma de Cuotas</h2>");
+                cuotasHtml.Append("<table><tr><th>#</th><th>Fecha</th><th>Valor Cuota</th><th>Saldo Restante</th></tr>");
+
+                foreach (var cuota in schedule)
+                {
+                    cuotasHtml.Append("<tr>");
+                    cuotasHtml.Append($"<td>{cuota.Number}</td>");
+                    cuotasHtml.Append($"<td>{cuota.PaymentDate:dd/MM/yyyy}</td>");
+                    cuotasHtml.Append($"<td>$ {cuota.Amount.ToString("N0", culture)}</td>");
+                    cuotasHtml.Append($"<td>$ {cuota.RemainingBalance.ToString("N0", culture)}</td>");
+                    cuotasHtml.Append("</tr>");
+                }
+
+                cuotasHtml.Append("</table>");
+            }
+            else
+            {
+                cuotasHtml.Append("<p>No se generó cronograma de cuotas.</p>");
+            }
+
+            // Generar el HTML final reemplazando marcadores
+            var html = PaymentAgreementTemplate.Html
                 .Replace("@Nombre", HttpUtility.HtmlEncode(dto.PersonName ?? "-"))
                 .Replace("@Documento", HttpUtility.HtmlEncode(dto.DocumentNumber ?? "-"))
                 .Replace("@TipoDocumento", HttpUtility.HtmlEncode(dto.DocumentType ?? "-"))
                 .Replace("@Direccion", HttpUtility.HtmlEncode(dto.address ?? "-"))
                 .Replace("@Barrio", HttpUtility.HtmlEncode(dto.Neighborhood ?? "-"))
+                .Replace("{{TablaCuotas}}", cuotasHtml.ToString())
                 .Replace("@Telefono", HttpUtility.HtmlEncode(dto.PhoneNumber ?? "-"))
                 .Replace("@Correo", HttpUtility.HtmlEncode(dto.Email ?? "-"))
                 .Replace("@FechaInicio", dto.AgreementStart.ToString("dd/MM/yyyy"))
@@ -146,6 +176,9 @@ namespace Business.Services.PDF
                 .Replace("@UltimoInteres", dto.LastInterestAppliedOn.HasValue
                     ? $"<p><strong>Último cálculo de interés:</strong> {dto.LastInterestAppliedOn:dd/MM/yyyy}</p>"
                     : "");
+
+            return html; // ✅ retorna el HTML generado
         }
+
     }
 }
