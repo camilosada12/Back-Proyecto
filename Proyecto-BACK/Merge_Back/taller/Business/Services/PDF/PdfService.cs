@@ -6,6 +6,7 @@ using Entity.DTOs.Select.Entities;
 using Microsoft.Playwright;
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 using Template.Templates;
@@ -68,6 +69,8 @@ namespace Business.Services.PDF
 
         public async Task<byte[]> GeneratePaymentAgreementPdfAsync(PaymentAgreementSelectDto dto)
         {
+            Console.WriteLine($"🧾 Cuotas en DTO: {dto.InstallmentSchedule?.Count}");
+
             var html = BuildPaymentAgreementHtml(dto);
 
             await EnsureBrowserAsync();
@@ -102,6 +105,7 @@ namespace Business.Services.PDF
             }
         }
 
+
         private static string BuildHtml(UserInfractionSelectDto dto)
         {
             var template = InspectoraTemplate.Html; // 👈 CORREGIDO
@@ -119,40 +123,43 @@ namespace Business.Services.PDF
         {
             var culture = new CultureInfo("es-CO");
 
-            // Cronograma ya viene en el DTO
+            // ✅ Verificar que el cronograma existe
             var schedule = dto.InstallmentSchedule ?? new List<InstallmentScheduleDto>();
 
+            Console.WriteLine($"📊 DEBUG - Cuotas recibidas en BuildHtml: {schedule.Count}");
+
             var cuotasHtml = new StringBuilder();
+
             if (schedule.Any())
             {
-                cuotasHtml.Append("<h2>📅 Cronograma de Cuotas</h2>");
-                cuotasHtml.Append("<table><tr><th>#</th><th>Fecha</th><th>Valor Cuota</th><th>Saldo Restante</th></tr>");
+                cuotasHtml.AppendLine("<h2>📅 Cronograma de Cuotas</h2>");
+                cuotasHtml.AppendLine("<table>");
+                cuotasHtml.AppendLine("<tr><th>#</th><th>Fecha de Pago</th><th>Valor Cuota</th><th>Saldo Restante</th></tr>");
 
                 foreach (var cuota in schedule)
                 {
-                    cuotasHtml.Append("<tr>");
-                    cuotasHtml.Append($"<td>{cuota.Number}</td>");
-                    cuotasHtml.Append($"<td>{cuota.PaymentDate:dd/MM/yyyy}</td>");
-                    cuotasHtml.Append($"<td>$ {cuota.Amount.ToString("N0", culture)}</td>");
-                    cuotasHtml.Append($"<td>$ {cuota.RemainingBalance.ToString("N0", culture)}</td>");
-                    cuotasHtml.Append("</tr>");
+                    cuotasHtml.AppendLine("<tr>");
+                    cuotasHtml.AppendLine($"<td>{cuota.Number}</td>");
+                    cuotasHtml.AppendLine($"<td>{cuota.PaymentDate:dd/MM/yyyy}</td>");
+                    cuotasHtml.AppendLine($"<td>$ {cuota.Amount.ToString("N0", culture)}</td>");
+                    cuotasHtml.AppendLine($"<td>$ {cuota.RemainingBalance.ToString("N0", culture)}</td>");
+                    cuotasHtml.AppendLine("</tr>");
                 }
 
-                cuotasHtml.Append("</table>");
+                cuotasHtml.AppendLine("</table>");
             }
             else
             {
-                cuotasHtml.Append("<p>No se generó cronograma de cuotas.</p>");
+                cuotasHtml.AppendLine("<p style='color: red; font-weight: bold;'>⚠️ No se generó cronograma de cuotas.</p>");
             }
 
-            // Generar el HTML final reemplazando marcadores
+            // Generar el HTML final
             var html = PaymentAgreementTemplate.Html
                 .Replace("@Nombre", HttpUtility.HtmlEncode(dto.PersonName ?? "-"))
                 .Replace("@Documento", HttpUtility.HtmlEncode(dto.DocumentNumber ?? "-"))
                 .Replace("@TipoDocumento", HttpUtility.HtmlEncode(dto.DocumentType ?? "-"))
                 .Replace("@Direccion", HttpUtility.HtmlEncode(dto.address ?? "-"))
                 .Replace("@Barrio", HttpUtility.HtmlEncode(dto.Neighborhood ?? "-"))
-                .Replace("{{TablaCuotas}}", cuotasHtml.ToString())
                 .Replace("@Telefono", HttpUtility.HtmlEncode(dto.PhoneNumber ?? "-"))
                 .Replace("@Correo", HttpUtility.HtmlEncode(dto.Email ?? "-"))
                 .Replace("@FechaInicio", dto.AgreementStart.ToString("dd/MM/yyyy"))
@@ -175,9 +182,10 @@ namespace Business.Services.PDF
                     : "")
                 .Replace("@UltimoInteres", dto.LastInterestAppliedOn.HasValue
                     ? $"<p><strong>Último cálculo de interés:</strong> {dto.LastInterestAppliedOn:dd/MM/yyyy}</p>"
-                    : "");
+                    : "")
+                .Replace("@TablaCuotas", cuotasHtml.ToString()); // ✅ Aquí se inserta la tabla
 
-            return html; // ✅ retorna el HTML generado
+            return html;
         }
 
     }

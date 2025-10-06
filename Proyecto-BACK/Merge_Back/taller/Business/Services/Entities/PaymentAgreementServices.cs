@@ -18,6 +18,7 @@ using Helpers.Business.Business.Helpers.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using Utilities.Exceptions;
 // 👇 alias para evitar ambigüedad
 using FVValidationException = FluentValidation.ValidationException;
@@ -89,33 +90,30 @@ namespace Business.Services.Entities
                 throw new BusinessException("La cantidad de cuotas debe ser mayor a cero.");
 
             var frequencyMap = new Dictionary<string, Func<DateTime, DateTime>>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "MENSUAL", date => date.AddMonths(1) },
-        { "QUINCENAL", date => date.AddDays(15) },
-        { "BIMESTRAL", date => date.AddMonths(2) }
-    };
+            {
+                { "MENSUAL", date => date.AddMonths(1) },
+                { "QUINCENAL", date => date.AddDays(15) },
+                { "BIMESTRAL", date => date.AddMonths(2) }
+            };
 
             if (!frequencyMap.TryGetValue(frequency, out var nextDateFunc))
                 throw new BusinessException($"Frecuencia de pago {frequency} no soportada.");
 
             var nextPaymentDate = startDate;
-
-            // Avanzar tantas veces como cuotas → la última iteración deja la fecha final
             for (int i = 0; i < installments; i++)
-            {
                 nextPaymentDate = nextDateFunc(nextPaymentDate);
-            }
 
             return nextPaymentDate;
         }
 
-        // Genera el cronograma de cuotas detallado
-        private List<InstallmentScheduleDto> GenerateInstallmentSchedule(
-            DateTime startDate,
-            string frequency,
-            int installments,
-            decimal baseAmount,
-            decimal monthlyFee)
+        // ✅ Genera cronograma completo
+        private List<InstallmentSchedule> GenerateInstallmentScheduleEntities(
+     int paymentAgreementId,
+     DateTime startDate,
+     string frequency,
+     int installments,
+     decimal baseAmount,
+     decimal monthlyFee)
         {
             if (installments <= 0)
                 throw new BusinessException("El número de cuotas debe ser mayor a cero.");
@@ -130,71 +128,52 @@ namespace Business.Services.Entities
         { "BIMESTRAL", date => date.AddMonths(2) }
     };
 
+            frequency = frequency.Trim().ToUpper();
+
             if (!frequencyMap.TryGetValue(frequency, out var nextDateFunc))
                 throw new BusinessException($"Frecuencia de pago {frequency} no soportada.");
 
-            var schedule = new List<InstallmentScheduleDto>();
-            var nextPaymentDate = startDate;
+            var scheduleEntities = new List<InstallmentSchedule>();
+
+            // ✅ Iniciar desde la SIGUIENTE fecha según la frecuencia
+            var nextPaymentDate = nextDateFunc(startDate);
             var remaining = baseAmount;
 
             for (int i = 1; i <= installments; i++)
             {
-                var cuota = monthlyFee;
-
-                if (i == installments && remaining != monthlyFee)
-                {
-                    // Ajuste en la última cuota si sobra o falta
-                    cuota += remaining - monthlyFee;
-                }
-
+                var cuota = (i == installments) ? remaining : monthlyFee;
                 remaining -= cuota;
 
-                schedule.Add(new InstallmentScheduleDto
+                scheduleEntities.Add(new InstallmentSchedule
                 {
+                    PaymentAgreementId = paymentAgreementId,
                     Number = i,
                     PaymentDate = nextPaymentDate,
                     Amount = cuota,
-                    RemainingBalance = remaining
+                    RemainingBalance = Math.Max(remaining, 0),
+                    IsPaid = false
                 });
 
                 nextPaymentDate = nextDateFunc(nextPaymentDate);
             }
 
-            return schedule;
+            return scheduleEntities;
         }
 
-        public new async Task<PaymentAgreementSelectDto> CreateAsync(PaymentAgreementDto dto)
+
+        public async Task<PaymentAgreementSelectDto> CreateAsync(PaymentAgreementDto dto)
         {
-            // 1️⃣ Crear el acuerdo de pago en la base
+            // Crear el acuerdo en BD (ahora incluye el cronograma guardado)
             var entity = await CreatePaymentAgreementInternalAsync(dto);
 
-            // 2️⃣ Mapear la entidad a DTO seguro
-            var resultDto = _mapper.Map<PaymentAgreementSelectDto>(entity);
+            // Recargar con Include para traer el cronograma desde BD
+            var agreementWithSchedule = await _paymentAgreementRepository.GetByIdAsync(entity.id);
+            var resultDto = _mapper.Map<PaymentAgreementSelectDto>(agreementWithSchedule);
 
-            // 🚨 Validar datos antes de generar el cronograma
-            var frequency = entity.paymentFrequency?.intervalPage ?? "";
-            var installments = entity.Installments ?? 1;
-            var monthlyFee = entity.MonthlyFee ?? entity.BaseAmount; // Si es pago único, cuota = monto total
+            _logger.LogInformation("Acuerdo {Id} creado con {Count} cuotas",
+                resultDto.Id, resultDto.InstallmentSchedule?.Count ?? 0);
 
-            if (string.IsNullOrWhiteSpace(frequency))
-                throw new BusinessException("La frecuencia de pago es obligatoria para generar el cronograma.");
-
-            if (installments <= 0)
-                throw new BusinessException("El número de cuotas debe ser mayor a cero.");
-
-            if (monthlyFee <= 0)
-                throw new BusinessException("El valor de la cuota mensual debe ser mayor a cero.");
-
-            // 2b️⃣ Generar cronograma siempre, incluso si es una sola cuota
-            resultDto.InstallmentSchedule = GenerateInstallmentSchedule(
-                entity.AgreementStart,
-                frequency,
-                installments,
-                entity.BaseAmount,
-                monthlyFee
-            );
-
-            // 3️⃣ Enviar correo con PDF en background
+            // Envío de PDF y correo (background)
             await _emailQueue.QueueBackgroundWorkItemAsync(async () =>
             {
                 try
@@ -202,38 +181,42 @@ namespace Business.Services.Entities
                     using var scope = _scopeFactory.CreateScope();
                     var emailService = scope.ServiceProvider.GetRequiredService<IServiceEmail>();
                     var pdfService = scope.ServiceProvider.GetRequiredService<IPdfGeneratorService>();
-                    var userInfractionRepo = scope.ServiceProvider.GetRequiredService<IUserInfractionRepository>();
+                    var repository = scope.ServiceProvider.GetRequiredService<IPaymentAgreementRepository>();
 
-                    var infraction = await userInfractionRepo.GetByIdAsync(entity.userInfractionId);
-                    if (infraction?.User == null || string.IsNullOrWhiteSpace(infraction.User.email))
-                        return;
+                    // Consultar desde BD con el cronograma incluido
+                    var agreement = await repository.GetByIdAsync(entity.id);
+                    var dtoForPdf = _mapper.Map<PaymentAgreementSelectDto>(agreement);
 
-                    // Aseguramos que el PDF tenga el cronograma generado
-                    var dtoForPdf = resultDto;
+                    _logger.LogInformation("Generando PDF con {Count} cuotas",
+                        dtoForPdf.InstallmentSchedule?.Count ?? 0);
+
                     var pdfBytes = await pdfService.GeneratePaymentAgreementPdfAsync(dtoForPdf);
                     var builder = new PaymentAgreementEmailBuilder(dtoForPdf, pdfBytes);
 
+                    var email = agreement.userInfraction?.User?.email;
+                    if (string.IsNullOrWhiteSpace(email))
+                    {
+                        _logger.LogWarning("Usuario sin correo para acuerdo {Id}", entity.id);
+                        return;
+                    }
+
                     await emailService.SendEmailAsync(
-                        infraction.User.email,
+                        email,
                         builder.GetSubject(),
                         builder.GetBody(),
                         builder.GetAttachments()
                     );
 
-                    _logger.LogInformation("Correo enviado correctamente a {Email} para el acuerdo de pago {Id}",
-                        infraction.User.email, entity.id);
+                    _logger.LogInformation("Correo enviado correctamente para acuerdo {Id}", entity.id);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error enviando correo para el acuerdo de pago {Id}", resultDto.Id);
+                    _logger.LogError(ex, "Error enviando correo con acuerdo {Id}", entity.id);
                 }
             });
 
             return resultDto;
         }
-
-
-
 
         // Método interno para la creación de PaymentAgreement
         private async Task<PaymentAgreement> CreatePaymentAgreementInternalAsync(PaymentAgreementDto dto)
@@ -258,7 +241,6 @@ namespace Business.Services.Entities
             var typePayment = await _paymentAgreementRepository.GetTypePaymentAsync(dto.typePaymentId)
                 ?? throw new BusinessException($"El método de pago con ID {dto.typePaymentId} no existe.");
 
-            // ✅ Calcular montos de forma segura
             var (baseAmount, installments, monthlyFee) = CalcularMontos(userInfraction, dto);
 
             var startDate = DateTime.Now.Date;
@@ -283,8 +265,8 @@ namespace Business.Services.Entities
                 OutstandingAmount = baseAmount,
                 IsPaid = false,
                 IsCoactive = false,
-                Installments = installments,   // 👈 nunca null
-                MonthlyFee = monthlyFee        // 👈 nunca null
+                Installments = installments,
+                MonthlyFee = monthlyFee
             };
 
             userInfraction.stateInfraction = EstadoMulta.ConAcuerdoPago;
@@ -293,55 +275,23 @@ namespace Business.Services.Entities
             var created = await _paymentAgreementRepository.CreateAsync(agreement);
             await _context.SaveChangesAsync();
 
+            // Generar y guardar el cronograma en la base de datos
+            var cronogramaEntities = GenerateInstallmentScheduleEntities(
+                created.id,
+                startDate,
+                frequency.intervalPage,
+                installments,
+                baseAmount,
+                monthlyFee
+            );
+
+            _context.Set<InstallmentSchedule>().AddRange(cronogramaEntities);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Cronograma de {Count} cuotas guardado en BD para acuerdo {Id}",
+                cronogramaEntities.Count, created.id);
+
             return created;
-        }
-
-
-
-        public override async Task<bool> UpdateAsync(PaymentAgreementDto dto)
-        {
-            try
-            {
-                BusinessValidationHelper.ThrowIfNull(dto, "El DTO no puede ser nulo.");
-
-                var updateValidator = new PaymentAgreementUpdateValidator();
-                var validationResult = updateValidator.Validate(dto);
-                if (!validationResult.IsValid)
-                    throw new FVValidationException(validationResult.Errors);
-
-                var entity = await _context.paymentAgreement.FindAsync(dto.id);
-                if (entity == null)
-                    throw new BusinessException($"El acuerdo de pago con ID {dto.id} no existe.");
-
-                entity.Installments = dto.Installments;
-                entity.MonthlyFee = dto.MonthlyFee;
-
-                _context.paymentAgreement.Update(entity);
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new BusinessException("Error al actualizar el acuerdo de pago.", ex);
-            }
-        }
-
-        public override async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                BusinessValidationHelper.ThrowIfZeroOrLess(id, "El ID debe ser mayor que cero.");
-
-                if (!await ExistsAsync(id))
-                    throw new BusinessException($"No se puede eliminar. El acuerdo de pago con ID {id} no existe.");
-
-                return await base.DeleteAsync(id);
-            }
-            catch (Exception ex)
-            {
-                throw new BusinessException($"Error al eliminar el registro con ID {id}.", ex);
-            }
         }
 
         public override async Task<bool> RestoreLogical(int id)
@@ -417,8 +367,8 @@ namespace Business.Services.Entities
         }
 
         public (decimal BaseAmount, int Installments, decimal MonthlyFee) CalcularMontos(
-      UserInfraction userInfraction,
-      PaymentAgreementDto dto)  
+            UserInfraction userInfraction,
+            PaymentAgreementDto dto)
         {
             var detail = userInfraction.Infraction.fineCalculationDetail
                 .OrderByDescending(fd => fd.valueSmldv.Current_Year)
@@ -428,24 +378,8 @@ namespace Business.Services.Entities
                 throw new BusinessException("No existe detalle de cálculo para esta infracción.");
 
             decimal baseAmount = userInfraction.Infraction.numer_smldv * (decimal)detail.valueSmldv.value_smldv;
-
-            // ✅ Siempre aseguramos que Installments tenga un valor válido
-            int installments = (dto.Installments.HasValue && dto.Installments.Value > 0)
-                ? dto.Installments.Value
-                : 1;
-
-            // ✅ Calculamos cuota mensual redondeada
+            int installments = dto.Installments > 0 ? dto.Installments.Value : 1;
             decimal monthlyFee = Math.Round(baseAmount / installments, 0, MidpointRounding.AwayFromZero);
-
-            // ✅ Si el frontend manda ambos valores, validamos coherencia
-            if (dto.Installments.HasValue && dto.MonthlyFee.HasValue)
-            {
-                var total = dto.Installments.Value * dto.MonthlyFee.Value;
-                if (total != baseAmount)
-                    throw new BusinessException(
-                        $"El total de cuotas ({dto.Installments} x {dto.MonthlyFee} = {total}) no coincide con el monto base ({baseAmount})."
-                    );
-            }
 
             return (baseAmount, installments, monthlyFee);
         }

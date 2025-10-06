@@ -37,5 +37,6 @@ public class PaymentAgreement : BaseModel
 
 
     public List<DocumentInfraction> documentInfraction { get; set; } = new List<DocumentInfraction>();
-
+    public List<InstallmentSchedule> InstallmentSchedule { get; set; } = new List<InstallmentSchedule>();
 }
+

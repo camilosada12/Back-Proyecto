@@ -108,7 +108,8 @@ namespace Template.Templates
   </table>
 
   <!-- Aquí insertamos dinámicamente el cronograma -->
-  {{TablaCuotas}}
+@TablaCuotas
+
 
   <div class=""section"">
     <p><span class=""label"">Estado:</span> @Estado</p>

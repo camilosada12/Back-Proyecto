@@ -5,6 +5,7 @@ using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.Domain.Models.Implements.parameters;
 using Entity.DTOs.Default.Auth;
 using Entity.DTOs.Default.EntitiesDto;
+using Entity.DTOs.Default.InstallmentSchedule;
 using Entity.DTOs.Default.Me;
 using Entity.DTOs.Default.ModelSecurityDto;
 using Entity.DTOs.Default.parameters;
@@ -74,11 +75,26 @@ namespace Web.AutoMapper
 
             CreateMap<PaymentAgreement, PaymentAgreementDto>().ReverseMap();
 
+            CreateMap<InstallmentSchedule, InstallmentScheduleDto>().ReverseMap();
+            CreateMap<InstallmentSchedule, InstallmentScheduleSelectDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.id))
+            .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Number))
+            .ForMember(dest => dest.PaymentDate, opt => opt.MapFrom(src => src.PaymentDate))
+            .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount))
+            .ForMember(dest => dest.RemainingBalance, opt => opt.MapFrom(src => src.RemainingBalance))
+            .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.IsPaid))
+            .ReverseMap();
+
+
             CreateMap<PaymentAgreement, PaymentAgreementDto>()
                 .ReverseMap()
                 .ForMember(dest => dest.Installments, opt => opt.MapFrom(src => src.Installments))
                 .ForMember(dest => dest.MonthlyFee, opt => opt.MapFrom(src => src.MonthlyFee));
 
+            // Mapeo de InstallmentSchedule
+            CreateMap<InstallmentSchedule, InstallmentScheduleDto>().ReverseMap();
+
+            // Mapeo de PaymentAgreement a PaymentAgreementSelectDto
             CreateMap<PaymentAgreement, PaymentAgreementSelectDto>()
                 .ForMember(d => d.PersonName,
                     o => o.MapFrom(s => s.userInfraction.User.Person != null
@@ -110,8 +126,7 @@ namespace Web.AutoMapper
                     o => o.MapFrom(s => s.paymentFrequency.intervalPage))
                 .ForMember(d => d.Installments, o => o.MapFrom(s => s.Installments))
                 .ForMember(d => d.MonthlyFee, o => o.MapFrom(s => s.MonthlyFee))
-                // 👇 IGNORAMOS EL CRONOGRAMA porque lo llenamos manualmente
-                .ForMember(d => d.InstallmentSchedule, o => o.Ignore());
+                .ForMember(d => d.InstallmentSchedule, o => o.MapFrom(s => s.InstallmentSchedule));
 
 
             // Document & Report

@@ -63,8 +63,10 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
                     .ThenInclude(fd => fd.valueSmldv)
             .Include(p => p.paymentFrequency)
             .Include(p => p.TypePayment)
+            .Include(p => p.InstallmentSchedule) // ✅ Aquí agregas el cronograma
             .FirstOrDefaultAsync(p => p.id == id);
     }
+
 
     public async Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userId, int? infractionId = null)
     {
@@ -107,8 +109,6 @@ public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymen
             };
         });
     }
-
-
 
     public async Task<UserInfraction?> GetUserInfractionWithDetailsAsync(int userInfractionId)
     {

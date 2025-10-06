@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entity.Migrations
 {
     /// <inheritdoc />
-    public partial class sqlserver : Migration
+    public partial class slserver : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -590,8 +590,8 @@ namespace Entity.Migrations
                     address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     neighborhood = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     AgreementDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    expeditionCedula = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    expeditionCedula = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     AgreementStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AgreementEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -667,6 +667,35 @@ namespace Entity.Migrations
                         principalTable: "paymentAgreement",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "installmentSchedule",
+                schema: "Entities",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RemainingBalance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    PaymentAgreementId = table.Column<int>(type: "int", nullable: false),
+                    active = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_installmentSchedule", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_InstallmentSchedule_PaymentAgreement",
+                        column: x => x.PaymentAgreementId,
+                        principalSchema: "Entities",
+                        principalTable: "paymentAgreement",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -1067,10 +1096,10 @@ namespace Entity.Migrations
                 columns: new[] { "id", "AgreementDescription", "AgreementEnd", "AgreementStart", "BaseAmount", "CoactiveActivatedOn", "Email", "Installments", "LastInterestAppliedOn", "MonthlyFee", "OutstandingAmount", "PhoneNumber", "active", "address", "created_date", "expeditionCedula", "is_deleted", "neighborhood", "paymentFrequencyId", "typePaymentId", "userInfractionId" },
                 values: new object[,]
                 {
-                    { 1, "se realizará a 4 cuotas iguales", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 130500m, null, "user1@example.com", 4, null, 32625m, 130500m, "3101234567", true, "carrera 10", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc), false, "eduardo santos", 1, 1, 1 },
-                    { 2, "se realizará a 2 cuotas iguales", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 174000m, null, "user2@example.com", 2, null, 87000m, 174000m, "3009876543", true, "carrera 1", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc), false, "panamá", 2, 2, 2 },
-                    { 3, "se realizará a 8 cuotas iguales", new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 348000m, null, "user3@example.com", 8, null, 43500m, 348000m, "3015558888", true, "calle 20 #15-40", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2018, 3, 10, 0, 0, 0, 0, DateTimeKind.Utc), false, "la merced", 2, 3, 3 },
-                    { 4, "se realizará a 12 cuotas iguales", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 835200m, null, "user4@example.com", 12, null, 69600m, 835200m, "3024449999", true, "avenida 5 #45-12", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2019, 5, 22, 0, 0, 0, 0, DateTimeKind.Utc), false, "san martin", 3, 1, 4 }
+                    { 1, "Acuerdo a 4 cuotas iguales.", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 130500m, null, "user1@example.com", 4, null, 32625m, 130500m, "3101234567", true, "Carrera 10 #45-20", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2020, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Eduardo Santos", 1, 1, 1 },
+                    { 2, "Acuerdo a 2 cuotas iguales.", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 174000m, null, "user2@example.com", 2, null, 87000m, 174000m, "3009876543", true, "Carrera 1 #23-18", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Panamá", 2, 2, 2 },
+                    { 3, "Acuerdo a 8 cuotas iguales.", new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 348000m, null, "user3@example.com", 8, null, 43500m, 348000m, "3015558888", true, "Calle 20 #15-40", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2018, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "La Merced", 2, 3, 3 },
+                    { 4, "Acuerdo a 12 cuotas iguales.", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 835200m, null, "user4@example.com", 12, null, 69600m, 835200m, "3024449999", true, "Avenida 5 #45-12", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2019, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "San Martín", 3, 1, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -1081,6 +1110,16 @@ namespace Entity.Migrations
                 {
                     { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 1, false },
                     { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, false }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "Entities",
+                table: "installmentSchedule",
+                columns: new[] { "id", "Amount", "Number", "PaymentAgreementId", "PaymentDate", "RemainingBalance", "active", "created_date", "is_deleted" },
+                values: new object[,]
+                {
+                    { 1, 32625m, 1, 1, new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc), 97900m, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false },
+                    { 2, 32625m, 2, 1, new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Utc), 65275m, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1163,6 +1202,12 @@ namespace Entity.Migrations
                 name: "IX_Infraction_TypeInfractionId",
                 table: "Infraction",
                 column: "TypeInfractionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_installmentSchedule_PaymentAgreementId",
+                schema: "Entities",
+                table: "installmentSchedule",
+                column: "PaymentAgreementId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_module_name",
@@ -1340,6 +1385,10 @@ namespace Entity.Migrations
                 schema: "ModelSecurity");
 
             migrationBuilder.DropTable(
+                name: "installmentSchedule",
+                schema: "Entities");
+
+            migrationBuilder.DropTable(
                 name: "refreshTokens");
 
             migrationBuilder.DropTable(
@@ -1355,16 +1404,16 @@ namespace Entity.Migrations
                 schema: "Entities");
 
             migrationBuilder.DropTable(
-                name: "paymentAgreement",
-                schema: "Entities");
-
-            migrationBuilder.DropTable(
                 name: "valueSmldv",
                 schema: "Entities");
 
             migrationBuilder.DropTable(
                 name: "module",
                 schema: "ModelSecurity");
+
+            migrationBuilder.DropTable(
+                name: "paymentAgreement",
+                schema: "Entities");
 
             migrationBuilder.DropTable(
                 name: "form",
