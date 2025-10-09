@@ -26,6 +26,9 @@ namespace Entity.Domain.Models.Implements.Entities
 
         public List<PaymentAgreement> paymentAgreement { get; set; } = new();
         public decimal amountToPay { get; set; }
+
+        public decimal originalAmount { get; set; }
+
     }
 
 }

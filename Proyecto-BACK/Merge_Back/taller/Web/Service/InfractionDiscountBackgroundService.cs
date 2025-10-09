@@ -103,6 +103,7 @@ public class InfractionDiscountBackgroundService : BackgroundService
 
                     // Actualizar monto a pagar en UserInfraction
                     infraction.amountToPay = detailDto.totalCalculation;
+                    infraction.originalAmount = baseAmount;              // siempre el valor base
                     dbContext.userInfraction.Update(infraction);
                 }
 

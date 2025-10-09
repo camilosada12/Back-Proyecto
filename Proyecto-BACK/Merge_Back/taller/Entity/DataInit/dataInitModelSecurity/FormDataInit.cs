@@ -57,7 +57,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new Form
                 {
                     id = 4,
-                    name = "Notificacion de multas",
+                    name = "Formulario Notificacion de multas",
                     description = "Formulario Notificacion de multas",
                     active = true,
                      Route = "notificaciones/notificacion-multas",
@@ -233,7 +233,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new Form
                 {
                     id = 20,
-                    name = "Consultar Multas",
+                    name = "inicio",
                     description = "inicio ",
                     active = true,
                      Route = "consultar-ingresar",
