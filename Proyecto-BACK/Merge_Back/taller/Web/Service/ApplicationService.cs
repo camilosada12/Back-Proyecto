@@ -68,6 +68,7 @@ namespace Web.Service
             services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
             services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
             services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
+            services.AddScoped<IInstallmentScheduleRepository, InstallmentScheduleRepository>();
 
             // Servicios — PARAMETERS
             services.AddScoped<IdepartmentServices, departmentServices>();
@@ -102,6 +103,7 @@ namespace Web.Service
             services.AddScoped<IUserInfractionServices, UserInfractionServices>();
             services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
             services.AddScoped<IValueSmldvService, ValueSmldvService>();
+            services.AddScoped<IInstallmentScheduleServices, InstallmentScheduleService>();
 
             // Servicios PDF
             services.AddScoped<IPdfGeneratorService, PdfService>();

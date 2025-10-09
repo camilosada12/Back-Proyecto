@@ -1,9 +1,12 @@
 ﻿using Business.Interfaces.PDF;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.EntitiesDto;
+using Entity.DTOs.Default.InstallmentSchedule;
 using Entity.DTOs.Select.Entities;
 using Microsoft.Playwright;
 using System.Globalization;
+using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 using Template.Templates;
@@ -66,6 +69,8 @@ namespace Business.Services.PDF
 
         public async Task<byte[]> GeneratePaymentAgreementPdfAsync(PaymentAgreementSelectDto dto)
         {
+            Console.WriteLine($"🧾 Cuotas en DTO: {dto.InstallmentSchedule?.Count}");
+
             var html = BuildPaymentAgreementHtml(dto);
 
             await EnsureBrowserAsync();
@@ -100,6 +105,7 @@ namespace Business.Services.PDF
             }
         }
 
+
         private static string BuildHtml(UserInfractionSelectDto dto)
         {
             var template = InspectoraTemplate.Html; // 👈 CORREGIDO
@@ -117,7 +123,38 @@ namespace Business.Services.PDF
         {
             var culture = new CultureInfo("es-CO");
 
-            return PaymentAgreementTemplate.Html
+            // ✅ Verificar que el cronograma existe
+            var schedule = dto.InstallmentSchedule ?? new List<InstallmentScheduleDto>();
+
+            Console.WriteLine($"📊 DEBUG - Cuotas recibidas en BuildHtml: {schedule.Count}");
+
+            var cuotasHtml = new StringBuilder();
+
+            if (schedule.Any())
+            {
+                cuotasHtml.AppendLine("<h2>📅 Cronograma de Cuotas</h2>");
+                cuotasHtml.AppendLine("<table>");
+                cuotasHtml.AppendLine("<tr><th>#</th><th>Fecha de Pago</th><th>Valor Cuota</th><th>Saldo Restante</th></tr>");
+
+                foreach (var cuota in schedule)
+                {
+                    cuotasHtml.AppendLine("<tr>");
+                    cuotasHtml.AppendLine($"<td>{cuota.Number}</td>");
+                    cuotasHtml.AppendLine($"<td>{cuota.PaymentDate:dd/MM/yyyy}</td>");
+                    cuotasHtml.AppendLine($"<td>$ {cuota.Amount.ToString("N0", culture)}</td>");
+                    cuotasHtml.AppendLine($"<td>$ {cuota.RemainingBalance.ToString("N0", culture)}</td>");
+                    cuotasHtml.AppendLine("</tr>");
+                }
+
+                cuotasHtml.AppendLine("</table>");
+            }
+            else
+            {
+                cuotasHtml.AppendLine("<p style='color: red; font-weight: bold;'>⚠️ No se generó cronograma de cuotas.</p>");
+            }
+
+            // Generar el HTML final
+            var html = PaymentAgreementTemplate.Html
                 .Replace("@Nombre", HttpUtility.HtmlEncode(dto.PersonName ?? "-"))
                 .Replace("@Documento", HttpUtility.HtmlEncode(dto.DocumentNumber ?? "-"))
                 .Replace("@TipoDocumento", HttpUtility.HtmlEncode(dto.DocumentType ?? "-"))
@@ -145,7 +182,11 @@ namespace Business.Services.PDF
                     : "")
                 .Replace("@UltimoInteres", dto.LastInterestAppliedOn.HasValue
                     ? $"<p><strong>Último cálculo de interés:</strong> {dto.LastInterestAppliedOn:dd/MM/yyyy}</p>"
-                    : "");
+                    : "")
+                .Replace("@TablaCuotas", cuotasHtml.ToString()); // ✅ Aquí se inserta la tabla
+
+            return html;
         }
+
     }
 }

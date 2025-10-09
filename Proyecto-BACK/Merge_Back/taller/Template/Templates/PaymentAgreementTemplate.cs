@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Template.Templates
 {
@@ -73,6 +69,9 @@ namespace Template.Templates
   <h1>📑 Acuerdo de Pago</h1>
 
   <div class=""section"">
+    <span class=""label"">Nombre:</span> <span class=""value"">@Nombre</span><br/>
+    <span class=""label"">Documento:</span> <span class=""value"">@Documento</span><br/>
+    <span class=""label"">Tipo Documento:</span> <span class=""value"">@TipoDocumento</span><br/>
     <span class=""label"">Dirección:</span> <span class=""value"">@Direccion</span><br/>
     <span class=""label"">Barrio:</span> <span class=""value"">@Barrio</span><br/>
     <span class=""label"">Teléfono:</span> <span class=""value"">@Telefono</span><br/>
@@ -82,6 +81,11 @@ namespace Template.Templates
   <div class=""section"">
     <span class=""label"">Inicio del acuerdo:</span> <span class=""value"">@FechaInicio</span><br/>
     <span class=""label"">Fin del acuerdo:</span> <span class=""value"">@FechaFin</span><br/>
+    <span class=""label"">Expedición Cédula:</span> <span class=""value"">@ExpedicionCedula</span><br/>
+    <span class=""label"">Método de pago:</span> <span class=""value"">@MetodoPago</span><br/>
+    <span class=""label"">Frecuencia de pago:</span> <span class=""value"">@FrecuenciaPago</span><br/>
+    <span class=""label"">Tipo infracción:</span> <span class=""value"">@TipoInfraccion</span><br/>
+    <span class=""label"">Infracción:</span> <span class=""value"">@Infraccion</span><br/>
     <span class=""label"">Descripción:</span> <span class=""value"">@Descripcion</span>
   </div>
 
@@ -103,9 +107,14 @@ namespace Template.Templates
     </tr>
   </table>
 
+  <!-- Aquí insertamos dinámicamente el cronograma -->
+@TablaCuotas
+
+
   <div class=""section"">
     <p><span class=""label"">Estado:</span> @Estado</p>
     @Coactivo
+    @UltimoInteres
   </div>
 
   <div class=""footer"">
@@ -115,4 +124,3 @@ namespace Template.Templates
 </html>";
     }
 }
-

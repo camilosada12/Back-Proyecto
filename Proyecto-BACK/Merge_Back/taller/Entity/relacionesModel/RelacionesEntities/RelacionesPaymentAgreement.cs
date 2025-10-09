@@ -1,54 +1,46 @@
-﻿using System;
-using Entity.Domain.Models.Implements.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Entity.Domain.Models.Implements.Entities;
 using Entity.ConfigurationsBase;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Entity.relacionesModel.RelacionesEntities
 {
-    // 1. PaymentAgreement Configuration
     public class RelacionesPaymentAgreement : IEntityTypeConfiguration<PaymentAgreement>
     {
         public void Configure(EntityTypeBuilder<PaymentAgreement> builder)
         {
             builder.ToTable("paymentAgreement", schema: "Entities");
-
             builder.ConfigureBaseModel();
 
-            // Propiedades requeridas
             builder.Property(p => p.address)
-                     .HasMaxLength(200)
-                     .IsRequired(); // address sigue siendo requerido
+                   .HasMaxLength(200)
+                   .IsRequired();
 
             builder.Property(p => p.neighborhood)
                    .HasMaxLength(150)
-                   .IsRequired(false); // ahora es opcional
+                   .IsRequired(false);
 
             builder.Property(p => p.AgreementDescription)
                    .HasMaxLength(500)
-                   .IsRequired(false); // ahora es opcional
+                   .IsRequired(false);
 
             builder.Property(p => p.expeditionCedula)
-                    .IsRequired(); // 🔹 como fecha, puede ser obligatoria
-
+                   .IsRequired(false); // ✅ ahora opcional
 
             builder.Property(p => p.PhoneNumber)
-                   .IsRequired(false); // ahora es opcional
+                   .HasMaxLength(20)
+                   .IsRequired(false);
 
             builder.Property(p => p.Email)
                    .HasMaxLength(200)
-                   .IsRequired(false); // ahora es opcional
+                   .IsRequired(false);
 
-
-            builder.Property(p => p.AgreementStart)
-                   .IsRequired();
-
-            builder.Property(p => p.AgreementEnd)
-                   .IsRequired();
+            builder.Property(p => p.AgreementStart).IsRequired();
+            builder.Property(p => p.AgreementEnd).IsRequired();
 
             builder.Property(p => p.BaseAmount)
-               .HasColumnType("decimal(18,2)")
-               .IsRequired();
+                   .HasColumnType("decimal(18,2)")
+                   .IsRequired();
 
             builder.Property(p => p.AccruedInterest)
                    .HasColumnType("decimal(18,2)")
@@ -58,20 +50,14 @@ namespace Entity.relacionesModel.RelacionesEntities
                    .HasColumnType("decimal(18,2)")
                    .IsRequired();
 
-            builder.Property(p => p.IsPaid)
-                   .HasDefaultValue(false);
-
-            builder.Property(p => p.IsCoactive)
-                   .HasDefaultValue(false);
-
-            builder.Property(p => p.CoactiveActivatedOn)
+            builder.Property(p => p.MonthlyFee)
+                   .HasColumnType("decimal(18,2)")
                    .IsRequired(false);
 
-            builder.Property(p => p.LastInterestAppliedOn)
-                   .IsRequired(false);
+            builder.Property(p => p.IsPaid).HasDefaultValue(false);
+            builder.Property(p => p.IsCoactive).HasDefaultValue(false);
 
-
-            // Relación: PaymentAgreement -> UserInfraction (muchos a uno)
+            // 🔹 Relaciones
             builder.HasOne(pa => pa.userInfraction)
                    .WithMany(ui => ui.paymentAgreement)
                    .HasForeignKey(pa => pa.userInfractionId)
@@ -84,20 +70,17 @@ namespace Entity.relacionesModel.RelacionesEntities
                    .OnDelete(DeleteBehavior.Restrict)
                    .IsRequired();
 
-            builder.Property(p => p.Installments)
-                    .IsRequired(false);
-
-            builder.Property(p => p.MonthlyFee)
-                   .HasColumnType("decimal(18,2)")
-                   .IsRequired(false);
-
-
             builder.HasOne(pa => pa.TypePayment)
-           .WithMany(tp => tp.PaymentAgreements)
-           .HasForeignKey(pa => pa.typePaymentId)
-           .OnDelete(DeleteBehavior.Restrict)
-           .HasConstraintName("FK_PaymentAgreement_TypePayment");
+                   .WithMany(tp => tp.PaymentAgreements)
+                   .HasForeignKey(pa => pa.typePaymentId)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasConstraintName("FK_PaymentAgreement_TypePayment");
 
+            // 🔹 Relación con InstallmentSchedule
+            builder.HasMany(pa => pa.InstallmentSchedule)
+                   .WithOne(isched => isched.PaymentAgreement)
+                   .HasForeignKey(isched => isched.PaymentAgreementId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

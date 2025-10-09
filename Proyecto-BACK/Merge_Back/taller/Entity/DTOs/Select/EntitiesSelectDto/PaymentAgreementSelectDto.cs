@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entity.DTOs.Default.InstallmentSchedule;
+using System;
 
 namespace Entity.DTOs.Select.Entities
 {
@@ -41,5 +42,8 @@ namespace Entity.DTOs.Select.Entities
         public bool IsCoactive { get; set; }              // si ya pasó a cobro coactivo
         public DateTime? CoactiveActivatedOn { get; set; }// fecha de activación coactivo
         public DateTime? LastInterestAppliedOn { get; set; } // última vez que se calculó interés
+
+        // 🔹 Nuevo: Cronograma de cuotas
+        public List<InstallmentScheduleDto> InstallmentSchedule { get; set; } = new();
     }
 }

@@ -74,6 +74,7 @@ namespace Entity.Infrastructure.Contexts
         public DbSet<FineCalculationDetail> fineCalculationDetail { get; set; }
         public DbSet<PaymentAgreement> paymentAgreement { get; set; }
 
+        public DbSet<InstallmentSchedule> installmentSchedule { get; set; }
 
         //parametros
         public DbSet<AuthSession> AuthSessions { get; set; } = null!;
@@ -118,6 +119,7 @@ namespace Entity.Infrastructure.Contexts
             modelBuilder.ApplyConfiguration(new RelacionesUserInfraction());
             modelBuilder.ApplyConfiguration(new RelacionesFineCalculationDetail());
             modelBuilder.ApplyConfiguration(new RelacionesPaymentAgreement());
+            modelBuilder.ApplyConfiguration(new RelacionesInstallmentSchedule());
 
             modelBuilder.ApplyConfiguration(new AuthSessionConfig());
 
@@ -165,6 +167,7 @@ namespace Entity.Infrastructure.Contexts
             //    PaymentAgreement depende de UserInfraction y PaymentFrequency (y sus tablas puente de M:N
             //    con DocumentInfraction/TypePayment deben existir antes). Por eso va casi al final.
             modelBuilder.SeedPaymentAgreement();
+            modelBuilder.SeedInstallmentSchedule();
         }
 
 

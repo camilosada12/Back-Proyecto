@@ -27,7 +27,7 @@ public class PaymentAgreement : BaseModel
     public decimal AccruedInterest { get; set; } = 0m;   // Intereses acumulados
     public decimal OutstandingAmount { get; set; }
 
-    public int? Installments { get; set; }   // número de cuotas
+    public int?Installments { get; set; }   // número de cuotas
     public decimal? MonthlyFee { get; set; } // valor de cada cuota
 
     public bool IsPaid { get; set; } = false;            // Marcado cuando se cancela totalmente
@@ -37,5 +37,6 @@ public class PaymentAgreement : BaseModel
 
 
     public List<DocumentInfraction> documentInfraction { get; set; } = new List<DocumentInfraction>();
-
+    public List<InstallmentSchedule> InstallmentSchedule { get; set; } = new List<InstallmentSchedule>();
 }
+
