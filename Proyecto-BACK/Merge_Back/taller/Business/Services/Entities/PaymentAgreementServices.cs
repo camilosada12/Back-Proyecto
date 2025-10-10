@@ -81,6 +81,36 @@ namespace Business.Services.Entities
             }
         }
 
+        private DateTime CalculateEndDateWithInstallments(DateTime startDate, string frequency, int installments)
+        {
+            if (installments <= 0)
+                throw new BusinessException("La cantidad de cuotas debe ser mayor a cero.");
+
+            // Diccionario para calcular la fecha de la próxima cuota según la frecuencia
+            var frequencyMap = new Dictionary<string, Func<DateTime, DateTime>>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "MENSUAL", date => date.AddMonths(1) },
+        { "QUINCENAL", date => date.AddDays(15) },
+        { "BIMESTRAL", date => date.AddMonths(2) }
+        // Agrega nuevas frecuencias aquí
+    };
+
+            if (!frequencyMap.TryGetValue(frequency, out var nextDateFunc))
+                throw new BusinessException($"Frecuencia de pago {frequency} no soportada.");
+
+            // La primera cuota empieza en la próxima fecha válida
+            var nextPaymentDate = nextDateFunc(startDate);
+
+            // Fecha final = fecha de la última cuota
+            for (int i = 1; i < installments; i++)
+            {
+                nextPaymentDate = nextDateFunc(nextPaymentDate);
+            }
+
+            return nextPaymentDate;
+        }
+
+
         public new async Task<PaymentAgreementSelectDto> CreateAsync(PaymentAgreementDto dto)
         {
             // 1️⃣ Crear el acuerdo de pago en la base (internamente maneja validaciones, montos, estado de infracción, etc.)
@@ -174,11 +204,14 @@ namespace Business.Services.Entities
             // Calcular montos
             var (baseAmount, installments, monthlyFee) = CalcularMontos(userInfraction, dto);
 
-            // Crear entidad
+            // Fecha de inicio: hoy
+            var startDate = DateTime.Now.Date;
+            var endDate = CalculateEndDateWithInstallments(startDate, frequency.intervalPage, installments);
+
             var agreement = new PaymentAgreement
             {
-                AgreementStart = dto.AgreementStart,
-                AgreementEnd = dto.AgreementEnd,
+                AgreementStart = startDate,
+                AgreementEnd = endDate,
                 expeditionCedula = dto.expeditionCedula,
                 userInfractionId = dto.userInfractionId,
                 paymentFrequencyId = dto.paymentFrequencyId,
@@ -188,7 +221,7 @@ namespace Business.Services.Entities
                 PhoneNumber = dto.PhoneNumber,
                 Email = dto.Email,
                 AgreementDescription = dto.AgreementDescription
-                    ?? $"Acuerdo para {userInfraction.User.Person?.firstName} {userInfraction.User.Person?.lastName} - Infracción: {userInfraction.typeInfraction.description}",
+                    ?? $"Acuerdo para {userInfraction.User.Person?.firstName} {userInfraction.User.Person?.lastName} - Infracción: {userInfraction.Infraction.description}",
                 BaseAmount = baseAmount,
                 AccruedInterest = 0m,
                 OutstandingAmount = baseAmount,
@@ -197,6 +230,7 @@ namespace Business.Services.Entities
                 Installments = installments,
                 MonthlyFee = monthlyFee
             };
+
 
             // Cambiar estado de la infracción
             userInfraction.stateInfraction = EstadoMulta.ConAcuerdoPago;
@@ -322,16 +356,16 @@ namespace Business.Services.Entities
             return updated;
         }
 
-        public async Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId)
+        public async Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userId, int? infractionId = null)
         {
-            return await _paymentAgreementRepository.GetInitDataAsync(userInfractionId);
+            return await _paymentAgreementRepository.GetInitDataAsync(userId, infractionId);
         }
 
         public (decimal BaseAmount, int Installments, decimal MonthlyFee) CalcularMontos(
             UserInfraction userInfraction,
             PaymentAgreementDto dto)
         {
-            var detail = userInfraction.typeInfraction.fineCalculationDetail
+            var detail = userInfraction.Infraction.fineCalculationDetail
                 .OrderByDescending(fd => fd.valueSmldv.Current_Year)
                 .FirstOrDefault();
 
@@ -339,7 +373,7 @@ namespace Business.Services.Entities
                 throw new BusinessException("No existe detalle de cálculo para esta infracción.");
 
             // ✅ Siempre recalculamos el monto base en runtime
-            decimal baseAmount = userInfraction.typeInfraction.numer_smldv * (decimal)detail.valueSmldv.value_smldv;
+            decimal baseAmount = userInfraction.Infraction.numer_smldv * (decimal)detail.valueSmldv.value_smldv;
 
 
             // Número de cuotas (por defecto 1 si no viene en el DTO)

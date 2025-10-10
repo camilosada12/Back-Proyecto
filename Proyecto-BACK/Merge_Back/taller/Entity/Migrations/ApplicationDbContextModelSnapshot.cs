@@ -76,6 +76,82 @@ namespace Entity.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.Infraction", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("TypeInfractionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("numer_smldv")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("TypeInfractionId");
+
+                    b.ToTable("Infraction");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "lanzar basura en un lugar publico",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 2,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "hacer mucho ruido en un sitio publico",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 3,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 4,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        });
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.InspectoraReport", b =>
                 {
                     b.Property<int>("id")
@@ -139,73 +215,59 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("numer_smldv")
-                        .HasColumnType("int");
-
-                    b.Property<string>("type_Infraction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("id");
 
-                    b.HasIndex("type_Infraction")
+                    b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("typeInfraction", "Entities");
+                    b.ToTable("TypeInfraction", "Entities");
 
                     b.HasData(
                         new
                         {
                             id = 1,
+                            Name = "Infraccion de tipo uno",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "lanzar basura en un lugar publico",
-                            is_deleted = false,
-                            numer_smldv = 4,
-                            type_Infraction = "infraccion de tipo uno"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 2,
+                            Name = "Infraccion de tipo dos",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "hacer mucho ruido en un sitio publico",
-                            is_deleted = false,
-                            numer_smldv = 8,
-                            type_Infraction = "infraccion de tipo dos"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 3,
+                            Name = "Infraccion de tipo tres",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
-                            is_deleted = false,
-                            numer_smldv = 16,
-                            type_Infraction = "infraccion de tipo Tres"
+                            is_deleted = false
                         },
                         new
                         {
                             id = 4,
+                            Name = "Infraccion de tipo cuatro",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.",
-                            is_deleted = false,
-                            numer_smldv = 32,
-                            type_Infraction = "infraccion de tipo Cuatro"
+                            is_deleted = false
                         });
                 });
 
@@ -296,6 +358,12 @@ namespace Entity.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("InformationFine")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InfractionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -317,23 +385,19 @@ namespace Entity.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("observations")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("originalAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("stateInfraction")
                         .HasColumnType("int");
 
-                    b.Property<int>("typeInfractionId")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
+
+                    b.HasIndex("InfractionId");
 
                     b.HasIndex("UserId");
 
                     b.HasIndex("UserNotificationId");
-
-                    b.HasIndex("typeInfractionId");
 
                     b.ToTable("userInfraction", "Entities");
 
@@ -341,6 +405,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 1,
+                            InfractionId = 1,
                             UserId = 1,
                             UserNotificationId = 1,
                             active = true,
@@ -348,13 +413,13 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "la persona no opuso resistencia a la infracción",
-                            stateInfraction = 0,
-                            typeInfractionId = 1
+                            originalAmount = 0m,
+                            stateInfraction = 0
                         },
                         new
                         {
                             id = 2,
+                            InfractionId = 3,
                             UserId = 1,
                             UserNotificationId = 2,
                             active = true,
@@ -362,13 +427,13 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "portaba un cuchillo en la vía pública",
-                            stateInfraction = 0,
-                            typeInfractionId = 3
+                            originalAmount = 0m,
+                            stateInfraction = 0
                         },
                         new
                         {
                             id = 3,
+                            InfractionId = 2,
                             UserId = 2,
                             UserNotificationId = 1,
                             active = true,
@@ -376,13 +441,13 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "la persona se encontraba en estado de embriaguez",
-                            stateInfraction = 0,
-                            typeInfractionId = 2
+                            originalAmount = 0m,
+                            stateInfraction = 0
                         },
                         new
                         {
                             id = 4,
+                            InfractionId = 4,
                             UserId = 2,
                             UserNotificationId = 2,
                             active = true,
@@ -390,9 +455,8 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            observations = "agredió verbalmente a la autoridad",
-                            stateInfraction = 0,
-                            typeInfractionId = 4
+                            originalAmount = 0m,
+                            stateInfraction = 0
                         });
                 });
 
@@ -612,7 +676,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             Icon = "pi pi-fw pi-homeing",
-                            Route = "CreacionMulta",
+                            Route = "anexar-multas/multas",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario para agregar nuevas multas",
@@ -634,7 +698,7 @@ namespace Entity.Migrations
                         {
                             id = 4,
                             Icon = "pi pi-fw pi-check-square",
-                            Route = "notificaciones",
+                            Route = "notificaciones/notificacion-multas",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario Notificacion de multas",
@@ -645,7 +709,7 @@ namespace Entity.Migrations
                         {
                             id = 5,
                             Icon = "pi pi-fw pi-file",
-                            Route = "dashboard",
+                            Route = "formularios",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formularios",
@@ -656,7 +720,7 @@ namespace Entity.Migrations
                         {
                             id = 6,
                             Icon = "pi pi-fw pi-clone",
-                            Route = "dashboard",
+                            Route = "form-modules",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Form modules",
@@ -667,7 +731,7 @@ namespace Entity.Migrations
                         {
                             id = 7,
                             Icon = "pi pi-fw pi-th-large",
-                            Route = "dashboard",
+                            Route = "modulos",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Modulos",
@@ -678,10 +742,10 @@ namespace Entity.Migrations
                         {
                             id = 8,
                             Icon = "pi pi-fw pi-users",
-                            Route = "dashboard",
+                            Route = "personas",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "personas",
+                            description = "Personas",
                             is_deleted = false,
                             name = "personas"
                         },
@@ -689,7 +753,7 @@ namespace Entity.Migrations
                         {
                             id = 9,
                             Icon = "pi pi-fw pi-lock-open",
-                            Route = "dashboard",
+                            Route = "permisos",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "permisos",
@@ -700,7 +764,7 @@ namespace Entity.Migrations
                         {
                             id = 10,
                             Icon = "pi pi-fw pi-key",
-                            Route = "dashboard",
+                            Route = "rol-form-permission",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Rol Form Permission",
@@ -711,7 +775,7 @@ namespace Entity.Migrations
                         {
                             id = 11,
                             Icon = "pi pi-fw pi-users",
-                            Route = "dashboard",
+                            Route = "roles",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Roles",
@@ -722,7 +786,7 @@ namespace Entity.Migrations
                         {
                             id = 12,
                             Icon = "pi pi-fw pi-user",
-                            Route = "dashboard",
+                            Route = "usuarios",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Usuarios",
@@ -733,7 +797,7 @@ namespace Entity.Migrations
                         {
                             id = 13,
                             Icon = "pi pi-fw pi-user-plus",
-                            Route = "dashboard",
+                            Route = "rol-user",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Rol Usuario",
@@ -744,7 +808,7 @@ namespace Entity.Migrations
                         {
                             id = 14,
                             Icon = "pi pi-fw pi-briefcase",
-                            Route = "dashboard",
+                            Route = "parameters/department",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "departamento",
@@ -755,7 +819,7 @@ namespace Entity.Migrations
                         {
                             id = 15,
                             Icon = "pi pi-fw pi-briefcase",
-                            Route = "dashboard",
+                            Route = "parameters/document-type",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Tipo de Documento",
@@ -766,7 +830,7 @@ namespace Entity.Migrations
                         {
                             id = 16,
                             Icon = "pi pi-fw pi-briefcase",
-                            Route = "dashboard",
+                            Route = "parameters/municipality",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Municipio",
@@ -777,7 +841,7 @@ namespace Entity.Migrations
                         {
                             id = 17,
                             Icon = "pi pi-fw pi-briefcase",
-                            Route = "dashboard",
+                            Route = "parameters/payment-frequency",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Frecuencia de pago",
@@ -799,7 +863,7 @@ namespace Entity.Migrations
                         {
                             id = 19,
                             Icon = "pi pi-fw pi-briefcase",
-                            Route = "dashboard",
+                            Route = "notificaciones",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Notificacion de acuerdo ",
@@ -1495,22 +1559,13 @@ namespace Entity.Migrations
                             id = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            dueDayOfMonth = 16,
-                            intervalPage = "UNICA",
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 2,
-                            active = true,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 15,
                             intervalPage = "MENSUAL",
                             is_deleted = false
                         },
                         new
                         {
-                            id = 3,
+                            id = 2,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 1,
@@ -1519,7 +1574,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 4,
+                            id = 3,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dueDayOfMonth = 10,
@@ -2091,7 +2146,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 1,
-                            FormId = 1,
+                            FormId = 2,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2101,7 +2156,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 2,
-                            FormId = 1,
+                            FormId = 2,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2111,7 +2166,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 3,
-                            FormId = 1,
+                            FormId = 2,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2121,7 +2176,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 4,
-                            FormId = 1,
+                            FormId = 2,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2131,7 +2186,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 5,
-                            FormId = 1,
+                            FormId = 2,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2141,7 +2196,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 6,
-                            FormId = 1,
+                            FormId = 2,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2151,7 +2206,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 7,
-                            FormId = 2,
+                            FormId = 3,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2161,7 +2216,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 8,
-                            FormId = 2,
+                            FormId = 3,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2171,7 +2226,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 9,
-                            FormId = 2,
+                            FormId = 3,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2181,7 +2236,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 10,
-                            FormId = 2,
+                            FormId = 3,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2191,7 +2246,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 11,
-                            FormId = 2,
+                            FormId = 3,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2201,7 +2256,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 12,
-                            FormId = 2,
+                            FormId = 3,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2211,7 +2266,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 13,
-                            FormId = 3,
+                            FormId = 4,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2221,7 +2276,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 14,
-                            FormId = 3,
+                            FormId = 4,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2231,7 +2286,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 15,
-                            FormId = 3,
+                            FormId = 4,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2241,7 +2296,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 16,
-                            FormId = 3,
+                            FormId = 4,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2251,7 +2306,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 17,
-                            FormId = 3,
+                            FormId = 4,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2261,7 +2316,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 18,
-                            FormId = 3,
+                            FormId = 4,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2271,7 +2326,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 19,
-                            FormId = 4,
+                            FormId = 5,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2281,7 +2336,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 20,
-                            FormId = 4,
+                            FormId = 5,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2291,7 +2346,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 21,
-                            FormId = 4,
+                            FormId = 5,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2301,7 +2356,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 22,
-                            FormId = 4,
+                            FormId = 5,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2311,7 +2366,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 23,
-                            FormId = 4,
+                            FormId = 5,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2321,7 +2376,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 24,
-                            FormId = 4,
+                            FormId = 5,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2331,7 +2386,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 25,
-                            FormId = 5,
+                            FormId = 6,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2341,7 +2396,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 26,
-                            FormId = 5,
+                            FormId = 6,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2351,7 +2406,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 27,
-                            FormId = 5,
+                            FormId = 6,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2361,7 +2416,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 28,
-                            FormId = 5,
+                            FormId = 6,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2371,7 +2426,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 29,
-                            FormId = 5,
+                            FormId = 6,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2381,7 +2436,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 30,
-                            FormId = 5,
+                            FormId = 6,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2391,7 +2446,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 31,
-                            FormId = 6,
+                            FormId = 7,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2401,7 +2456,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 32,
-                            FormId = 6,
+                            FormId = 7,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2411,7 +2466,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 33,
-                            FormId = 6,
+                            FormId = 7,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2421,7 +2476,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 34,
-                            FormId = 6,
+                            FormId = 7,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2431,7 +2486,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 35,
-                            FormId = 6,
+                            FormId = 7,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2441,7 +2496,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 36,
-                            FormId = 6,
+                            FormId = 7,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2451,7 +2506,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 37,
-                            FormId = 7,
+                            FormId = 8,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2461,7 +2516,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 38,
-                            FormId = 7,
+                            FormId = 8,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2471,7 +2526,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 39,
-                            FormId = 7,
+                            FormId = 8,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2481,7 +2536,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 40,
-                            FormId = 7,
+                            FormId = 8,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2491,7 +2546,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 41,
-                            FormId = 7,
+                            FormId = 8,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2501,7 +2556,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 42,
-                            FormId = 7,
+                            FormId = 8,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2511,7 +2566,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 43,
-                            FormId = 8,
+                            FormId = 9,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2521,7 +2576,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 44,
-                            FormId = 8,
+                            FormId = 9,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2531,7 +2586,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 45,
-                            FormId = 8,
+                            FormId = 9,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2541,7 +2596,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 46,
-                            FormId = 8,
+                            FormId = 9,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2551,7 +2606,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 47,
-                            FormId = 8,
+                            FormId = 9,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2561,7 +2616,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 48,
-                            FormId = 8,
+                            FormId = 9,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2571,7 +2626,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 49,
-                            FormId = 9,
+                            FormId = 10,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2581,7 +2636,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 50,
-                            FormId = 9,
+                            FormId = 10,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2591,7 +2646,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 51,
-                            FormId = 9,
+                            FormId = 10,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2601,7 +2656,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 52,
-                            FormId = 9,
+                            FormId = 10,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2611,7 +2666,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 53,
-                            FormId = 9,
+                            FormId = 10,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2621,7 +2676,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 54,
-                            FormId = 9,
+                            FormId = 10,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2631,7 +2686,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 55,
-                            FormId = 10,
+                            FormId = 11,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2641,7 +2696,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 56,
-                            FormId = 10,
+                            FormId = 11,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2651,7 +2706,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 57,
-                            FormId = 10,
+                            FormId = 11,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2661,7 +2716,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 58,
-                            FormId = 10,
+                            FormId = 11,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2671,7 +2726,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 59,
-                            FormId = 10,
+                            FormId = 11,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2681,7 +2736,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 60,
-                            FormId = 10,
+                            FormId = 11,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2691,7 +2746,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 61,
-                            FormId = 11,
+                            FormId = 12,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2701,7 +2756,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 62,
-                            FormId = 11,
+                            FormId = 12,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2711,7 +2766,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 63,
-                            FormId = 11,
+                            FormId = 12,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2721,7 +2776,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 64,
-                            FormId = 11,
+                            FormId = 12,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2731,7 +2786,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 65,
-                            FormId = 11,
+                            FormId = 12,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2741,7 +2796,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 66,
-                            FormId = 11,
+                            FormId = 12,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2751,7 +2806,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 67,
-                            FormId = 12,
+                            FormId = 13,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2761,7 +2816,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 68,
-                            FormId = 12,
+                            FormId = 13,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2771,7 +2826,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 69,
-                            FormId = 12,
+                            FormId = 13,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2781,7 +2836,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 70,
-                            FormId = 12,
+                            FormId = 13,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2791,7 +2846,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 71,
-                            FormId = 12,
+                            FormId = 13,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2801,7 +2856,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 72,
-                            FormId = 12,
+                            FormId = 13,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2811,7 +2866,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 73,
-                            FormId = 13,
+                            FormId = 14,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2821,7 +2876,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 74,
-                            FormId = 13,
+                            FormId = 14,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2831,7 +2886,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 75,
-                            FormId = 13,
+                            FormId = 14,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2841,7 +2896,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 76,
-                            FormId = 13,
+                            FormId = 14,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2851,7 +2906,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 77,
-                            FormId = 13,
+                            FormId = 14,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2861,7 +2916,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 78,
-                            FormId = 13,
+                            FormId = 14,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2871,7 +2926,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 79,
-                            FormId = 14,
+                            FormId = 15,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2881,7 +2936,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 80,
-                            FormId = 14,
+                            FormId = 15,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2891,7 +2946,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 81,
-                            FormId = 14,
+                            FormId = 15,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2901,7 +2956,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 82,
-                            FormId = 14,
+                            FormId = 15,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2911,7 +2966,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 83,
-                            FormId = 14,
+                            FormId = 15,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2921,7 +2976,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 84,
-                            FormId = 14,
+                            FormId = 15,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2931,7 +2986,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 85,
-                            FormId = 15,
+                            FormId = 16,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -2941,7 +2996,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 86,
-                            FormId = 15,
+                            FormId = 16,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -2951,7 +3006,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 87,
-                            FormId = 15,
+                            FormId = 16,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -2961,7 +3016,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 88,
-                            FormId = 15,
+                            FormId = 16,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -2971,7 +3026,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 89,
-                            FormId = 15,
+                            FormId = 16,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -2981,7 +3036,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 90,
-                            FormId = 15,
+                            FormId = 16,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -2991,7 +3046,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 91,
-                            FormId = 16,
+                            FormId = 17,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -3001,7 +3056,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 92,
-                            FormId = 16,
+                            FormId = 17,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -3011,7 +3066,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 93,
-                            FormId = 16,
+                            FormId = 17,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -3021,7 +3076,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 94,
-                            FormId = 16,
+                            FormId = 17,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -3031,7 +3086,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 95,
-                            FormId = 16,
+                            FormId = 17,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -3041,7 +3096,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 96,
-                            FormId = 16,
+                            FormId = 17,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -3051,7 +3106,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 97,
-                            FormId = 17,
+                            FormId = 18,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -3061,7 +3116,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 98,
-                            FormId = 17,
+                            FormId = 18,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -3071,7 +3126,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 99,
-                            FormId = 17,
+                            FormId = 18,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -3081,7 +3136,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 100,
-                            FormId = 17,
+                            FormId = 18,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -3091,7 +3146,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 101,
-                            FormId = 17,
+                            FormId = 18,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -3101,7 +3156,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 102,
-                            FormId = 17,
+                            FormId = 18,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -3111,7 +3166,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 103,
-                            FormId = 18,
+                            FormId = 19,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -3121,7 +3176,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 104,
-                            FormId = 18,
+                            FormId = 19,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -3131,7 +3186,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 105,
-                            FormId = 18,
+                            FormId = 19,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -3141,7 +3196,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 106,
-                            FormId = 18,
+                            FormId = 19,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -3151,7 +3206,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 107,
-                            FormId = 18,
+                            FormId = 19,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -3161,7 +3216,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 108,
-                            FormId = 18,
+                            FormId = 19,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -3171,7 +3226,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 109,
-                            FormId = 19,
+                            FormId = 20,
                             PermissionId = 1,
                             RolId = 1,
                             active = false,
@@ -3181,7 +3236,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 110,
-                            FormId = 19,
+                            FormId = 20,
                             PermissionId = 2,
                             RolId = 1,
                             active = false,
@@ -3191,7 +3246,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 111,
-                            FormId = 19,
+                            FormId = 20,
                             PermissionId = 3,
                             RolId = 1,
                             active = false,
@@ -3201,7 +3256,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 112,
-                            FormId = 19,
+                            FormId = 20,
                             PermissionId = 4,
                             RolId = 1,
                             active = false,
@@ -3211,7 +3266,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 113,
-                            FormId = 19,
+                            FormId = 20,
                             PermissionId = 5,
                             RolId = 1,
                             active = false,
@@ -3221,7 +3276,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 114,
-                            FormId = 19,
+                            FormId = 20,
                             PermissionId = 6,
                             RolId = 1,
                             active = false,
@@ -3231,66 +3286,6 @@ namespace Entity.Migrations
                         new
                         {
                             id = 115,
-                            FormId = 20,
-                            PermissionId = 1,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 116,
-                            FormId = 20,
-                            PermissionId = 2,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 117,
-                            FormId = 20,
-                            PermissionId = 3,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 118,
-                            FormId = 20,
-                            PermissionId = 4,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 119,
-                            FormId = 20,
-                            PermissionId = 5,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 120,
-                            FormId = 20,
-                            PermissionId = 6,
-                            RolId = 1,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            is_deleted = false
-                        },
-                        new
-                        {
-                            id = 121,
                             FormId = 4,
                             PermissionId = 1,
                             RolId = 2,
@@ -3300,7 +3295,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 122,
+                            id = 116,
                             FormId = 18,
                             PermissionId = 1,
                             RolId = 2,
@@ -3310,7 +3305,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 123,
+                            id = 117,
                             FormId = 19,
                             PermissionId = 1,
                             RolId = 2,
@@ -3320,7 +3315,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 124,
+                            id = 118,
                             FormId = 20,
                             PermissionId = 1,
                             RolId = 2,
@@ -3405,8 +3400,26 @@ namespace Entity.Migrations
                     b.Navigation("paymentAgreement");
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.Infraction", b =>
+                {
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "TypeInfraction")
+                        .WithMany("Infractions")
+                        .HasForeignKey("TypeInfractionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("FK_TypeInfraction_Infraction");
+
+                    b.Navigation("TypeInfraction");
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfraction", b =>
                 {
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.Infraction", "Infraction")
+                        .WithMany("userInfractions")
+                        .HasForeignKey("InfractionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entity.Domain.Models.Implements.ModelSecurity.User", "User")
                         .WithMany("UserInfraction")
                         .HasForeignKey("UserId")
@@ -3419,17 +3432,11 @@ namespace Entity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "typeInfraction")
-                        .WithMany("userInfractions")
-                        .HasForeignKey("typeInfractionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Infraction");
 
                     b.Navigation("User");
 
                     b.Navigation("UserNotification");
-
-                    b.Navigation("typeInfraction");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.ModelSecurity.FormModule", b =>
@@ -3494,7 +3501,7 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("FineCalculationDetail", b =>
                 {
-                    b.HasOne("Entity.Domain.Models.Implements.Entities.TypeInfraction", "typeInfraction")
+                    b.HasOne("Entity.Domain.Models.Implements.Entities.Infraction", "Infraction")
                         .WithMany("fineCalculationDetail")
                         .HasForeignKey("typeInfractionId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -3508,7 +3515,7 @@ namespace Entity.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_ValueSmldv_FineCalculationDetail");
 
-                    b.Navigation("typeInfraction");
+                    b.Navigation("Infraction");
 
                     b.Navigation("valueSmldv");
                 });
@@ -3593,6 +3600,13 @@ namespace Entity.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.Infraction", b =>
+                {
+                    b.Navigation("fineCalculationDetail");
+
+                    b.Navigation("userInfractions");
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.InspectoraReport", b =>
                 {
                     b.Navigation("documentInfraction");
@@ -3600,9 +3614,7 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypeInfraction", b =>
                 {
-                    b.Navigation("fineCalculationDetail");
-
-                    b.Navigation("userInfractions");
+                    b.Navigation("Infractions");
                 });
 
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypePayment", b =>

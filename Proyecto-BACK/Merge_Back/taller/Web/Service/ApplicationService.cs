@@ -25,7 +25,7 @@ using Data.Services.Entities;
 using Data.Services.Security;
 using Entity.Domain.Models.Implements.ModelSecurity;
 using Entity.Domain.Models.Implements.Recaptcha;
-using Microsoft.AspNetCore.Authentication; // 👈 para ISystemClock
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Utilities.Custom;
 using Web.AutoMapper;
@@ -42,7 +42,6 @@ namespace Web.Service
             // Infra
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(AutoMapperProfile));
-            services.AddSingleton<Utilities.Custom.EncriptePassword>();
             services.AddSingleton<EncriptePassword>();
             services.AddMemoryCache();
 
@@ -60,24 +59,15 @@ namespace Web.Service
             services.AddScoped<IRolFormPermissionRepository, RolFormPermissionRepository>();
 
             // Repositorios — ENTITIES
+            services.AddScoped<ITypeInfractionRepository, TypeInfractionRepository>();
+            services.AddScoped<IInfractionRepository, InfractionRepository>();
             services.AddScoped<IDocumentInfractionRepository, DocumentInfractionRepository>();
             services.AddScoped<IPaymentAgreementRepository, PaymentAgreementRepository>();
             services.AddScoped<IInspectoraReportRepository, InspectoraReportRepository>();
-
-            services.AddScoped<IPdfGeneratorService, PdfService>();
-
-
-
-            services.AddHostedService<InfractionDiscountBackgroundService>();
-            services.AddScoped<DiscountService>();
-
-
-
-            services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
-            services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
-            services.AddScoped<ITypeInfractionRepository, TypeInfractionRepository>();
-            services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
             services.AddScoped<IUserInfractionRepository, UserInfractionRepository>();
+            services.AddScoped<IUserNotificationRepository, UserNotificationRepository>();
+            services.AddScoped<IFineCalculationDetailRepository, FineCalculationDetailsRepository>();
+            services.AddScoped<IValueSmldvRepository, ValueSmldvRepository>();
 
             // Servicios — PARAMETERS
             services.AddScoped<IdepartmentServices, departmentServices>();
@@ -96,21 +86,33 @@ namespace Web.Service
             services.AddScoped<IRolUserService, RolUserService>();
             services.AddScoped<IFormModuleService, FormModuleService>();
             services.AddScoped<IRolFormPermissionService, RolFormPermissionService>();
-
-            // 🔐 Sesiones
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IToken, TokenBusiness>();
             services.AddScoped<IAuthSessionRepository, AuthSessionRepository>();
             services.AddScoped<IAuthSessionService, AuthSessionService>();
             services.AddSingleton<ISystemClock, SystemClock>();
 
             // Servicios — ENTITIES
+            services.AddScoped<ITypeInfractionServices, TypeInfractionService>();
+            services.AddScoped<IInfractionService, InfractionService>();
             services.AddScoped<IDocumentInfractionServices, DocumentInfractionServices>();
             services.AddScoped<IInspectoraReportService, InspectoraReportService>();
             services.AddScoped<IPaymentAgreementServices, PaymentAgreementServices>();
-            services.AddScoped<ITypeInfractionService, TypeInfractionService>();
             services.AddScoped<IUserNotificationService, UserNotificationService>();
             services.AddScoped<IUserInfractionServices, UserInfractionServices>();
             services.AddScoped<IFineCalculationDetailService, FineCalculationDetailService>();
             services.AddScoped<IValueSmldvService, ValueSmldvService>();
+
+            // Servicios PDF
+            services.AddScoped<IPdfGeneratorService, PdfService>();
+
+            // Background Services
+            services.AddHostedService<InfractionDiscountBackgroundService>();
+            services.AddScoped<DiscountService>();
+            services.AddHostedService<EmailBackgroundService>();
+            services.AddSingleton<EmailBackgroundQueue>();
+            services.AddScoped<IServiceEmail, ServiceEmails>();
+            services.AddHostedService<PaymentAgreementBackgroundService>();
 
             // Recaptcha
             services.Configure<RecaptchaOptions>(configuration.GetSection("Recaptcha"));
@@ -118,37 +120,16 @@ namespace Web.Service
 
             // Identity y Tokens
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.AddScoped<IToken, TokenBusiness>();
-            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IUserMeRepository, MeRepository>();
             services.AddScoped<IAuthCookieFactory, AuthCookieFactory>();
-
-            //services.AddScoped<IServiceEmail, ServiceEmails>();
-
-            //services.AddScoped<EmailBackgroundQueue>();
-
             services.AddScoped<IVerificationService, VerificationService>();
+            services.AddSingleton<VerificationCache>();
 
-            services.AddScoped<VerificationCache>();
-
-            services.AddSingleton<EmailBackgroundQueue>();
-            services.AddHostedService<EmailBackgroundService>();
-
-
-
-            services.AddHostedService<EmailBackgroundService>();
-            services.AddScoped<IServiceEmail, ServiceEmails>();
-
-
-            //backGround services
-            // Configuración de intereses (appsettings.json -> PaymentAgreementInterestOptions)
+            // Configuración adicional
             services.Configure<PaymentAgreementInterestOptions>(
-            configuration.GetSection("PaymentAgreementInterestOptions"));
-
-            // Background job de intereses/coactivo
-            services.AddHostedService<PaymentAgreementBackgroundService>();
+                configuration.GetSection("PaymentAgreementInterestOptions"));
 
             return services;
         }

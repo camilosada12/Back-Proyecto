@@ -15,10 +15,6 @@ namespace Entity.DTOs.Interface.Entities
         string PhoneNumber { get; set; }
         string Email { get; set; }
 
-        // Fechas
-        DateTime AgreementStart { get; set; }
-        DateTime AgreementEnd { get; set; }
-
         // Datos financieros
         decimal BaseAmount { get; set; }
         bool IsPaid { get; set; }

@@ -16,7 +16,7 @@ namespace ControlDeComparendo.Tests
                 valueSmldvId = 10,
                 typeInfractionId = 5,
                 valueSmldv = new ValueSmldv { id = 10, minimunWage = 1300000 },
-                typeInfraction = new TypeInfraction
+                Infraction = new Infraction
                 {
                     id = 5,
                     description = "Infracción grave",
@@ -27,8 +27,8 @@ namespace ControlDeComparendo.Tests
             Assert.Equal(1, detail.id);
             Assert.Equal("SMLDV * 2", detail.formula);
             Assert.NotNull(detail.valueSmldv);
-            Assert.NotNull(detail.typeInfraction);
-            Assert.Equal(8, detail.typeInfraction.numer_smldv); 
+            Assert.NotNull(detail.Infraction);
+            Assert.Equal(8, detail.Infraction.numer_smldv); 
         }
     }
 }

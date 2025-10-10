@@ -13,7 +13,7 @@ namespace Entity.DTOs.Default.Me
         public string description { get; set; } 
         public string route { get; set; } 
         public bool state { get; set; } = true;
-
+        public string? icon { get; set; }
         public IEnumerable<string> Permissions { get; set; } = [];
     }
 }

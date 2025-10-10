@@ -29,6 +29,8 @@ namespace Entity.Domain.Models.Implements.Entities
 
         public decimal amountToPay { get; set; }
 
+        public decimal originalAmount { get; set; } 
+
         public string userEmail { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Entity.DTOs.Default.Me
         public int id { get; set; }
         public string? name { get; set; }
         public string? description { get; set; }
-        public string? icon { get; set; }
+        //public string? icon { get; set; }
 
         public IEnumerable<FormMeDto> forms { get; set; } = [];
     }

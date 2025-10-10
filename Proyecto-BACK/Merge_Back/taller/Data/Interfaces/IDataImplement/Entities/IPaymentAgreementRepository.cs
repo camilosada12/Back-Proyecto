@@ -12,7 +12,7 @@ namespace Data.Interfaces.IDataImplement.Entities
 {
     public interface IPaymentAgreementRepository : IData<PaymentAgreement>
     {
-        Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userInfractionId);
+        Task<IEnumerable<PaymentAgreementInitDto>> GetInitDataAsync(int userId, int? infractionId = null);
         Task<UserInfraction?> GetUserInfractionWithDetailsAsync(int userInfractionId);
         Task<PaymentFrequency?> GetPaymentFrequencyAsync(int id);
         Task<TypePayment?> GetTypePaymentAsync(int id);

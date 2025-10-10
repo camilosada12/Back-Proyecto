@@ -12,5 +12,5 @@ public class FineCalculationDetail : BaseModel
     public ValueSmldv valueSmldv { get; set; }
 
     public int typeInfractionId { get; set; }
-    public TypeInfraction typeInfraction { get; set; }
+    public Infraction Infraction { get; set; }
 }
