@@ -70,8 +70,14 @@ namespace Web.AutoMapper
             CreateMap<RolFormPermission, RolFormPermissionSelectDto>().ReverseMap();
 
             // Entities
+
+            // ValueSmldv
+            CreateMap<ValueSmldv, ValueSmldvDto>().ReverseMap();
+            CreateMap<ValueSmldv, ValueSmldvSelectDto>().ReverseMap();
+
             CreateMap<TypePayment, TypePaymentDto>().ReverseMap();
             CreateMap<TypePayment, TypePaymentSelectDto>().ReverseMap();
+
 
             CreateMap<PaymentAgreement, PaymentAgreementDto>().ReverseMap();
 

@@ -24,17 +24,17 @@ namespace Entity.DataInit.EntitiesDataInit
                      active = true,
                      is_deleted = false,
                      created_date  = seedDate,
-                 },
-                new ValueSmldv
-                {
-                    id = 2,
-                    value_smldv = 43500m,
-                    Current_Year = 2022,
-                    minimunWage = 1100000m,
-                    active = true,
-                    is_deleted = false,
-                    created_date = seedDate,
-                }
+                 }
+                //new ValueSmldv
+                //{
+                //    id = 2,
+                //    value_smldv = 43500m,
+                //    Current_Year = 2022,
+                //    minimunWage = 1100000m,
+                //    active = true,
+                //    is_deleted = false,
+                //    created_date = seedDate,
+                //}
                 );
         }
     }

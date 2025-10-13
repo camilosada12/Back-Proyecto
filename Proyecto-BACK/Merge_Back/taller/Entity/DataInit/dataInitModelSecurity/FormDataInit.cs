@@ -230,7 +230,7 @@ namespace Entity.DataInit.dataInitModelSecurity
                     is_deleted = false,
                     created_date = seedDate,
                 },
-                 new Form
+                new Form
                 {
                     id = 20,
                     name = "inicio",
@@ -239,6 +239,17 @@ namespace Entity.DataInit.dataInitModelSecurity
                      Route = "consultar-ingresar",
                      Icon = "pi pi-fw pi-home",
                      is_deleted = false,
+                    created_date = seedDate,
+                },
+                new Form
+                {
+                    id = 21,
+                    name = "valor de SMDLV",
+                    description = "valor de SMDLV ",
+                    active = true,
+                    Route = "parameters/smdlv",
+                    Icon = "pi pi-fw pi-home",
+                    is_deleted = false,
                     created_date = seedDate,
                 }
 
