@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251013193740_sqlserver")]
+    [Migration("20251014021236_sqlserver")]
     partial class sqlserver
     {
         /// <inheritdoc />
@@ -119,13 +119,253 @@ namespace Entity.Migrations
                             TypeInfractionId = 1,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "lanzar basura en un lugar publico",
+                            description = "Irrespetar las normas propias de los lugares públicos tales como salas de velación, cementerios, clínicas, hospitales, bibliotecas y museos, entre otros.",
                             is_deleted = false,
                             numer_smldv = 4
                         },
                         new
                         {
                             id = 2,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Emplear o inducir a los niños, niñas y adolescentes a utilizar indebidamente las telecomunicaciones o sistemas de emergencia",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 3,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Utilizar a estas personas para obtener beneficio económico o satisfacer interés personal.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 4,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Limitar u obstruir las manifestaciones de afecto público que no configuren actos sexuales, de exhibicionismo en razón a la raza, orientación sexual, género u otra condición similar.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 5,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Ingresar o introducir niños, niñas o adolescentes a los actos o eventos que puedan causar daño a su integridad o en los cuales exista previa restricción de edad por parte de las autoridades de policía, o esté prohibido su ingreso por las normas vigentes.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 6,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "No destruir en la fuente los envases de bebidas embriagantes.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 7,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Ingresar con boletería falsa.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 8,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Vender o canjear boletería, manillas, credencial o identificaciones facilitando el ingreso a un espectáculo público, actuando por fuera de las operaciones autorizadas para determinado evento.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 9,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Ingresar al evento sin boletería, manilla, credencial o identificación dispuesta y autorizada para el mismo o trasladarse fraudulentamente a una localidad diferente a la que acredite su boleta, manilla, credencial o identificación dispuesta y autorizada.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 10,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "No informar los protocolos de seguridad y evacuación en caso de emergencias a las personas que se encuentren en el lugar.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 11,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "No fijar la señalización de los protocolos de seguridad en un lugar visible.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 12,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Permitir el consumo de tabaco y/o sus derivados en lugares no autorizados por la ley y la normatividad vigente.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 13,
+                            TypeInfractionId = 1,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Comercializar, almacenar, poseer o tener especies de flora o fauna que ofrezcan peligro para la integridad y la salud.",
+                            is_deleted = false,
+                            numer_smldv = 4
+                        },
+                        new
+                        {
+                            id = 14,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Reñir, incitar o incurrir en confrontaciones violentas que puedan derivar en agresiones físicas.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 15,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Amenazar con causar un daño físico a personas por cualquier medio.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 16,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Portar armas, elementos cortantes, punzantes o semejantes, o sustancias peligrosas, en áreas comunes o lugares abiertos al público. Se exceptúa a quien demuestre que tales elementos o sustancias constituyen una herramienta de su actividad deportiva, oficio, profesión o estudio",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 17,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Portar armas neumáticas, de aire, de fogueo, de letalidad reducida o sprays, rociadores, aspersores o aerosoles de pimienta o cualquier elemento que se asimile a armas de fuego, en lugares abiertos al público donde se desarrollen aglomeraciones de personas o en aquellos donde se consuman bebidas embriagantes, o se advierta su utilización irregular, o se incurra en un comportamiento contrario a la convivencia.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 18,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Sonidos o ruidos en actividades, fiestas, reuniones o eventos similares que afecten la convivencia del vecindario, cuando generen molestia por su impacto auditivo, en cuyo caso podrán las autoridades de Policía desactivar temporalmente la fuente del ruido, en caso de que el residente se niegue a desactivarlo;",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 19,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Destruir, averiar o deteriorar bienes dentro del área circundante de la institución o centro educativo.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 20,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Irrespetar a las autoridades de Policía.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 21,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Permitir que los niños, niñas y adolescentes sean tenedores de animales potencialmente peligrosos.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 22,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "No permitir el acceso al predio sobre el cual pesa el gravamen de servidumbre para realizar el mantenimiento o la reparación.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 23,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Vender, procesar o almacenar productos alimenticios en los sitios no permitidos o contrariando las normas vigentes.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 24,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Propiciar la ocupación indebida del espacio público.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 25,
+                            TypeInfractionId = 2,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Comprar, alquilar o usar equipo terminal móvil con reporte de hurto y/o extravío en la base de datos negativa de que trata el artículo 106 de la Ley 1453 de 2011 o equipo terminal móvil cuyo número de identificación físico o electrónico haya sido reprogramado, remarcado, modificado o suprimido.",
+                            is_deleted = false,
+                            numer_smldv = 8
+                        },
+                        new
+                        {
+                            id = 26,
                             TypeInfractionId = 2,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -135,21 +375,261 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 3,
+                            id = 27,
                             TypeInfractionId = 3,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.",
+                            description = "Agredir físicamente a personas por cualquier medi",
                             is_deleted = false,
                             numer_smldv = 16
                         },
                         new
                         {
-                            id = 4,
+                            id = 28,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Poner en riesgo a personas o bienes durante la instalación, utilización, mantenimiento o modificación de las estructuras de los servicios públicos.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 29,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Modificar o alterar redes o instalaciones de servicios públicos.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 30,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "No reparar oportunamente los daños ocasionados a la infraestructura de servicios públicos domiciliarios, cuando estas reparaciones corresponden al usuario.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 31,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Sonidos o ruidos en actividades, fiestas, reuniones o eventos similares que afecten la convivencia del vecindario, cuando generen molestia por su impacto auditivo, en cuyo caso podrán las autoridades de Policía desactivar temporalmente la fuente del ruido, en caso de que el residente se niegue a desactivarlo;",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 32,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Cualquier medio de producción de sonidos o dispositivos o accesorios o maquinaria que produzcan ruidos, desde bienes muebles o inmuebles, en cuyo caso podrán las autoridades identificar, registrar y desactivar temporalmente la fuente del ruido, salvo sean originados en construcciones o reparaciones en horas permitidas;",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 33,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Consumir bebidas alcohólicas, drogas o sustancias prohibidas, dentro de la institución o centro educativo.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 34,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Dificultar, obstruir o limitar información e insumos relacionados con los derechos sexuales y reproductivos de la mujer, del hombre y de la comunidad LGBTI, incluido el acceso de estos a métodos anticonceptivos.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 35,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Ejercer la prostitución sin el cumplimiento de las medidas sanitarias y de protección requeridas.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 36,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Realizar actos sexuales o exhibicionistas en la vía pública o en lugares expuestos a esta.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 37,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Carecer o no proporcionar los implementos de seguridad exigidos por la actividad, o proporcionarlos en mal estado de funcionamiento.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 38,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Invadir los espacios no abiertos al público.",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 39,
+                            TypeInfractionId = 3,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Pretender ingresan o estar en posesión o tenencia de cualquier tipo de arma u objetos prohibidos por las normas vigentes, por el alcalde o su delegado",
+                            is_deleted = false,
+                            numer_smldv = 16
+                        },
+                        new
+                        {
+                            id = 40,
                             TypeInfractionId = 4,
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.",
+                            description = "Arrojar en las redes de alcantarillado, acueducto y de aguas lluvias, cualquier objeto, sustancia, residuo, escombros, lodo, combustibles o lubricantes, que alteren u obstruyan el normal funcionamiento.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 41,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Permitir, auspiciar, tolerar, inducir o constreñir el ingreso de los niños, niñas y adolescentes a los lugares donde:",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 42,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Salvo actos circenses, prender o manipular fuego en el espacio público, lugar abierto al público, sin contar con la autorización del alcalde o su delegado o del responsable del sitio, sin cumplir las medidas de seguridad.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 43,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Prender o manipular fuego, sustancias combustibles o mercancías peligrosas en medio de transporte público.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 44,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Fabricar, tener, portar, distribuir, transportar, comercializar, manipular o usar sustancias prohibidas, elementos o residuos químicos o inflamables sin el cumplimiento de los requisitos establecidos.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 45,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Realizar quemas o incendios que afecten la convivencia en cualquier lugar público o privado o en sitios prohibidos.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 46,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Utilizar calderas, motores, máquinas o aparatos similares que no se encuentren en condiciones aptas de funcionamiento.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 47,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Incumplir, desacatar, desconocer e impedir la función o la orden de Policía.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 48,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Impedir, dificultar, obstaculizar o resistirse a procedimiento de identificación o individualización, por parte de las autoridades de Policía.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 49,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Negarse a dar información veraz sobre lugar de residencia, domicilio y actividad a las autoridades de Policía cuando estas lo requieran en procedimientos de Policía",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 50,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Ofrecer cualquier tipo de resistencia a la aplicación de una medida o la utilización de un medio de Policía.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 51,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Agredir por cualquier medio o lanzar objetos que puedan causar daño o sustancias que representen peligro a las autoridades de Policía.",
+                            is_deleted = false,
+                            numer_smldv = 32
+                        },
+                        new
+                        {
+                            id = 52,
+                            TypeInfractionId = 4,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            description = "Utilizar inadecuadamente el sistema de número único de seguridad y emergencia.",
                             is_deleted = false,
                             numer_smldv = 32
                         });
@@ -490,7 +970,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 2,
-                            InfractionId = 3,
+                            InfractionId = 14,
                             UserId = 1,
                             UserNotificationId = 2,
                             active = true,
@@ -503,7 +983,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 3,
-                            InfractionId = 2,
+                            InfractionId = 27,
                             UserId = 2,
                             UserNotificationId = 1,
                             active = true,
@@ -516,7 +996,7 @@ namespace Entity.Migrations
                         new
                         {
                             id = 4,
-                            InfractionId = 4,
+                            InfractionId = 40,
                             UserId = 2,
                             UserNotificationId = 2,
                             active = true,
@@ -620,7 +1100,7 @@ namespace Entity.Migrations
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
-                            minimunWage = 1300000m,
+                            minimunWage = 1425000m,
                             value_smldv = 43500m
                         });
                 });
@@ -781,9 +1261,9 @@ namespace Entity.Migrations
                             Route = "form-modules",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Form modules",
+                            description = "Formularios y  modules",
                             is_deleted = false,
-                            name = "Form modules"
+                            name = "Formularios y  modules"
                         },
                         new
                         {
@@ -825,9 +1305,9 @@ namespace Entity.Migrations
                             Route = "rol-form-permission",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Rol Form Permission",
+                            description = "Roles Formularios y Permission",
                             is_deleted = false,
-                            name = "Rol Form Permission"
+                            name = "Roles Formularios y Permission"
                         },
                         new
                         {
@@ -858,9 +1338,9 @@ namespace Entity.Migrations
                             Route = "rol-user",
                             active = true,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            description = "Rol Usuario",
+                            description = "Roles y Usuario",
                             is_deleted = false,
-                            name = "Rol Usuario"
+                            name = "Roles y Usuario"
                         },
                         new
                         {
@@ -1000,7 +1480,7 @@ namespace Entity.Migrations
                             id = 2,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            formid = 3,
+                            formid = 4,
                             is_deleted = false,
                             moduleid = 2
                         },
@@ -1009,22 +1489,13 @@ namespace Entity.Migrations
                             id = 3,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            formid = 4,
-                            is_deleted = false,
-                            moduleid = 2
-                        },
-                        new
-                        {
-                            id = 4,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 5,
                             is_deleted = false,
                             moduleid = 3
                         },
                         new
                         {
-                            id = 5,
+                            id = 4,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 6,
@@ -1033,7 +1504,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 6,
+                            id = 5,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 7,
@@ -1042,7 +1513,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 7,
+                            id = 6,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 8,
@@ -1051,7 +1522,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 8,
+                            id = 7,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 9,
@@ -1060,7 +1531,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 9,
+                            id = 8,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 10,
@@ -1069,7 +1540,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 10,
+                            id = 9,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 11,
@@ -1078,16 +1549,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 11,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            formid = 12,
-                            is_deleted = false,
-                            moduleid = 3
-                        },
-                        new
-                        {
-                            id = 12,
+                            id = 10,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 13,
@@ -1096,7 +1558,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 13,
+                            id = 11,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 14,
@@ -1105,7 +1567,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 14,
+                            id = 12,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 15,
@@ -1114,7 +1576,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 15,
+                            id = 13,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 16,
@@ -1123,7 +1585,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 16,
+                            id = 14,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 17,
@@ -1132,16 +1594,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 17,
-                            active = false,
-                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            formid = 18,
-                            is_deleted = false,
-                            moduleid = 2
-                        },
-                        new
-                        {
-                            id = 18,
+                            id = 15,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 20,
@@ -1150,7 +1603,7 @@ namespace Entity.Migrations
                         },
                         new
                         {
-                            id = 19,
+                            id = 16,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 21,

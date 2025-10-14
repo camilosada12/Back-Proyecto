@@ -20,7 +20,7 @@ namespace Entity.DataInit.EntitiesDataInit
                      id = 1,
                      value_smldv = 43500m,
                      Current_Year = 2024,
-                     minimunWage = 1300000m,
+                     minimunWage = 1425000m,
                      active = true,
                      is_deleted = false,
                      created_date  = seedDate,

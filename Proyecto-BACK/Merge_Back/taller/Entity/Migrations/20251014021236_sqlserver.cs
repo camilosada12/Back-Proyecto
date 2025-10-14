@@ -755,14 +755,14 @@ namespace Entity.Migrations
                     { 3, "pi pi-fw pi-id-card", "tipos-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario tipo de  multas", false, "Formulario tipo de  multas" },
                     { 4, "pi pi-fw pi-check-square", "notificaciones/notificacion-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario Notificacion de multas", false, "Formulario Notificacion de multas" },
                     { 5, "pi pi-fw pi-file", "formularios", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formularios", false, "Formularios" },
-                    { 6, "pi pi-fw pi-clone", "form-modules", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Form modules", false, "Form modules" },
+                    { 6, "pi pi-fw pi-clone", "form-modules", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formularios y  modules", false, "Formularios y  modules" },
                     { 7, "pi pi-fw pi-th-large", "modulos", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Modulos", false, "Modulos" },
                     { 8, "pi pi-fw pi-users", "personas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Personas", false, "personas" },
                     { 9, "pi pi-fw pi-lock-open", "permisos", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "permisos", false, "permisos" },
-                    { 10, "pi pi-fw pi-key", "rol-form-permission", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol Form Permission", false, "Rol Form Permission" },
+                    { 10, "pi pi-fw pi-key", "rol-form-permission", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Roles Formularios y Permission", false, "Roles Formularios y Permission" },
                     { 11, "pi pi-fw pi-users", "roles", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Roles", false, "Roles" },
                     { 12, "pi pi-fw pi-user", "usuarios", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Usuarios", false, "Usuarios" },
-                    { 13, "pi pi-fw pi-user-plus", "rol-user", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Rol Usuario", false, "Rol Usuario" },
+                    { 13, "pi pi-fw pi-user-plus", "rol-user", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Roles y Usuario", false, "Roles y Usuario" },
                     { 14, "pi pi-fw pi-briefcase", "parameters/department", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "departamento", false, "departamento" },
                     { 15, "pi pi-fw pi-briefcase", "parameters/document-type", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Tipo de Documento", false, "Tipo de Documento" },
                     { 16, "pi pi-fw pi-briefcase", "parameters/municipality", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Municipio", false, "Municipio" },
@@ -848,17 +848,65 @@ namespace Entity.Migrations
                 schema: "Entities",
                 table: "valueSmldv",
                 columns: new[] { "id", "Current_Year", "active", "created_date", "is_deleted", "minimunWage", "value_smldv" },
-                values: new object[] { 1, 2024, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1300000m, 43500m });
+                values: new object[] { 1, 2024, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 1425000m, 43500m });
 
             migrationBuilder.InsertData(
                 table: "Infraction",
                 columns: new[] { "id", "TypeInfractionId", "active", "created_date", "description", "is_deleted", "numer_smldv" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "lanzar basura en un lugar publico", false, 4 },
-                    { 2, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, 8 },
-                    { 3, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas, elementos cortantes, punzantes, o sustancias peligrosas en áreas comunes o lugares abiertos al público.", false, 16 },
-                    { 4, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agresión a la autoridad: Agredir o lanzar objetos a las autoridades de policía.", false, 32 }
+                    { 1, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Irrespetar las normas propias de los lugares públicos tales como salas de velación, cementerios, clínicas, hospitales, bibliotecas y museos, entre otros.", false, 4 },
+                    { 2, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Emplear o inducir a los niños, niñas y adolescentes a utilizar indebidamente las telecomunicaciones o sistemas de emergencia", false, 4 },
+                    { 3, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Utilizar a estas personas para obtener beneficio económico o satisfacer interés personal.", false, 4 },
+                    { 4, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Limitar u obstruir las manifestaciones de afecto público que no configuren actos sexuales, de exhibicionismo en razón a la raza, orientación sexual, género u otra condición similar.", false, 4 },
+                    { 5, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Ingresar o introducir niños, niñas o adolescentes a los actos o eventos que puedan causar daño a su integridad o en los cuales exista previa restricción de edad por parte de las autoridades de policía, o esté prohibido su ingreso por las normas vigentes.", false, 4 },
+                    { 6, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "No destruir en la fuente los envases de bebidas embriagantes.", false, 4 },
+                    { 7, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Ingresar con boletería falsa.", false, 4 },
+                    { 8, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Vender o canjear boletería, manillas, credencial o identificaciones facilitando el ingreso a un espectáculo público, actuando por fuera de las operaciones autorizadas para determinado evento.", false, 4 },
+                    { 9, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Ingresar al evento sin boletería, manilla, credencial o identificación dispuesta y autorizada para el mismo o trasladarse fraudulentamente a una localidad diferente a la que acredite su boleta, manilla, credencial o identificación dispuesta y autorizada.", false, 4 },
+                    { 10, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "No informar los protocolos de seguridad y evacuación en caso de emergencias a las personas que se encuentren en el lugar.", false, 4 },
+                    { 11, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "No fijar la señalización de los protocolos de seguridad en un lugar visible.", false, 4 },
+                    { 12, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Permitir el consumo de tabaco y/o sus derivados en lugares no autorizados por la ley y la normatividad vigente.", false, 4 },
+                    { 13, 1, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Comercializar, almacenar, poseer o tener especies de flora o fauna que ofrezcan peligro para la integridad y la salud.", false, 4 },
+                    { 14, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Reñir, incitar o incurrir en confrontaciones violentas que puedan derivar en agresiones físicas.", false, 8 },
+                    { 15, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Amenazar con causar un daño físico a personas por cualquier medio.", false, 8 },
+                    { 16, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas, elementos cortantes, punzantes o semejantes, o sustancias peligrosas, en áreas comunes o lugares abiertos al público. Se exceptúa a quien demuestre que tales elementos o sustancias constituyen una herramienta de su actividad deportiva, oficio, profesión o estudio", false, 8 },
+                    { 17, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Portar armas neumáticas, de aire, de fogueo, de letalidad reducida o sprays, rociadores, aspersores o aerosoles de pimienta o cualquier elemento que se asimile a armas de fuego, en lugares abiertos al público donde se desarrollen aglomeraciones de personas o en aquellos donde se consuman bebidas embriagantes, o se advierta su utilización irregular, o se incurra en un comportamiento contrario a la convivencia.", false, 8 },
+                    { 18, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Sonidos o ruidos en actividades, fiestas, reuniones o eventos similares que afecten la convivencia del vecindario, cuando generen molestia por su impacto auditivo, en cuyo caso podrán las autoridades de Policía desactivar temporalmente la fuente del ruido, en caso de que el residente se niegue a desactivarlo;", false, 8 },
+                    { 19, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Destruir, averiar o deteriorar bienes dentro del área circundante de la institución o centro educativo.", false, 8 },
+                    { 20, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Irrespetar a las autoridades de Policía.", false, 8 },
+                    { 21, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Permitir que los niños, niñas y adolescentes sean tenedores de animales potencialmente peligrosos.", false, 8 },
+                    { 22, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "No permitir el acceso al predio sobre el cual pesa el gravamen de servidumbre para realizar el mantenimiento o la reparación.", false, 8 },
+                    { 23, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Vender, procesar o almacenar productos alimenticios en los sitios no permitidos o contrariando las normas vigentes.", false, 8 },
+                    { 24, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Propiciar la ocupación indebida del espacio público.", false, 8 },
+                    { 25, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Comprar, alquilar o usar equipo terminal móvil con reporte de hurto y/o extravío en la base de datos negativa de que trata el artículo 106 de la Ley 1453 de 2011 o equipo terminal móvil cuyo número de identificación físico o electrónico haya sido reprogramado, remarcado, modificado o suprimido.", false, 8 },
+                    { 26, 2, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "hacer mucho ruido en un sitio publico", false, 8 },
+                    { 27, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agredir físicamente a personas por cualquier medi", false, 16 },
+                    { 28, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Poner en riesgo a personas o bienes durante la instalación, utilización, mantenimiento o modificación de las estructuras de los servicios públicos.", false, 16 },
+                    { 29, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Modificar o alterar redes o instalaciones de servicios públicos.", false, 16 },
+                    { 30, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "No reparar oportunamente los daños ocasionados a la infraestructura de servicios públicos domiciliarios, cuando estas reparaciones corresponden al usuario.", false, 16 },
+                    { 31, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Sonidos o ruidos en actividades, fiestas, reuniones o eventos similares que afecten la convivencia del vecindario, cuando generen molestia por su impacto auditivo, en cuyo caso podrán las autoridades de Policía desactivar temporalmente la fuente del ruido, en caso de que el residente se niegue a desactivarlo;", false, 16 },
+                    { 32, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Cualquier medio de producción de sonidos o dispositivos o accesorios o maquinaria que produzcan ruidos, desde bienes muebles o inmuebles, en cuyo caso podrán las autoridades identificar, registrar y desactivar temporalmente la fuente del ruido, salvo sean originados en construcciones o reparaciones en horas permitidas;", false, 16 },
+                    { 33, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Consumir bebidas alcohólicas, drogas o sustancias prohibidas, dentro de la institución o centro educativo.", false, 16 },
+                    { 34, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Dificultar, obstruir o limitar información e insumos relacionados con los derechos sexuales y reproductivos de la mujer, del hombre y de la comunidad LGBTI, incluido el acceso de estos a métodos anticonceptivos.", false, 16 },
+                    { 35, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Ejercer la prostitución sin el cumplimiento de las medidas sanitarias y de protección requeridas.", false, 16 },
+                    { 36, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Realizar actos sexuales o exhibicionistas en la vía pública o en lugares expuestos a esta.", false, 16 },
+                    { 37, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Carecer o no proporcionar los implementos de seguridad exigidos por la actividad, o proporcionarlos en mal estado de funcionamiento.", false, 16 },
+                    { 38, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Invadir los espacios no abiertos al público.", false, 16 },
+                    { 39, 3, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Pretender ingresan o estar en posesión o tenencia de cualquier tipo de arma u objetos prohibidos por las normas vigentes, por el alcalde o su delegado", false, 16 },
+                    { 40, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Arrojar en las redes de alcantarillado, acueducto y de aguas lluvias, cualquier objeto, sustancia, residuo, escombros, lodo, combustibles o lubricantes, que alteren u obstruyan el normal funcionamiento.", false, 32 },
+                    { 41, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Permitir, auspiciar, tolerar, inducir o constreñir el ingreso de los niños, niñas y adolescentes a los lugares donde:", false, 32 },
+                    { 42, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Salvo actos circenses, prender o manipular fuego en el espacio público, lugar abierto al público, sin contar con la autorización del alcalde o su delegado o del responsable del sitio, sin cumplir las medidas de seguridad.", false, 32 },
+                    { 43, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Prender o manipular fuego, sustancias combustibles o mercancías peligrosas en medio de transporte público.", false, 32 },
+                    { 44, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Fabricar, tener, portar, distribuir, transportar, comercializar, manipular o usar sustancias prohibidas, elementos o residuos químicos o inflamables sin el cumplimiento de los requisitos establecidos.", false, 32 },
+                    { 45, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Realizar quemas o incendios que afecten la convivencia en cualquier lugar público o privado o en sitios prohibidos.", false, 32 },
+                    { 46, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Utilizar calderas, motores, máquinas o aparatos similares que no se encuentren en condiciones aptas de funcionamiento.", false, 32 },
+                    { 47, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Incumplir, desacatar, desconocer e impedir la función o la orden de Policía.", false, 32 },
+                    { 48, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Impedir, dificultar, obstaculizar o resistirse a procedimiento de identificación o individualización, por parte de las autoridades de Policía.", false, 32 },
+                    { 49, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Negarse a dar información veraz sobre lugar de residencia, domicilio y actividad a las autoridades de Policía cuando estas lo requieran en procedimientos de Policía", false, 32 },
+                    { 50, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Ofrecer cualquier tipo de resistencia a la aplicación de una medida o la utilización de un medio de Policía.", false, 32 },
+                    { 51, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Agredir por cualquier medio o lanzar objetos que puedan causar daño o sustancias que representen peligro a las autoridades de Policía.", false, 32 },
+                    { 52, 4, true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Utilizar inadecuadamente el sistema de número único de seguridad y emergencia.", false, 32 }
                 });
 
             migrationBuilder.InsertData(
@@ -868,24 +916,21 @@ namespace Entity.Migrations
                 values: new object[,]
                 {
                     { 1, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, false, 2 },
-                    { 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 3, false, 2 },
-                    { 3, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 4, false, 2 },
-                    { 4, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 5, false, 3 },
-                    { 5, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 6, false, 3 },
-                    { 6, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 7, false, 3 },
-                    { 7, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 8, false, 3 },
-                    { 8, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 9, false, 3 },
-                    { 9, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 10, false, 3 },
-                    { 10, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 11, false, 3 },
-                    { 11, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 12, false, 3 },
-                    { 12, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 13, false, 3 },
-                    { 13, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 14, false, 5 },
-                    { 14, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 15, false, 5 },
-                    { 15, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 16, false, 5 },
-                    { 16, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 17, false, 5 },
-                    { 17, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 18, false, 2 },
-                    { 18, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 20, false, 2 },
-                    { 19, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 21, false, 5 }
+                    { 2, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 4, false, 2 },
+                    { 3, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 5, false, 3 },
+                    { 4, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 6, false, 3 },
+                    { 5, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 7, false, 3 },
+                    { 6, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 8, false, 3 },
+                    { 7, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 9, false, 3 },
+                    { 8, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 10, false, 3 },
+                    { 9, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 11, false, 3 },
+                    { 10, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 13, false, 3 },
+                    { 11, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 14, false, 5 },
+                    { 12, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 15, false, 5 },
+                    { 13, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 16, false, 5 },
+                    { 14, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 17, false, 5 },
+                    { 15, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 20, false, 2 },
+                    { 16, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 21, false, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -1075,9 +1120,9 @@ namespace Entity.Migrations
                 values: new object[,]
                 {
                     { 1, null, 1, 1, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
-                    { 2, null, 3, 1, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
-                    { 3, null, 2, 2, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
-                    { 4, null, 4, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 }
+                    { 2, null, 14, 1, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
+                    { 3, null, 27, 2, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
+                    { 4, null, 40, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 }
                 });
 
             migrationBuilder.InsertData(

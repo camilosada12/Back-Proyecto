@@ -28,7 +28,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 2,
                     UserId = 1,
-                    InfractionId = 3,
+                    InfractionId = 14,
                     UserNotificationId = 2,
                     dateInfraction = seedDate,
                     stateInfraction = EstadoMulta.Pendiente, 
@@ -41,7 +41,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 3,
                     UserId = 2,
-                    InfractionId = 2,
+                    InfractionId = 27,
                     UserNotificationId = 1,
                     dateInfraction = seedDate,
                     stateInfraction = EstadoMulta.Pendiente,
@@ -54,7 +54,7 @@ namespace Entity.DataInit.EntitiesDataInit
                 {
                     id = 4,
                     UserId = 2,
-                    InfractionId = 4,
+                    InfractionId = 40,
                     UserNotificationId = 2,
                     dateInfraction = seedDate,
                     stateInfraction = EstadoMulta.Pendiente,

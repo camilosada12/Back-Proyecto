@@ -79,8 +79,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new Form
                 {
                     id = 6,
-                    name = "Form modules",
-                    description = "Form modules",
+                    name = "Formularios y  modules",
+                    description = "Formularios y  modules",
                     active = true,
                      Route = "form-modules",
                      Icon = "pi pi-fw pi-clone",
@@ -123,8 +123,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                 new Form
                 {
                     id = 10,
-                    name = "Rol Form Permission",
-                    description = "Rol Form Permission",
+                    name = "Roles Formularios y Permission",
+                    description = "Roles Formularios y Permission",
                     active = true,
                      Route = "rol-form-permission",
                     Icon = "pi pi-fw pi-key",
@@ -156,8 +156,8 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new Form
                 {
                     id = 13,
-                    name = "Rol Usuario",
-                    description = "Rol Usuario",
+                    name = "Roles y Usuario",
+                    description = "Roles y Usuario",
                     active = true,
                      Route = "rol-user",
                      Icon = "pi pi-fw pi-user-plus",
