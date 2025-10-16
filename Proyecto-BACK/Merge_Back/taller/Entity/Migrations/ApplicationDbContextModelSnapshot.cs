@@ -207,6 +207,78 @@ namespace Entity.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.InstallmentSchedule", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsPaid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentAgreementId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("RemainingBalance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_deleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("PaymentAgreementId");
+
+                    b.ToTable("installmentSchedule", "Entities");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Amount = 32625m,
+                            IsPaid = false,
+                            Number = 1,
+                            PaymentAgreementId = 1,
+                            PaymentDate = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RemainingBalance = 97900m,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        },
+                        new
+                        {
+                            id = 2,
+                            Amount = 32625m,
+                            IsPaid = false,
+                            Number = 2,
+                            PaymentAgreementId = 1,
+                            PaymentDate = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RemainingBalance = 65275m,
+                            active = true,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            is_deleted = false
+                        });
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.TypeInfraction", b =>
                 {
                     b.Property<int>("id")
@@ -1956,7 +2028,8 @@ namespace Entity.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("active")
                         .HasColumnType("bit");
@@ -1969,7 +2042,7 @@ namespace Entity.Migrations
                     b.Property<DateTime>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("expeditionCedula")
+                    b.Property<DateTime?>("expeditionCedula")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("is_deleted")
@@ -2003,7 +2076,7 @@ namespace Entity.Migrations
                         {
                             id = 1,
                             AccruedInterest = 0m,
-                            AgreementDescription = "se realizará a 4 cuotas iguales",
+                            AgreementDescription = "Acuerdo a 4 cuotas iguales.",
                             AgreementEnd = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             BaseAmount = 130500m,
@@ -2015,11 +2088,11 @@ namespace Entity.Migrations
                             OutstandingAmount = 130500m,
                             PhoneNumber = "3101234567",
                             active = true,
-                            address = "carrera 10",
+                            address = "Carrera 10 #45-20",
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            expeditionCedula = new DateTime(2016, 1, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2020, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             is_deleted = false,
-                            neighborhood = "eduardo santos",
+                            neighborhood = "Eduardo Santos",
                             paymentFrequencyId = 1,
                             typePaymentId = 1,
                             userInfractionId = 1
@@ -2028,7 +2101,7 @@ namespace Entity.Migrations
                         {
                             id = 2,
                             AccruedInterest = 0m,
-                            AgreementDescription = "se realizará a 2 cuotas iguales",
+                            AgreementDescription = "Acuerdo a 2 cuotas iguales.",
                             AgreementEnd = new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             BaseAmount = 174000m,
@@ -2040,11 +2113,11 @@ namespace Entity.Migrations
                             OutstandingAmount = 174000m,
                             PhoneNumber = "3009876543",
                             active = true,
-                            address = "carrera 1",
+                            address = "Carrera 1 #23-18",
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            expeditionCedula = new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             is_deleted = false,
-                            neighborhood = "panamá",
+                            neighborhood = "Panamá",
                             paymentFrequencyId = 2,
                             typePaymentId = 2,
                             userInfractionId = 2
@@ -2053,7 +2126,7 @@ namespace Entity.Migrations
                         {
                             id = 3,
                             AccruedInterest = 0m,
-                            AgreementDescription = "se realizará a 8 cuotas iguales",
+                            AgreementDescription = "Acuerdo a 8 cuotas iguales.",
                             AgreementEnd = new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             BaseAmount = 348000m,
@@ -2065,11 +2138,11 @@ namespace Entity.Migrations
                             OutstandingAmount = 348000m,
                             PhoneNumber = "3015558888",
                             active = true,
-                            address = "calle 20 #15-40",
+                            address = "Calle 20 #15-40",
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            expeditionCedula = new DateTime(2018, 3, 10, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2018, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             is_deleted = false,
-                            neighborhood = "la merced",
+                            neighborhood = "La Merced",
                             paymentFrequencyId = 2,
                             typePaymentId = 3,
                             userInfractionId = 3
@@ -2078,7 +2151,7 @@ namespace Entity.Migrations
                         {
                             id = 4,
                             AccruedInterest = 0m,
-                            AgreementDescription = "se realizará a 12 cuotas iguales",
+                            AgreementDescription = "Acuerdo a 12 cuotas iguales.",
                             AgreementEnd = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             AgreementStart = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             BaseAmount = 835200m,
@@ -2090,11 +2163,11 @@ namespace Entity.Migrations
                             OutstandingAmount = 835200m,
                             PhoneNumber = "3024449999",
                             active = true,
-                            address = "avenida 5 #45-12",
+                            address = "Avenida 5 #45-12",
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            expeditionCedula = new DateTime(2019, 5, 22, 0, 0, 0, 0, DateTimeKind.Utc),
+                            expeditionCedula = new DateTime(2019, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             is_deleted = false,
-                            neighborhood = "san martin",
+                            neighborhood = "San Martín",
                             paymentFrequencyId = 3,
                             typePaymentId = 1,
                             userInfractionId = 4
@@ -3412,6 +3485,18 @@ namespace Entity.Migrations
                     b.Navigation("TypeInfraction");
                 });
 
+            modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.InstallmentSchedule", b =>
+                {
+                    b.HasOne("PaymentAgreement", "PaymentAgreement")
+                        .WithMany("InstallmentSchedule")
+                        .HasForeignKey("PaymentAgreementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_InstallmentSchedule_PaymentAgreement");
+
+                    b.Navigation("PaymentAgreement");
+                });
+
             modelBuilder.Entity("Entity.Domain.Models.Implements.Entities.UserInfraction", b =>
                 {
                     b.HasOne("Entity.Domain.Models.Implements.Entities.Infraction", "Infraction")
@@ -3695,6 +3780,8 @@ namespace Entity.Migrations
 
             modelBuilder.Entity("PaymentAgreement", b =>
                 {
+                    b.Navigation("InstallmentSchedule");
+
                     b.Navigation("documentInfraction");
                 });
 #pragma warning restore 612, 618
