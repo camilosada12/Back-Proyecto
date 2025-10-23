@@ -3,11 +3,11 @@ using Data.Repositoy;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.parameters;
 using Entity.Infrastructure.Contexts;
-using Entity.Init;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PaymentAgreementInitDto = Entity.Init.PaymentAgreementInitDto;
 
 public class PaymentAgreementRepository : DataGeneric<PaymentAgreement>, IPaymentAgreementRepository
 {

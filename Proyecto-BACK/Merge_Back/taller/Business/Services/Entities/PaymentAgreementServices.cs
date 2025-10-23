@@ -12,7 +12,6 @@ using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Default.InstallmentSchedule;
 using Entity.DTOs.Select.Entities;
 using Entity.Infrastructure.Contexts;
-using Entity.Init;
 using FluentValidation;
 using Helpers.Business.Business.Helpers.Validation;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +21,7 @@ using System.Text.Json;
 using Utilities.Exceptions;
 // 👇 alias para evitar ambigüedad
 using FVValidationException = FluentValidation.ValidationException;
+using PaymentAgreementInitDto = Entity.Init.PaymentAgreementInitDto;
 
 namespace Business.Services.Entities
 {

@@ -1,12 +1,12 @@
 ﻿using Business.Interfaces.BusinessBasic;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.DTOs.Select.Entities;
-using Entity.Init;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PaymentAgreementInitDto = Entity.Init.PaymentAgreementInitDto;
 
 namespace Business.Interfaces.IBusinessImplements.Entities
 {

@@ -1,12 +1,12 @@
 ﻿using Data.Interfaces.DataBasic;
 using Entity.Domain.Models.Implements.Entities;
 using Entity.Domain.Models.Implements.parameters;
-using Entity.Init;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PaymentAgreementInitDto = Entity.Init.PaymentAgreementInitDto;
 
 namespace Data.Interfaces.IDataImplement.Entities
 {
