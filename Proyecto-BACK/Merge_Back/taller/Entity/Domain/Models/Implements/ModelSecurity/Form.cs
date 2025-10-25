@@ -7,8 +7,8 @@ namespace Entity.Domain.Models.Implements.ModelSecurity
     {
         // Relaciones
 
-        public string Route { get; set; } = null!;
-        public string Icon { get; set; } = null!;
+        public string? Route { get; set; } = null!;
+        public string? Icon { get; set; } = null!;
 
         public List<RolFormPermission> rol_form_permission { get; set; } = new List<RolFormPermission>();
 

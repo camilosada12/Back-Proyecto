@@ -104,32 +104,77 @@ namespace Business.Services.PDF
                 await context.CloseAsync();
             }
         }
-
-
         private static string BuildHtml(UserInfractionSelectDto dto)
         {
-            var template = InspectoraTemplate.Html; // 👈 CORREGIDO
+            var template = InspectoraTemplate.Html;
 
-            return template
-         .Replace("@Expediente", HttpUtility.HtmlEncode(dto.id.ToString()))
-        .Replace("@Fecha", dto.dateInfraction.ToString("dd 'de' MMMM 'de' yyyy"))
-        .Replace("@InfractorNombre", HttpUtility.HtmlEncode($"{dto.firstName} {dto.lastName}"))
-        .Replace("@InfractorCedula", HttpUtility.HtmlEncode(dto.documentNumber ?? ""))
-        .Replace("@TipoInfraccion", HttpUtility.HtmlEncode(dto.typeInfractionName))
-        .Replace("@DescripcionInfraccion", HttpUtility.HtmlEncode(dto.observations));
+            // ✅ Ruta física absoluta de la imagen
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Template", "images", "marcaAgua.png");
+            imagePath = Path.GetFullPath(imagePath);
+
+            Console.WriteLine("Ruta imagen: " + imagePath);
+            Console.WriteLine("Existe: " + File.Exists(imagePath));
+
+            string imageBase64 = string.Empty;
+
+            if (File.Exists(imagePath))
+            {
+                // ✅ Convertir la imagen a Base64
+                byte[] imageBytes = File.ReadAllBytes(imagePath);
+                string base64String = Convert.ToBase64String(imageBytes);
+                imageBase64 = $"data:image/png;base64,{base64String}";
+            }
+            else
+            {
+                Console.WriteLine("❌ No se encontró la imagen en la ruta especificada.");
+            }
+
+            // ✅ Construcción del HTML con los valores dinámicos
+            var html = template
+                .Replace("@WatermarkBase64", imageBase64)
+                .Replace("@Expediente", HttpUtility.HtmlEncode(dto.id.ToString()))
+                .Replace("@Fecha", dto.dateInfraction.ToString("dd 'de' MMMM 'de' yyyy"))
+                .Replace("@InfractorNombre", HttpUtility.HtmlEncode($"{dto.firstName} {dto.lastName}"))
+                .Replace("@InfractorCedula", HttpUtility.HtmlEncode(dto.documentNumber ?? ""))
+                .Replace("@TipoInfraccion", HttpUtility.HtmlEncode(dto.typeInfractionName))
+                .Replace("@DescripcionInfraccion", HttpUtility.HtmlEncode(dto.observations));
+
+            // 🧪 Guardar HTML temporal para verificar si se ve la imagen
+            var debugPath = Path.Combine(Directory.GetCurrentDirectory(), "debug_inspectora.html");
+            File.WriteAllText(debugPath, html);
+            Console.WriteLine($"🧩 HTML de depuración guardado en: {debugPath}");
+
+            return html;
         }
 
         private static string BuildPaymentAgreementHtml(PaymentAgreementSelectDto dto)
         {
             var culture = new CultureInfo("es-CO");
 
+            // ✅ Cargar la imagen del encabezado
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Template", "images", "marcaAgua.png");
+            imagePath = Path.GetFullPath(imagePath);
+            Console.WriteLine("Ruta imagen: " + imagePath);
+            Console.WriteLine("Existe: " + File.Exists(imagePath));
+
+            string imageBase64 = string.Empty;
+            if (File.Exists(imagePath))
+            {
+                // ✅ Convertir la imagen a Base64
+                byte[] imageBytes = File.ReadAllBytes(imagePath);
+                string base64String = Convert.ToBase64String(imageBytes);
+                imageBase64 = $"data:image/png;base64,{base64String}";
+            }
+            else
+            {
+                Console.WriteLine("❌ No se encontró la imagen en la ruta especificada.");
+            }
+
             // ✅ Verificar que el cronograma existe
             var schedule = dto.InstallmentSchedule ?? new List<InstallmentScheduleDto>();
-
             Console.WriteLine($"📊 DEBUG - Cuotas recibidas en BuildHtml: {schedule.Count}");
 
             var cuotasHtml = new StringBuilder();
-
             if (schedule.Any())
             {
                 cuotasHtml.AppendLine("<h2>📅 Cronograma de Cuotas</h2>");
@@ -153,8 +198,9 @@ namespace Business.Services.PDF
                 cuotasHtml.AppendLine("<p style='color: red; font-weight: bold;'>⚠️ No se generó cronograma de cuotas.</p>");
             }
 
-            // Generar el HTML final
+            // ✅ Generar el HTML final
             var html = PaymentAgreementTemplate.Html
+                .Replace("@WatermarkBase64", imageBase64)
                 .Replace("@Nombre", HttpUtility.HtmlEncode(dto.PersonName ?? "-"))
                 .Replace("@Documento", HttpUtility.HtmlEncode(dto.DocumentNumber ?? "-"))
                 .Replace("@TipoDocumento", HttpUtility.HtmlEncode(dto.DocumentType ?? "-"))
@@ -183,10 +229,14 @@ namespace Business.Services.PDF
                 .Replace("@UltimoInteres", dto.LastInterestAppliedOn.HasValue
                     ? $"<p><strong>Último cálculo de interés:</strong> {dto.LastInterestAppliedOn:dd/MM/yyyy}</p>"
                     : "")
-                .Replace("@TablaCuotas", cuotasHtml.ToString()); // ✅ Aquí se inserta la tabla
+                .Replace("@TablaCuotas", cuotasHtml.ToString());
+
+            // 🧪 Guardar HTML temporal para verificar si se ve la imagen
+            var debugPath = Path.Combine(Directory.GetCurrentDirectory(), "debug_payment_agreement.html");
+            File.WriteAllText(debugPath, html);
+            Console.WriteLine($"🧩 HTML de depuración guardado en: {debugPath}");
 
             return html;
         }
-
     }
 }

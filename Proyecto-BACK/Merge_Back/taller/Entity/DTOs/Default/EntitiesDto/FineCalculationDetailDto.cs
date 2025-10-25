@@ -19,6 +19,8 @@ namespace Entity.Domain.Models.Implements.Entities
         public string valueSmldvName { get; set; }
         public int typeInfractionId { get; set; }
         public string type_Infraction { get; set; }
+        public decimal SmldvValueAtCreation { get; set; }
+
 
     }
 }

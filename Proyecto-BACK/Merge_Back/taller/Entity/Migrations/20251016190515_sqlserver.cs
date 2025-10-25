@@ -89,8 +89,8 @@ namespace Entity.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Route = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Route = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -446,6 +446,7 @@ namespace Entity.Migrations
                     totalCalculation = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     valueSmldvId = table.Column<int>(type: "int", nullable: false),
                     typeInfractionId = table.Column<int>(type: "int", nullable: false),
+                    SmldvValueAtCreation = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -551,6 +552,7 @@ namespace Entity.Migrations
                     InfractionId = table.Column<int>(type: "int", nullable: false),
                     UserNotificationId = table.Column<int>(type: "int", nullable: false),
                     amountToPay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    smldvValueAtCreation = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     active = table.Column<bool>(type: "bit", nullable: false),
                     is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -753,7 +755,7 @@ namespace Entity.Migrations
                     { 1, "pi pi-fw pi-home", "acuerdoPago", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario de creacion de acuerdo de pago", false, "Formulario de acuerdo de pago" },
                     { 2, "pi pi-fw pi-homeing", "anexar-multas/multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario para agregar nuevas multas", false, "Formulario de creacion de multas" },
                     { 3, "pi pi-fw pi-id-card", "tipos-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario tipo de  multas", false, "Formulario tipo de  multas" },
-                    { 4, "pi pi-fw pi-check-square", "notificaciones/notificacion-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario Notificacion de multas", false, "Formulario Notificacion de multas" },
+                    { 4, "pi pi-fw pi-check-square", "notificaciones/notificacion-multas", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formulario Notificacion de multas", false, "Notificacion de multas" },
                     { 5, "pi pi-fw pi-file", "formularios", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formularios", false, "Formularios" },
                     { 6, "pi pi-fw pi-clone", "form-modules", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Formularios y  modules", false, "Formularios y  modules" },
                     { 7, "pi pi-fw pi-th-large", "modulos", true, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "Modulos", false, "Modulos" },
@@ -929,8 +931,10 @@ namespace Entity.Migrations
                     { 12, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 15, false, 5 },
                     { 13, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 16, false, 5 },
                     { 14, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 17, false, 5 },
-                    { 15, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 20, false, 2 },
-                    { 16, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 21, false, 5 }
+                    { 15, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 18, false, 2 },
+                    { 16, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 19, false, 2 },
+                    { 17, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 20, false, 2 },
+                    { 18, false, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 21, false, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -1116,13 +1120,13 @@ namespace Entity.Migrations
             migrationBuilder.InsertData(
                 schema: "Entities",
                 table: "userInfraction",
-                columns: new[] { "id", "InformationFine", "InfractionId", "UserId", "UserNotificationId", "active", "amountToPay", "created_date", "dateInfraction", "is_deleted", "stateInfraction" },
+                columns: new[] { "id", "InformationFine", "InfractionId", "UserId", "UserNotificationId", "active", "amountToPay", "created_date", "dateInfraction", "is_deleted", "smldvValueAtCreation", "stateInfraction" },
                 values: new object[,]
                 {
-                    { 1, null, 1, 1, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
-                    { 2, null, 14, 1, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
-                    { 3, null, 27, 2, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 },
-                    { 4, null, 40, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 0 }
+                    { 1, null, 1, 1, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 43500m, 0 },
+                    { 2, null, 14, 1, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 43500m, 0 },
+                    { 3, null, 27, 2, 1, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 43500m, 0 },
+                    { 4, null, 40, 2, 2, true, 0m, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), false, 43500m, 0 }
                 });
 
             migrationBuilder.InsertData(

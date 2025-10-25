@@ -37,7 +37,8 @@ namespace Business.Services
                 typeInfractionId = infraction.typeInfractionId,
                 type_Infraction = typeInfractionName,
                 valueSmldvId = smldvId,
-                valueSmldvName = smldvName
+                valueSmldvName = smldvName,
+                SmldvValueAtCreation = infraction.smldvValueAtCreation
             };
         }
 

@@ -16,6 +16,8 @@
         public string TypeInfractionName { get; set; }
         public int numerSmldv { get; set; }
         public string description { get; set; }
+        public decimal SmldvValueAtCreation { get; set; }
+
 
     }
 }

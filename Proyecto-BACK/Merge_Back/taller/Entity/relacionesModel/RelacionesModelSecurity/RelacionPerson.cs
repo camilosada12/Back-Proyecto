@@ -23,9 +23,7 @@ namespace Entity.relacionesModel.RelacionesModelSecurity
             builder.Property(p => p.lastName)
                    .IsRequired()
                    .HasMaxLength(100);
-
-
-
+   
             // FK opcional: municipality
             builder.HasOne(p => p.municipality)
                    .WithMany(m => m.person)

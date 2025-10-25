@@ -25,7 +25,8 @@ namespace Entity.Domain.Models.Implements.Entities
         public UserNotification UserNotification { get; set; } = null!;
 
         public List<PaymentAgreement> paymentAgreement { get; set; } = new();
-        public decimal amountToPay { get; set; }
+        public decimal amountToPay { get; set; }           
+        public decimal? smldvValueAtCreation { get; set; }  
     }
 
 }

@@ -21,7 +21,7 @@ services:
     image: postgres:16-alpine
     container_name: postgresBack
     environment:
-      - POSTGRES_DB=ControlComparendo
+      - POSTGRES_DB=controlComparendoDB
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Admin123.
     ports: ["5433:5432"]
@@ -39,7 +39,7 @@ services:
     container_name: mysqlBack
     environment:
       - MYSQL_ROOT_PASSWORD=Admin123.
-      - MYSQL_DATABASE=ControlComparendo
+      - MYSQL_DATABASE=controlComparendoDB
     ports: ["3307:3306"]
     volumes:
       - mysql_data:/var/lib/mysql
@@ -59,9 +59,9 @@ services:
     ports: ["8080:8080"]
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ConnectionStrings__SqlServer=Server=sqlserverBack,1433;Database=ControlComparendo;User Id=sa;Password=Admin123.;Encrypt=False;TrustServerCertificate=True
-      - ConnectionStrings__Postgres=Host=postgresBack;Port=5432;Database=ControlComparendo;Username=postgres;Password=Admin123.
-      - ConnectionStrings__MySql=Server=mysqlBack;Port=3306;Database=ControlComparendo;User ID=root;Password=Admin123.;SslMode=Preferred;AllowPublicKeyRetrieval=True;CharSet=utf8mb4;DefaultCommandTimeout=60;Connection Timeout=60;Pooling=true;MinimumPoolSize=0;MaximumPoolSize=50;
+      - ConnectionStrings__SqlServer=Server=sqlserverBack,1433;Database=controlComparendoDB;User Id=sa;Password=Admin123.;Encrypt=False;TrustServerCertificate=True
+      - ConnectionStrings__Postgres=Host=postgresBack;Port=5432;Database=controlComparendoDB;Username=postgres;Password=Admin123.
+      - ConnectionStrings__MySql=Server=mysqlBack;Port=3306;Database=controlComparendoDB;User ID=root;Password=Admin123.;SslMode=Preferred;AllowPublicKeyRetrieval=True;CharSet=utf8mb4;DefaultCommandTimeout=60;Connection Timeout=60;Pooling=true;MinimumPoolSize=0;MaximumPoolSize=50;
       - MIGRATE_SQLSERVER=true
       - MIGRATE_POSTGRES=true
       - MIGRATE_MYSQL=true

@@ -93,7 +93,19 @@ public class UserInfractionServices
         if (!await ExistsAsync(dto.id))
             throw new BusinessException($"La infracción de usuario con ID {dto.id} no existe.");
 
-        await EnsureFkAsync(dto);
+        var existing = await _repo.GetByIdAsync(dto.id)
+         ?? throw new BusinessException($"La infracción no existe.");
+
+        // 🔹 PRESERVAR el valor histórico del SMLDV
+        dto.smldvValueAtCreation = existing.smldvValueAtCreation
+            ?? throw new BusinessException("El valor histórico del SMLDV no existe.");
+
+        // 🔹 Recalcular amountToPay con el valor histórico
+        var typeInfraction = await _types.GetByIdAsync(dto.typeInfractionId)
+            ?? throw new BusinessException("Tipo de infracción inválido.");
+
+        dto.amountToPay = typeInfraction.numer_smldv * dto.smldvValueAtCreation;
+
         return await base.UpdateAsync(dto);
     }
 
@@ -154,8 +166,26 @@ public class UserInfractionServices
     }
 
     // ➕ Crear infracción normal (con userId conocido) + enviar correo con PDF
+    // ➕ Crear infracción normal (con userId conocido) + enviar correo con PDF
     public override async Task<UserInfractionDto> CreateAsync(UserInfractionDto dto)
     {
+        // 🔹 NUEVO: Buscar el último SMLDV vigente antes de crear
+        var currentSmldv = await _context.valueSmldv
+            .Where(v => v.active && !v.is_deleted)
+            .OrderByDescending(v => v.created_date)
+            .FirstOrDefaultAsync()
+            ?? throw new BusinessException("No hay SMLDV vigente registrado.");
+
+        // 🔹 NUEVO: Guardar el valor histórico del SMLDV
+        dto.smldvValueAtCreation = currentSmldv.value_smldv;
+
+        // 🔹 NUEVO: Calcular amountToPay con el valor histórico
+        var typeInfraction = await _types.GetByIdAsync(dto.typeInfractionId)
+            ?? throw new BusinessException("Tipo de infracción inválido.");
+
+        dto.amountToPay = typeInfraction.numer_smldv * dto.smldvValueAtCreation;
+
+        // Crear la infracción
         var result = await base.CreateAsync(dto);
 
         // 📨 Enviar correo con PDF de la multa
@@ -261,6 +291,7 @@ public class UserInfractionServices
             stateInfraction = EstadoMulta.Pendiente,
             InformationFine = typeInfraction.description,
             amountToPay = amount,
+            smldvValueAtCreation = smldv.value_smldv, // Guardamos el valor histórico
             UserNotificationId = notification.id
         };
 

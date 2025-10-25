@@ -13,4 +13,6 @@ public class FineCalculationDetail : BaseModel
 
     public int typeInfractionId { get; set; }
     public Infraction Infraction { get; set; }
+    public decimal SmldvValueAtCreation { get; set; }
+
 }

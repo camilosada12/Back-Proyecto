@@ -78,7 +78,9 @@ namespace Entity.DataInit.dataInitModelSecurity
                 PermissionId = 1,
                 is_deleted = false,
                 created_date = seedDate
-            });
+            }
+            );
+
 
             modelBuilder.Entity<RolFormPermission>().HasData(rolFormPermissions);
         }

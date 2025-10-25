@@ -11,8 +11,6 @@ namespace Entity.DTOs.Default.ModelSecurityDto
         public string lastName { get; set; }
         public string? phoneNumber { get; set; }
         public string? address { get; set; }
-
-        public int documentTypeId { get; set; }
         public int municipalityId { get; set; }
     }
 }

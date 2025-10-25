@@ -66,8 +66,6 @@ namespace Business.Services.Security
         {
             try
             {
-                if (!await ExistsAsync(dto.documentTypeId))
-                    throw new BusinessException($"El tipo de documento con ID {dto.documentTypeId} no existe.");
 
                 if (!await ExistsAsync(dto.municipalityId))
                     throw new BusinessException($"El municipio con ID {dto.municipalityId} no existe.");
@@ -85,8 +83,6 @@ namespace Business.Services.Security
             try
             {
 
-                if (!await ExistsAsync(dto.documentTypeId))
-                    throw new BusinessException($"El tipo de documento con ID {dto.documentTypeId} no existe.");
 
                 if (!await ExistsAsync(dto.municipalityId))
                     throw new BusinessException($"El municipio con ID {dto.municipalityId} no existe.");

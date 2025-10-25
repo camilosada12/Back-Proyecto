@@ -118,14 +118,7 @@ namespace Web.AutoMapper
                 .ForMember(d => d.Neighborhood, o => o.MapFrom(s => s.neighborhood))
                 .ForMember(d => d.Infringement, o => o.MapFrom(s => s.userInfraction.Infraction.description))
                 .ForMember(d => d.TypeFine, o => o.MapFrom(s => s.userInfraction.Infraction.TypeInfraction.Name))
-                .ForMember(d => d.ValorSMDLV,
-                    o => o.MapFrom(s =>
-                        s.userInfraction.Infraction.fineCalculationDetail != null
-                            ? s.userInfraction.Infraction.fineCalculationDetail
-                                .OrderByDescending(f => f.valueSmldv.Current_Year)
-                                .Select(f => (decimal)f.valueSmldv.value_smldv)
-                                .FirstOrDefault()
-                            : 0))
+                .ForMember(d => d.ValorSMDLV, o => o.MapFrom(s => s.userInfraction.smldvValueAtCreation ?? 0))
                 .ForMember(d => d.PaymentMethod,
                     o => o.MapFrom(s => s.TypePayment != null ? s.TypePayment.name : string.Empty))
                 .ForMember(d => d.FrequencyPayment,
@@ -149,22 +142,21 @@ namespace Web.AutoMapper
 
             // FineCalculationDetail
             CreateMap<FineCalculationDetail, FineCalculationDetailDto>().ReverseMap();
-            CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
-                .ForMember(d => d.valueSmldvValue,
-                    o => o.MapFrom(s => (double?)s.valueSmldv.value_smldv))
-                .ForMember(d => d.TypeInfractionName,
-                    o => o.MapFrom(s => s.Infraction != null && s.Infraction.TypeInfraction != null
-                        ? s.Infraction.TypeInfraction.Name
-                        : string.Empty));
 
             CreateMap<FineCalculationDetail, FineCalculationDetailSelectDto>()
-                .ForMember(dest => dest.valueSmldvValue, opt => opt.MapFrom(src => src.valueSmldv.value_smldv))
-                .ForMember(dest => dest.currentYear, opt => opt.MapFrom(src => src.valueSmldv.Current_Year))
-                .ForMember(dest => dest.minimunWage, opt => opt.MapFrom(src => src.valueSmldv.minimunWage))
-                .ForMember(dest => dest.TypeInfractionName, opt => opt.MapFrom(src => src.Infraction != null && src.Infraction.TypeInfraction != null
-                    ? src.Infraction.TypeInfraction.Name
-                    : string.Empty))
-                .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.Infraction.description))
+                .ForMember(dest => dest.valueSmldvValue, opt => opt.MapFrom(src =>
+                    (double?)src.SmldvValueAtCreation)) 
+                .ForMember(dest => dest.currentYear, opt => opt.MapFrom(src =>
+                    src.valueSmldv != null ? src.valueSmldv.Current_Year : 0))
+                .ForMember(dest => dest.minimunWage, opt => opt.MapFrom(src =>
+                    src.valueSmldv != null ? src.valueSmldv.minimunWage : 0))
+                .ForMember(dest => dest.TypeInfractionName, opt => opt.MapFrom(src =>
+                    src.Infraction != null && src.Infraction.TypeInfraction != null
+                        ? src.Infraction.TypeInfraction.Name
+                        : string.Empty))
+                .ForMember(dest => dest.description, opt => opt.MapFrom(src =>
+                    src.Infraction != null ? src.Infraction.description : string.Empty))
+                .ForMember(dest => dest.totalCalculation, opt => opt.MapFrom(src => src.totalCalculation))
                 .ReverseMap();
 
             // 🔹 NUEVOS MAPPINGS TypeInfraction & Infraction
@@ -191,8 +183,7 @@ namespace Web.AutoMapper
                 .ForMember(d => d.description, o => o.MapFrom(s => s.description))
                 .ReverseMap();
 
-
-            // UserInfraction
+            // UserInfraction -> UserInfractionDto
             CreateMap<UserInfraction, UserInfractionDto>()
                 .ForMember(d => d.userId, o => o.MapFrom(s => s.UserId))
                 .ForMember(d => d.userEmail, o => o.MapFrom(s => s.User != null && s.User.email != null ? s.User.email : string.Empty))
@@ -202,9 +193,11 @@ namespace Web.AutoMapper
                 .ForMember(d => d.dateInfraction, o => o.MapFrom(s => s.dateInfraction))
                 .ForMember(d => d.observations, o => o.MapFrom(s => s.Infraction.description ?? string.Empty))
                 .ForMember(d => d.amountToPay, o => o.MapFrom(s => s.amountToPay))
+                .ForMember(d => d.smldvValueAtCreation, o => o.MapFrom(s => s.smldvValueAtCreation))  // ✅ Nuevo campo
                 .ForMember(d => d.UserNotificationId, o => o.MapFrom(s => s.UserNotificationId))
                 .ReverseMap();
 
+            // UserInfraction -> UserInfractionSelectDto
             CreateMap<UserInfraction, UserInfractionSelectDto>()
                 .ForMember(d => d.userId, o => o.MapFrom(s => s.UserId))
                 .ForMember(d => d.userEmail, o => o.MapFrom(s => s.User != null ? s.User.email : string.Empty))
@@ -217,7 +210,9 @@ namespace Web.AutoMapper
                 .ForMember(d => d.dateInfraction, o => o.MapFrom(s => s.dateInfraction))
                 .ForMember(d => d.observations, o => o.MapFrom(s => s.Infraction.description ?? string.Empty))
                 .ForMember(d => d.amountToPay, o => o.MapFrom(s => s.amountToPay))
+                .ForMember(d => d.smldvValueAtCreation, o => o.MapFrom(s => s.smldvValueAtCreation))  // ✅ Nuevo campo
                 .ForMember(d => d.UserNotificationId, o => o.MapFrom(s => s.UserNotificationId));
+
 
             // Parameters
             CreateMap<department, departmentDto>().ReverseMap();

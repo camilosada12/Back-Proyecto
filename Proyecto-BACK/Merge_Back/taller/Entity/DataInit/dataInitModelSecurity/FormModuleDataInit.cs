@@ -159,26 +159,10 @@ namespace Entity.DataInit.dataInitModelSecurity
                      is_deleted = false,
                      created_date = seedDate,
                  },
-                 //new FormModule
-                 //{
-                 //    id = 15,
-                 //    formid = 18,
-                 //    moduleid = 2,
-                 //    is_deleted = false,
-                 //    created_date = seedDate,
-                 //},
-                 //new FormModule
-                 //{
-                 //    id = 16,
-                 //    formid = 19,
-                 //    moduleid = 2,
-                 //    is_deleted = false,
-                 //    created_date = seedDate,
-                 //},
                  new FormModule
                  {
                      id = 15,
-                     formid = 20,
+                     formid = 18,
                      moduleid = 2,
                      is_deleted = false,
                      created_date = seedDate,
@@ -186,6 +170,22 @@ namespace Entity.DataInit.dataInitModelSecurity
                  new FormModule
                  {
                      id = 16,
+                     formid = 19,
+                     moduleid = 2,
+                     is_deleted = false,
+                     created_date = seedDate,
+                 },
+                 new FormModule
+                 {
+                     id = 17,
+                     formid = 20,
+                     moduleid = 2,
+                     is_deleted = false,
+                     created_date = seedDate,
+                 },
+                 new FormModule
+                 {
+                     id = 18,
                      formid = 21,
                      moduleid = 5,
                      is_deleted = false,

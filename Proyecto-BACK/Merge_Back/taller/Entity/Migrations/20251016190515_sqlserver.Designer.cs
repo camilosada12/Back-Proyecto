@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251014021236_sqlserver")]
+    [Migration("20251016190515_sqlserver")]
     partial class sqlserver
     {
         /// <inheritdoc />
@@ -940,6 +940,9 @@ namespace Entity.Migrations
                     b.Property<bool>("is_deleted")
                         .HasColumnType("bit");
 
+                    b.Property<decimal?>("smldvValueAtCreation")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("stateInfraction")
                         .HasColumnType("int");
 
@@ -965,6 +968,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
+                            smldvValueAtCreation = 43500m,
                             stateInfraction = 0
                         },
                         new
@@ -978,6 +982,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
+                            smldvValueAtCreation = 43500m,
                             stateInfraction = 0
                         },
                         new
@@ -991,6 +996,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
+                            smldvValueAtCreation = 43500m,
                             stateInfraction = 0
                         },
                         new
@@ -1004,6 +1010,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             dateInfraction = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             is_deleted = false,
+                            smldvValueAtCreation = 43500m,
                             stateInfraction = 0
                         });
                 });
@@ -1165,11 +1172,9 @@ namespace Entity.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<string>("Icon")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Route")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("active")
@@ -1241,7 +1246,7 @@ namespace Entity.Migrations
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             description = "Formulario Notificacion de multas",
                             is_deleted = false,
-                            name = "Formulario Notificacion de multas"
+                            name = "Notificacion de multas"
                         },
                         new
                         {
@@ -1597,13 +1602,31 @@ namespace Entity.Migrations
                             id = 15,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            formid = 20,
+                            formid = 18,
                             is_deleted = false,
                             moduleid = 2
                         },
                         new
                         {
                             id = 16,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 19,
+                            is_deleted = false,
+                            moduleid = 2
+                        },
+                        new
+                        {
+                            id = 17,
+                            active = false,
+                            created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            formid = 20,
+                            is_deleted = false,
+                            moduleid = 2
+                        },
+                        new
+                        {
+                            id = 18,
                             active = false,
                             created_date = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             formid = 21,
@@ -2334,6 +2357,9 @@ namespace Entity.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<decimal>("SmldvValueAtCreation")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("active")
                         .HasColumnType("bit");
